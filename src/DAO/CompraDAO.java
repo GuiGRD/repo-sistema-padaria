@@ -32,8 +32,6 @@ public class CompraDAO {
                 + "compra_validade"
                 + "VALUES (?,?,?,?,?,?,?,?)";
 
-        
-
         try {
             pst = conn.prepareStatement(sql);
 
@@ -68,8 +66,6 @@ public class CompraDAO {
                 + "compra_validade = ?)"
                 + "WHERE id_compra=?";
 
-        
-
         try {
 
             pst = conn.prepareStatement(sql);
@@ -99,8 +95,6 @@ public class CompraDAO {
 
     public void excluirCompra(CompraDTO obj) {
         String sql = "DELETE FROM tbl_compra WHERE id_compra = ?";
-
-        
 
         try {
             pst = conn.prepareStatement(sql);
@@ -134,9 +128,6 @@ public class CompraDAO {
                 + " FROM tbl_compra as c"
                 + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
                 + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)";
-
-
-      
 
         try {
 
@@ -174,7 +165,6 @@ public class CompraDAO {
     }
 
     public ArrayList<CompraDTO> buscarCompraFornecedor(String forn_nome) {
-
 
         String sql = "SELECT"
                 + " c.compra_data,"
@@ -233,7 +223,7 @@ public class CompraDAO {
 
     public ArrayList<CompraDTO> buscarCompraProdutoNome(String pro_nome) {
 
-         String sql = "SELECT"
+        String sql = "SELECT"
                 + " c.compra_data,"
                 + " c.id_compra,"
                 + " c.compra_preco,"
@@ -248,8 +238,6 @@ public class CompraDAO {
                 + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
                 + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
                 + "WHERE p.pro_nome=?";
-
-        
 
         try {
             pst = conn.prepareStatement(sql);
@@ -304,8 +292,6 @@ public class CompraDAO {
                 + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
                 + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
                 + "WHERE p.pro_cod_barra=?";
-
-        
 
         try {
             pst = conn.prepareStatement(sql);
@@ -365,4 +351,58 @@ public class CompraDAO {
         }
     }
 
+    public CompraDTO buscarCompraProduto(int pro_cod_barra) {
+
+        String sql = "SELECT"
+                + " c.compra_data,"
+                + " c.id_compra,"
+                + " c.compra_preco,"
+                + " c.compra_preco_venda,"
+                + " c.compra_valor_total,"
+                + " c.compra_validade,"
+                + " f.forn_nome,"
+                + " p.pro_cod_barra,"
+                + " p.pro_nome,"
+                + " p.pro_estoque"
+                + " FROM tbl_compra as c"
+                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
+                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
+                + "WHERE p.pro_cod_barra=?";
+
+        try {
+            pst = conn.prepareStatement(sql);
+
+            pst.setInt(1, pro_cod_barra);
+            rs = pst.executeQuery();
+            CompraDTO obj = new CompraDTO();
+            FornecedorDTO f = new FornecedorDTO();
+            ProdutoDTO p = new ProdutoDTO();
+
+            while (rs.next()) {
+
+                obj.setIdCompra(rs.getInt("id_compra"));
+                obj.setDataCompra(rs.getString("compra_data"));
+                obj.setCompraPreco(rs.getDouble("compra_preco"));
+                obj.setCompraPrecoVenda(rs.getDouble("compra_preco_venda"));
+                obj.setCompraValorTotal(rs.getDouble("compra_valor_total"));
+                obj.setCompraValidade(rs.getString("compra_validade"));
+
+                f.setNomeFornecedor(rs.getString("f.forn_nome"));
+                p.setNomeProduto(rs.getString("p.pro_nome"));
+                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
+                p.setEstoqueProduto(rs.getInt("p.pro_estoque"));
+
+                obj.setFornecedor(f);
+                obj.setProduto(p);
+
+            }
+            return obj;
+
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "ERRO buscarCompraDAO " + erro);
+            return null;
+        }
+
+    }
 }
+   

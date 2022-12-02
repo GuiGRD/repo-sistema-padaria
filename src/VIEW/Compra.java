@@ -48,7 +48,6 @@ public class Compra extends javax.swing.JPanel {
         jLabel23 = new javax.swing.JLabel();
         txtvalorCompra = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
-        txtQtd = new javax.swing.JTextField();
         txtPreco = new javax.swing.JTextField();
         txtNomeProduto = new javax.swing.JTextField();
         btnAdicionar = new javax.swing.JButton();
@@ -73,6 +72,7 @@ public class Compra extends javax.swing.JPanel {
         txtvalorVenda = new javax.swing.JLabel();
         txtItemExcluido = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
+        txtQtd = new javax.swing.JSpinner();
         painelConFuncionario = new javax.swing.JPanel();
         txtBuscaNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -97,8 +97,6 @@ public class Compra extends javax.swing.JPanel {
         txtvalorCompra.setText("*Preço Compra R$:");
 
         jLabel25.setText("*Qtd:");
-
-        txtQtd.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
 
         txtPreco.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
 
@@ -268,7 +266,8 @@ public class Compra extends javax.swing.JPanel {
                                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                                         .addComponent(jLabel25)
                                         .addGap(18, 18, 18)
-                                        .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(63, 63, 63))
                                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                                         .addComponent(jLabel26)
                                         .addGap(18, 18, 18)
@@ -357,12 +356,11 @@ public class Compra extends javax.swing.JPanel {
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtvalorVenda)
                     .addComponent(txtPrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelCadCompraLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel25))
+                .addGap(12, 12, 12)
+                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
                     .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1, 1, 1)
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -617,7 +615,7 @@ public class Compra extends javax.swing.JPanel {
     private javax.swing.JTextField txtNomeProduto;
     private javax.swing.JTextField txtPreco;
     private javax.swing.JTextField txtPrecoVenda;
-    private javax.swing.JTextField txtQtd;
+    private javax.swing.JSpinner txtQtd;
     private javax.swing.JTextField txtTotal;
     private javax.swing.JFormattedTextField txtValidade;
     private javax.swing.JLabel txtvalorCompra;
@@ -785,7 +783,7 @@ public class Compra extends javax.swing.JPanel {
     }
 
     //Pega com o vetor a chava primaria para adicionar a informação nesse caso o nome dos fornecedores e nao o id na combobox
-    Vector<Integer> id_fornecedor = new Vector<Integer>();
+    Vector<Integer> idForn = new Vector<Integer>();
 
     public void FornecedorCbx() {
         try {
@@ -793,7 +791,7 @@ public class Compra extends javax.swing.JPanel {
             ResultSet rs = obj.CBXlistarNomeFornecedor();
 
             while (rs.next()) {
-                id_fornecedor.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
+                idForn.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
                 cbxFornecedor.addItem(rs.getString(2));// Armazenando o 2 elemento do sql que é o nome do fornecedor
                 
             }
@@ -803,21 +801,22 @@ public class Compra extends javax.swing.JPanel {
         }
     }
 
-    Vector<Integer> id_produto = new Vector<Integer>();
+    Vector<Integer> idPro = new Vector<Integer>();
 
     public void ProdutoCbx() {
         try {
-            ProdutoDTO dto = new ProdutoDTO();
-            ProdutoDAO obj = new ProdutoDAO();
-            ResultSet rs = obj.CBXlistarNomeProduto();
-            obj.listarProduto(dto);
+            ProdutoDTO obj = new ProdutoDTO();
+            ProdutoDAO dao = new ProdutoDAO();
+            ResultSet rs = dao.CBXlistarNomeProduto();
+            //obj = dao.pesquisarNomeProduto(txtNomeProduto.getText());
             
             
 
             while (rs.next()) {
-                id_produto.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
-                cbxCodigoProduto.addItem(rs.getString(2));// Armazenando o 2 elemento do sql que é o nome 
-                //txtNomeProduto.rs.getString(2);
+                idPro.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
+                cbxCodigoProduto.addItem(rs.getString(2));// Armazenando o 2 elemento do sql que é o codigo 
+                txtNomeProduto.setText(obj.getNomeProduto());
+                
             }
 
         } catch (SQLException erro) {
@@ -825,7 +824,7 @@ public class Compra extends javax.swing.JPanel {
         }
 
     }
-
+    Vector<Integer> idCodProd = new Vector<Integer>();
     public void ProdutoCodCbx() {
         try {
             ProdutoDAO obj = new ProdutoDAO();
@@ -833,7 +832,7 @@ public class Compra extends javax.swing.JPanel {
             ResultSet rs = obj.CBXlistarCodigoProduto();
 
             while (rs.next()) {
-                id_produto.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
+                idCodProd.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
                 cbxCodigoProduto.addItem(rs.getString(2));// Armazenando o 3 elemento do sql que é o codigo de barra
             }
 

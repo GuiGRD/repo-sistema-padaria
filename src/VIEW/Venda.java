@@ -1,16 +1,22 @@
-
 package VIEW;
 
+import CONEXAO.Conexao;
+import DAO.CompraDAO;
 import DAO.ProdutoDAO;
 import DTO.CompraDTO;
 import DTO.ProdutoDTO;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import java.sql.ResultSet;
 
 public class Venda extends javax.swing.JPanel {
 
@@ -23,8 +29,14 @@ public class Venda extends javax.swing.JPanel {
 
     DefaultTableModel itensvenda;
 
+    Connection conn; //Cria a Conexão
+    PreparedStatement pst; // Prepara a Conexão
+    ResultSet rs;
+
     public Venda() {
+        conn = new Conexao().conectaBD();
         initComponents();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -40,12 +52,12 @@ public class Venda extends javax.swing.JPanel {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        txtQtd = new javax.swing.JTextField();
         txtPreco = new javax.swing.JTextField();
         txtNomeProduto = new javax.swing.JTextField();
         btnBuscarProdutoVenda = new javax.swing.JButton();
         btnExcluirItem = new javax.swing.JButton();
         btnAdcionarProduto = new javax.swing.JButton();
+        txtQtd = new javax.swing.JSpinner();
         jLabel16 = new javax.swing.JLabel();
         txtTotal = new javax.swing.JTextField();
         btnPagamento = new javax.swing.JButton();
@@ -89,21 +101,9 @@ public class Venda extends javax.swing.JPanel {
 
         jLabel19.setText("Qtd:");
 
-        txtQtd.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        txtQtd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtQtdActionPerformed(evt);
-            }
-        });
-
         txtPreco.setEditable(false);
         txtPreco.setBackground(java.awt.SystemColor.controlHighlight);
         txtPreco.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        txtPreco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPrecoActionPerformed(evt);
-            }
-        });
 
         txtNomeProduto.setEditable(false);
         txtNomeProduto.setBackground(java.awt.SystemColor.controlHighlight);
@@ -134,6 +134,12 @@ public class Venda extends javax.swing.JPanel {
             }
         });
 
+        txtQtd.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                txtQtdStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelDadosLayout = new javax.swing.GroupLayout(painelDados);
         painelDados.setLayout(painelDadosLayout);
         painelDadosLayout.setHorizontalGroup(
@@ -141,13 +147,17 @@ public class Venda extends javax.swing.JPanel {
             .addGroup(painelDadosLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel19)
-                .addGap(6, 6, 6)
-                .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
-                .addComponent(btnExcluirItem)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAdcionarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelDadosLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 391, Short.MAX_VALUE)
+                        .addComponent(btnExcluirItem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAdcionarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(painelDadosLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(painelDadosLayout.createSequentialGroup()
                 .addGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelDadosLayout.createSequentialGroup()
@@ -190,7 +200,7 @@ public class Venda extends javax.swing.JPanel {
                         .addGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19)
                             .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35))
+                        .addGap(36, 36, 36))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelDadosLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -232,9 +242,16 @@ public class Venda extends javax.swing.JPanel {
                 "CÓD. BARRA", "PRODUTO", "QNT", "R$ UNI.", "SUBTOTAL"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -349,7 +366,7 @@ public class Venda extends javax.swing.JPanel {
                 .addComponent(jPDV, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -363,27 +380,57 @@ public class Venda extends javax.swing.JPanel {
 
     private void txtCodigoProdutoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProdutoKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            BuscarCodProduto();
-            BuscarNomeProduto();
+            
+            //int pcode = Integer.parseInt(txtCodigoProduto.getText());
+            String pcode = txtCodigoProduto.getText();
 
+            try {
+                /*
+                       String sql = ""
+                        + "SELECT "
+                        + "c.id_compra, "
+                        + "c.compra_data, "
+                        + "c.compra_preco_venda, "
+                        + "p.pro_cod_barra, "
+                        + "p.pro_nome, "
+                        + "p.pro_estoque "
+                        + "FROM tbl_compra as c "
+                        + "INNER JOIN tbl_produto as p "
+                        + "ON (c.fk_produto = p.id_produto)"
+                        + "WHERE id_compra = ?";
+*/
+                       String sql = ""
+                               + "SELECT * "
+                               + "FROM tbl_produto"
+                               + "WHERE pro_cod_barra = ?";
+                               //+ "WHERE id_produto = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, pcode);
+                rs = pst.executeQuery();
+                
+                if (rs.next() == false) 
+                {
+                    JOptionPane.showMessageDialog(this, "Produto não Encontrado");
+                } 
+                else 
+                {
+                   
+                    
+                    String pnome = rs.getString("pro_nome");
+                    //String ppreco = rs.getString("c.compra_preco_venda");
+
+                    txtNomeProduto.setText(pnome.trim());
+                    //txtPreco.setText(ppreco.trim());
+
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(Venda.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
     }//GEN-LAST:event_txtCodigoProdutoKeyPressed
-
-    private void txtQtdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQtdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtQtdActionPerformed
-
-    private void txtPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPrecoActionPerformed
-
-    private void btnBuscarProdutoVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProdutoVendaActionPerformed
-        //Busca Produto por código.
-
-        BuscarCodProduto();
-        BuscarNomeProduto();
-    }//GEN-LAST:event_btnBuscarProdutoVendaActionPerformed
-
+    
     private void btnPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagamentoActionPerformed
         Pagamento();
     }//GEN-LAST:event_btnPagamentoActionPerformed
@@ -403,6 +450,17 @@ public class Venda extends javax.swing.JPanel {
     private void btnExcluirItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirItemActionPerformed
         ExcluirItem();
     }//GEN-LAST:event_btnExcluirItemActionPerformed
+
+    private void btnBuscarProdutoVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProdutoVendaActionPerformed
+        //Busca Produto por código.
+
+        BuscarCodProduto();
+
+    }//GEN-LAST:event_btnBuscarProdutoVendaActionPerformed
+
+    private void txtQtdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtQtdStateChanged
+     int qnt = Integer.parseInt(txtQtd.getValue().toString());
+    }//GEN-LAST:event_txtQtdStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -428,7 +486,7 @@ public class Venda extends javax.swing.JPanel {
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNomeProduto;
     private javax.swing.JTextField txtPreco;
-    private javax.swing.JTextField txtQtd;
+    private javax.swing.JSpinner txtQtd;
     private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 
@@ -441,17 +499,12 @@ public class Venda extends javax.swing.JPanel {
 
     private void BuscarCodProduto() {
 
-        dtoproduto = daoproduto.pesquisarCodigoProduto(Integer.parseInt(txtCodigoProduto.getText()));
-        txtNomeProduto.setText(dtocompra.getProduto().getNomeProduto());
-        txtPreco.setText(String.valueOf(dtocompra.getCompraPrecoVenda()));
+        CompraDTO obj = new CompraDTO();
+        CompraDAO dao = new CompraDAO();
 
-    }
-
-    private void BuscarNomeProduto() {
-
-        dtoproduto = daoproduto.pesquisarNomeProduto(txtNomeProduto.getText());
-        txtNomeProduto.setText(dtocompra.getProduto().getNomeProduto());
-        txtPreco.setText(String.valueOf(dtocompra.getCompraPrecoVenda()));
+        obj = dao.buscarCompraProduto(Integer.parseInt(txtCodigoProduto.getText()));
+        txtNomeProduto.setText(obj.getProduto().getNomeProduto());
+        txtPreco.setText(String.valueOf(obj.getCompraPrecoVenda()));
 
     }
 
@@ -471,13 +524,12 @@ public class Venda extends javax.swing.JPanel {
 
     private void Limpar() {
         txtCodigoProduto.setText("");
-        txtQtd.setText("");        
+        //txtQtd.setText("");
     }
 
-    private void AdcionarItem() 
-    {
+    private void AdcionarItem() {
         dtoproduto = daoproduto.pesquisarCodigoProduto(Integer.parseInt(txtCodigoProduto.getText()));
-        qtd = Integer.parseInt(txtQtd.getText());
+        //qtd = Integer.parseInt(txtQtd.getText());
         if (qtd > 0) {
             if (dtoproduto.getEstoqueProduto() > 0 && dtoproduto.getEstoqueProduto() >= qtd) {
                 preco = Double.parseDouble(txtPreco.getText());
@@ -493,7 +545,7 @@ public class Venda extends javax.swing.JPanel {
                 itensvenda.addRow(new Object[]{
                     txtCodigoProduto.getText(),
                     txtNomeProduto.getText(),
-                    txtQtd.getText(),
+                    //txtQtd.getText(),
                     txtPreco.getText(),
                     subtotal
 
@@ -501,11 +553,11 @@ public class Venda extends javax.swing.JPanel {
 
             } else {
                 JOptionPane.showMessageDialog(null, "Quantidade maior. O estoque = " + dtoproduto.getEstoqueProduto());
-                txtQtd.setText("");
+                //txtQtd.setText("");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que 0 ");
-            txtQtd.setText("");
+            //txtQtd.setText("");
         }
 
     }

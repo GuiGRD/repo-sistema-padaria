@@ -695,6 +695,7 @@ public class MENU extends javax.swing.JFrame {
         getContentPane().add(PainelDashboard, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMouseClicked

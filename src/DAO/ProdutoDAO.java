@@ -279,7 +279,7 @@ public class ProdutoDAO {
 
         String sql = "SELECT * "
                 + "FROM tbl_produto "
-                + "WHERE pro_cod_barra LIKE ? ";
+                + "WHERE pro_cod_barra = ? ";
 
         try {
 

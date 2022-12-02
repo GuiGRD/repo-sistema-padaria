@@ -20,6 +20,7 @@ public class Cliente extends javax.swing.JPanel {
         initComponents();
         Listar();
         Limpar();
+        
     }
 
     @SuppressWarnings("unchecked")
