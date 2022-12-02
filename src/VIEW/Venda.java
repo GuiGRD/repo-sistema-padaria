@@ -627,11 +627,7 @@ public class Venda extends javax.swing.JPanel {
         //txtQtd.setValue((double)0);
 
     }
-/**
- * Método utilizado para calcular o preco dos produtos multiplicados pela quantidade
- * @param qnt quantidade do produto
- * @param preco  preco do produto
- */
+
     public void Quantidade() {
         qnt=0;
         preco=0;
@@ -749,5 +745,8 @@ public class Venda extends javax.swing.JPanel {
         txtPrint.setText(txtPrint.getText() + "        OBRIGADO, VOLTE SEMPRE!     ");
     }
 
+    private void Salvar()
+    {
+    }
 
 }

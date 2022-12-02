@@ -13,11 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author Pri
  */
-/**
- * Método Produto serão utilizados os atributos que foram encapsulados em
- * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
- * informações no banco de dados na tabela produto.
- */
+
 public class ProdutoDAO {
 
     //Cria a Conexão
@@ -29,6 +25,12 @@ public class ProdutoDAO {
     //Cria uma Lista das informações no banco de dados
     ArrayList<ProdutoDTO> lista = new ArrayList<>();
 
+ /**
+ * Método Produto serão utilizados os atributos que foram encapsulados em
+ * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+ * informações no banco de dados na tabela produto.
+ */
+    
     public ProdutoDAO() {
         //Conecta com o banco de dados
         conn = new Conexao().conectaBD();
@@ -209,7 +211,7 @@ public class ProdutoDAO {
      * @return lista retorna a lista com as informações do banco.
      */
     public ProdutoDTO pesquisarCodigoProduto(int pro_cod_barra) {
-//Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela produto no banco de dados.
+    //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela produto no banco de dados.
         String sql = "SELECT * "
                 + "FROM tbl_produto "
                 + "WHERE pro_cod_barra = ? ";

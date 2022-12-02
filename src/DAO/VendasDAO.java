@@ -19,12 +19,6 @@ import javax.swing.JOptionPane;
  */
 public class VendasDAO {
 
-    /**
-     * Método Venda serão utilizados os atributos que foram encapsulados em
-     * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
-     * informações no banco de dados na tabela vendas.
-     */
-
     //Cria a Conexão
     Connection conn;
     // Prepara a Conexão, cria um obj para representar as instrucoes do SQL que será executada.
@@ -34,6 +28,11 @@ public class VendasDAO {
     //Cria uma Lista das informações no banco de dados
     ArrayList<VendasDTO> lista = new ArrayList<>();
 
+    /**
+     * Método Venda serão utilizados os atributos que foram encapsulados em
+     * getters e setters no DTO para: Cadastrar e Consultar  as
+     * informações no banco de dados na tabela vendas.
+     */
     public VendasDAO() {
         //Conecta com o banco de dados
         conn = new Conexao().conectaBD();
@@ -48,7 +47,7 @@ public class VendasDAO {
      */
     public void cadastrarVenda(VendasDTO obj) {
         try {
-//Através dos comandos SQL salva as informações nas colunas da tabela vendas no banco de dados.
+        //Através dos comandos SQL salva as informações nas colunas da tabela vendas no banco de dados.
             String sql = ""
                     + "INSERT INTO tbl_vendas( "
                     + "venda_data, "
@@ -79,8 +78,55 @@ public class VendasDAO {
             JOptionPane.showMessageDialog(null, "Erro: " + erro);
         }
     }
+    /**
+     * Método Listar: Pega todas as informações do banco de dados das colunas da
+     * tabela venda e retorna listando em uma tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
+     public ArrayList<VendasDTO> listarVenda() 
+     {//Através dos comandos SQL lista todas informações nas colunas da tabela venda no banco de dados.
+           String sql = " SELECT * "
+                + " FROM tbl_venda as v "
+                + " INNER JOIN tbl_compra AS c ON(v.fk_compra = c.id_compra) "
+                + " INNER JOIN tbl_produto AS p ON(v.fk_produto = p.id_produto)";
 
- /*
+        try {
+
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                VendasDTO obj = new VendasDTO();
+                CompraDTO c = new CompraDTO();
+                ProdutoDTO p = new ProdutoDTO();
+
+                obj.setIdVenda(rs.getInt("v.id_venda"));
+                obj.setNumNota(rs.getInt("v.venda_num_nota"));
+                obj.setDataVenda(rs.getString("v.venda_data"));
+                obj.setQntVenda(rs.getInt("v.venda_qnt"));
+                obj.setValorProd(rs.getInt("v.venda_valor"));
+                obj.setTotalVenda(rs.getInt("v.venda_total"));
+                
+                
+                c.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
+                c.setCompraValorTotal(rs.getInt("v.venda_valor"));
+                
+                p.setNomeProduto(rs.getString("p.pro_nome"));
+                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
+
+                obj.setCompra(c);
+                obj.setProduto(p);
+
+                lista.add(obj);
+            }
+            return lista;
+
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "VendaDAO LISTAR " + erro);
+            return null;
+        }
+     }
     
     
 /**
@@ -116,5 +162,6 @@ public class VendasDAO {
         }
     }
 
+    
 
 }

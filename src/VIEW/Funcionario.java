@@ -1,6 +1,6 @@
 package VIEW;
 
-import CONTROLE.LimparCampos;
+import UTILIDADES.LimparCampos;
 import DAO.FuncionarioDAO;
 import DTO.FuncionarioDTO;
 import java.awt.event.KeyEvent;

@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package VIEW;
 
-import CONTROLE.Transparencia;
+import UTILIDADES.Transparencia;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
@@ -30,7 +27,7 @@ public class MENUADM extends javax.swing.JFrame {
     private final Compra compra;
     private final Venda venda;
     private final Relatorio relatorio;
-    private final FluxoCaixa fluxo;
+    
 
     public String LoginUsuario;
 
@@ -59,7 +56,7 @@ public class MENUADM extends javax.swing.JFrame {
         compra = new Compra();
         venda = new Venda();
         relatorio = new Relatorio();
-        fluxo = new FluxoCaixa();
+        
         
         
         Transparencia t = new Transparencia();

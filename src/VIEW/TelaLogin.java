@@ -3,7 +3,7 @@ package VIEW;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.awt.event.KeyEvent;
-import CONTROLE.Transparencia;
+import UTILIDADES.Transparencia;
 import DAO.UsuarioDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

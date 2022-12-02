@@ -1,7 +1,7 @@
 package VIEW;
 
 import CONEXAO.Conexao;
-import CONTROLE.LimparCampos;
+import UTILIDADES.LimparCampos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import DAO.CompraDAO;
@@ -825,7 +825,7 @@ public class Compra extends javax.swing.JPanel {
                 cdto.setProduto(pdto);
 
                 CompraDAO dao = new CompraDAO();
-                dao.cadastrarCompra(cdto);
+                dao.editarCompra(cdto);
             }
         }
     }

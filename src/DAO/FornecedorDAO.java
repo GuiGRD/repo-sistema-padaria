@@ -1,5 +1,10 @@
 package DAO;
 
+/**
+ *
+ * @author Pri 
+ */
+
 import CONEXAO.Conexao;
 import DTO.FornecedorDTO;
 import java.sql.Connection;
@@ -10,16 +15,13 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Pri
+ * 
  */
+
 public class FornecedorDAO {
 
-    /**
-     * Metodo Fornecedor, serao utilizados os atributos que foram encapsulados
-     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
-     * informacoes no banco de dados na tabela fornecedor.
-     */
+
     //Cria a Conexão
     Connection conn;
     // Prepara a Conexão, cria um obj para representar as instrucoes do SQL que será executada.
@@ -28,7 +30,14 @@ public class FornecedorDAO {
     ResultSet rs;
     //Cria uma Lista das informações no banco de dados
     ArrayList<FornecedorDTO> lista = new ArrayList<>();
-
+    
+    
+    /**
+     * Metodo Fornecedor, serao utilizados os atributos que foram encapsulados
+     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informacoes no banco de dados na tabela fornecedor.
+     */
+    
     public FornecedorDAO() {
         //Conecta com o banco de dados
         conn = new Conexao().conectaBD();

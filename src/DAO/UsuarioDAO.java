@@ -15,15 +15,13 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- * 
+ *
  * @author Pri
  */
 public class UsuarioDAO {
-    /**
-     * Método Usuário serão utilizados os atributos que foram encapsulados
-     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
-     * informações no banco de dados na tabela usuário.
-     */
+
+    public String LoginUsuario;
+    
     //Cria a Conexão
     Connection conn = new Conexao().conectaBD();
     // Prepara a Conexão, cria um objeto para representar as instruções do SQL que será executada.
@@ -33,8 +31,11 @@ public class UsuarioDAO {
     //Cria uma Lista das informações no banco de dados
     ArrayList<UsuarioDTO> lista = new ArrayList<>();
 
-    public String LoginUsuario;
-
+    /**
+     * Método Usuário serão utilizados os atributos que foram encapsulados em
+     * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informações no banco de dados na tabela usuário.
+     */
     public ResultSet autenticarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "SELECT usu_perfil "
@@ -57,13 +58,13 @@ public class UsuarioDAO {
         }
     }
 
-       /**
-     * Método Cadastrar:
-     * Insere as informações no banco de dados nas colunas da tabela
-     * usuário de acordo com os atributos informados pelo usuário.
+    /**
+     * Método Cadastrar: Insere as informações no banco de dados nas colunas da
+     * tabela usuário de acordo com os atributos informados pelo usuário.
      *
-     * @param objusuariodto UsuarioDTO conecta com banco para inserir as informações.
-     */ 
+     * @param objusuariodto UsuarioDTO conecta com banco para inserir as
+     * informações.
+     */
     public void cadastrarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "INSERT INTO tbl_usuario"
@@ -91,12 +92,14 @@ public class UsuarioDAO {
         }
 
     }
-	/**
-	 * Método Editar:
-	 * Altera as informações no banco de dados na tabela usuário de acordo com os atributos informados pelo usuário.
 
-	 * @param objusuariodto UsuarioDTO conecta com banco para fazer as alterações das informações.
-	 */
+    /**
+     * Método Editar: Altera as informações no banco de dados na tabela usuário
+     * de acordo com os atributos informados pelo usuário.
+     *
+     * @param objusuariodto UsuarioDTO conecta com banco para fazer as
+     * alterações das informações.
+     */
     public void editarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "UPDATE tbl_usuario"
@@ -127,11 +130,11 @@ public class UsuarioDAO {
     }
 
     /**
-     * Método Excluir:
-     * Exclui as informações no banco de dados nas colunas da tabela
-     * usuário informado pelo usuário.
+     * Método Excluir: Exclui as informações no banco de dados nas colunas da
+     * tabela usuário informado pelo usuário.
      *
-     * @param objusuariodto UsuarioDTO conecta com banco para excluir as informações.
+     * @param objusuariodto UsuarioDTO conecta com banco para excluir as
+     * informações.
      */
     public void excluirUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
@@ -152,11 +155,10 @@ public class UsuarioDAO {
             JOptionPane.showMessageDialog(null, "Usuário não selecionado para exclusão " + erro);
         }
     }
-    
+
     /**
-     * Método Listar:
-     * Pega as informações do banco de dados das colunas da tabela
-     * usuário e retorna listando em uma tabela para o usuário.
+     * Método Listar: Pega as informações do banco de dados das colunas da
+     * tabela usuário e retorna listando em uma tabela para o usuário.
      *
      * @return lista retorna a lista com as informações do banco.
      */
@@ -198,11 +200,11 @@ public class UsuarioDAO {
         // Esse metodo retorna toda a lista dos usuarios cadastrado
 
     }
-    
+
     /**
-     * Método Buscar:
-     * Pega as informações do usuário escolhido no banco de dados das colunas da tabela
-     * usuário e retorna listando em uma tabela para o usuário.
+     * Método Buscar: Pega as informações do usuário escolhido no banco de dados
+     * das colunas da tabela usuário e retorna listando em uma tabela para o
+     * usuário.
      *
      * @return lista retorna a lista com as informações do banco.
      */
@@ -251,15 +253,12 @@ public class UsuarioDAO {
 
     }
 
-
-
     /**
-     * Método Logar;
-     * Compara com o banco as informações passada pelo usuário
+     * Método Logar; Compara com o banco as informações passada pelo usuário
+     *
      * @param Login Compara com o banco as informações passada pelo usuário
      * @param Senha Compara com o banco as informações passada pelo usuário
      */
-
     public void LogarUsuario(String Login, String Senha) {
 
         try {
@@ -284,26 +283,27 @@ public class UsuarioDAO {
                 cargo = rs.getString("usu_perfil");
 
                 if (cargo == "Adm") {
-                //if(cargo.equals("Adm")){
+                    //if(cargo.equals("Adm")){
                     JOptionPane.showMessageDialog(null, "Bem vindo(a)");
                     MENUADM menuA = new MENUADM();
                     menuA.setVisible(true);
 
                     menuA.LoginUsuario = rs.getString("usu_login");
                     MENUADM.lblUsuario.setForeground(Color.BLUE);
-                    
-                } if (cargo == "Caixa") {
-                //} else if (cargo.equals("Caixa")){
+
+                }
+                if (cargo == "Caixa") {
+                    //} else if (cargo.equals("Caixa")){
                     JOptionPane.showMessageDialog(null, "Bem vindo(a)");
 
                     MENUCAIXA menuC = new MENUCAIXA();
                     menuC.setVisible(true);
 
-                   menuC.LoginUsuario = rs.getString("usu_login");
-                   MENUCAIXA.lblUsuario.setForeground(Color.gray);
-                    
+                    menuC.LoginUsuario = rs.getString("usu_login");
+                    MENUCAIXA.lblUsuario.setForeground(Color.gray);
+
                 } else if (cargo == "Escritorio") {
-                //} else if (cargo.equals("Escritorio")){
+                    //} else if (cargo.equals("Escritorio")){
                     JOptionPane.showMessageDialog(null, " Bem vindo(a)");
 
                     MENUESCRITORIO menuE = new MENUESCRITORIO();

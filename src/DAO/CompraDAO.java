@@ -5,7 +5,6 @@ import DTO.CompraDTO;
 import DTO.FornecedorDTO;
 import DTO.ProdutoDTO;
 import VIEW.Venda;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+/**
+ *
+ * @author Pri Bucholz
+ */
 public class CompraDAO {
 
     //Cria a Conexão
@@ -26,9 +29,17 @@ public class CompraDAO {
     //Cria uma Lista das informações no banco de dados
     ArrayList<CompraDTO> lista = new ArrayList<>();
 
+    
+    
+     /**
+     * Método Compra serão utilizados os atributos que foram encapsulados em
+     * getters e setters no DTO para: Cadastrar, Editar, Excluir e Consultar as
+     * informações no banco de dados na tabela compra.
+     */
     public void cadastrarCompra(CompraDTO obj)
     
     {
+        //Através dos comandos SQL salva as informações nas colunas da tabela compra no banco de dados.
         String sql = ""
                 + "INSERT INTO tbl_compra( "
                 + "compra_data, "
@@ -41,6 +52,7 @@ public class CompraDAO {
                 + "VALUES (?,?,?,?,?,?,?)";
 
         try {
+            //Preparar e Conecta o BD e organiza o comando SQL
             pst = conn.prepareStatement(sql);
 
             pst.setString(1, obj.getDataCompra());
@@ -50,7 +62,8 @@ public class CompraDAO {
             pst.setInt(5, obj.getCompraPreco());
             pst.setInt(6, obj.getCompraPrecoVenda());
             pst.setInt(7, obj.getCompraValorTotal());
-
+            
+            //Executar o comando SQL
             pst.execute();
             pst.close();
 
@@ -59,8 +72,15 @@ public class CompraDAO {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar a compra " + erro);
         }
     }
-
+    /**
+     * Método Editar: Altera as informações no banco de dados na tabela compra
+     * de acordo com os atributos informados pelo usuário.
+     *
+     * @param obj CompraDTO conecta com banco para fazer as alterações das
+     * informações.
+     */
     public void editarCompra(CompraDTO obj) {
+        //Através dos comandos SQL edita as informações nas colunas da tabela compra no banco de dados.
         String sql = ""
                 + "UPDATE INTO tbl_compra "
                 + "SET "
@@ -74,7 +94,7 @@ public class CompraDAO {
                 + "WHERE id_compra=?";
 
         try {
-
+            //Preparar e Conecta o BD e organiza o comando SQL
             pst = conn.prepareStatement(sql);
 
             pst.setString(1, obj.getDataCompra());
@@ -86,7 +106,7 @@ public class CompraDAO {
             pst.setInt(7, obj.getCompraValorTotal());
 
             pst.setInt(8, obj.getIdCompra());
-
+            //Executar o comando SQL
             pst.execute();
             pst.close();
 
@@ -97,13 +117,21 @@ public class CompraDAO {
         }
 
     }
-
+    /**
+     * Método Excluir: Exclui as informações no banco de dados nas colunas da
+     * tabela compra informado pelo usuário.
+     *
+     * @param obj CompraDTO conecta com banco para excluir as informações.
+     */
     public void excluirCompra(CompraDTO obj) {
+         //Através dos comandos SQL exclui as informações nas colunas da tabela compra no banco de dados.
+        
         String sql = ""
                 + "DELETE FROM tbl_compra "
                 + "WHERE id_compra = ?";
 
         try {
+            //Conecta no banco e prepara organizando o comando SQL de acordo com o  nome da coluna informada na String SQL.
             pst = conn.prepareStatement(sql);
 
             pst.setInt(1, obj.getIdCompra());
@@ -118,16 +146,21 @@ public class CompraDAO {
         }
 
     }
-
+    /**
+     * Método Listar: Pega todas as informações do banco de dados das colunas da
+     * tabela compra e retorna listando em uma tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
     public ArrayList<CompraDTO> listarCompra() {
-
+        //Através dos comandos SQL lista todas informações nas colunas da tabela compra no banco de dados.
         String sql = " SELECT * "
                 + " FROM tbl_compra as c "
                 + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
                 + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)";
 
         try {
-
+        //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
 
@@ -159,20 +192,27 @@ public class CompraDAO {
             JOptionPane.showMessageDialog(null, "CompraDAO LISTAR " + erro);
             return null;
         }
-         // Esse metodo retorna toda a lista dos usuarios cadastrado
+         
     }
-
+    /**
+     * Método Buscar: Pega as informações do nome do fornecedor escolhido no
+     * banco de dados das colunas da tabela fornecedor e retorna listando em uma
+     * tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
+    
     public ArrayList<CompraDTO> buscarCompraFornecedor(String forn_nome) {
-
+       //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela compra no banco de dados.
         String sql = "SELECT *"
                 + " FROM tbl_compra as c "
                 + "INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
                 + "INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto) "
                 + "WHERE f.forn_nome=?";
-
-        conn = new Conexao().conectaBD();
+              
 
         try {
+            //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
 
             pst.setString(1, forn_nome);
@@ -207,164 +247,18 @@ public class CompraDAO {
         return null;
 
     }
-
-    public ArrayList<CompraDTO> buscarCompraProdutoNome(String pro_nome) {
-
-        String sql = "SELECT * "
-                + "FROM tbl_compra as c "
-                + "INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
-                + "INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto) "
-                + "WHERE p.pro_nome=?";
-
-        try {
-            pst = conn.prepareStatement(sql);
-
-            pst.setString(1, pro_nome);
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                CompraDTO obj = new CompraDTO();
-                FornecedorDTO f = new FornecedorDTO();
-                ProdutoDTO p = new ProdutoDTO();
-
-                obj.setIdCompra(rs.getInt("c.id_compra"));
-                obj.setDataCompra(rs.getString("c.compra_data"));
-                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
-                obj.setCompraPreco(rs.getInt("c.compra_preco"));
-                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
-
-                f.setNomeFornecedor(rs.getString("f.forn_nome"));
-                p.setNomeProduto(rs.getString("p.pro_nome"));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
-
-                obj.setFornecedor(f);
-                obj.setProduto(p);
-
-                lista.add(obj);
-            }
-            return lista;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "ERRO CompraDAO " + erro);
-        }
-        return null;
-    }
-
-    public ArrayList<CompraDTO> buscarCompraProdutoCodigoBarra(int pro_cod_barra) {
-
-        String sql = "SELECT * "
-                + " FROM tbl_compra as c"
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
-                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
-                + " WHERE p.pro_cod_barra=?";
-
-        try {
-            pst = conn.prepareStatement(sql);
-
-            pst.setInt(1, pro_cod_barra);
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                CompraDTO obj = new CompraDTO();
-                FornecedorDTO f = new FornecedorDTO();
-                ProdutoDTO p = new ProdutoDTO();
-
-                obj.setIdCompra(rs.getInt("c.id_compra"));
-                obj.setDataCompra(rs.getString("c.compra_data"));
-                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
-                obj.setCompraPreco(rs.getInt("c.compra_preco"));
-                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
-
-                f.setNomeFornecedor(rs.getString("f.forn_nome"));
-                p.setNomeProduto(rs.getString("p.pro_nome"));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
-
-                obj.setFornecedor(f);
-                obj.setProduto(p);
-
-                lista.add(obj);
-            }
-            return lista;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "ERRO CompraDAO " + erro);
-        }
-        return null;
-    }
-
-    public CompraDTO buscarCompraProduto(int pro_cod_barra) {
-
-        String sql = "SELECT * "
-                + " FROM tbl_compra as c"
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
-                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto) "
-                + "WHERE p.pro_cod_barra=?";
-
-        try {
-            pst = conn.prepareStatement(sql);
-
-            pst.setInt(1, pro_cod_barra);
-            rs = pst.executeQuery();
-
-            CompraDTO obj = new CompraDTO();
-            FornecedorDTO f = new FornecedorDTO();
-            ProdutoDTO p = new ProdutoDTO();
-
-            while (rs.next()) {
-
-                obj.setIdCompra(rs.getInt("c.id_compra"));
-                obj.setDataCompra(rs.getString("c.compra_data"));
-                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
-                obj.setCompraPreco(rs.getInt("c.compra_preco"));
-                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
-
-                f.setNomeFornecedor(rs.getString("f.forn_nome"));
-                p.setNomeProduto(rs.getString("p.pro_nome"));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
-
-                obj.setFornecedor(f);
-                obj.setProduto(p);
-
-            }
-            return obj;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "ERRO buscarCompraDAO " + erro);
-            return null;
-        }
-
-    }
-
-    /*
-        public void atualizarEstoque(int id_compra, int novo_estoque) {
-        try {
-            String sql = "SELECT fk_produto"
-                    + " FROM tbl_compras as c "
-                    + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)  "
-                    + " UPDATE INTO tbl_compra "
-                    + " SET p.pro_estoque=? "
-                    + " WHERE id_compra=?";
-
-            pst = conn.prepareStatement(sql);
-
-            pst.setInt(1, novo_estoque);
-            pst.setInt(2, id_compra);
-
-            pst.execute();
-            pst.close();
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ERRO CompraDAO: " + e);
-        }
-    }
     
+        /**
+     * Método Buscar: Pega as informações do codigo do produto escolhido no
+     * banco de dados das colunas da tabela produto e retorna listando em uma
+     * tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
      */
-    public CompraDTO PesquisaCodProd(int pcode)
-    {
 
+    public ArrayList<CompraDTO> PesquisaCodProd(int pcode)
+    {
+    //Através dos comandos SQL salva as informações nas colunas da tabela compra no banco de dados.
         String sql = ""
                 + "SELECT * "
                 + "FROM tbl_compra as c "
@@ -372,6 +266,7 @@ public class CompraDAO {
                 + "ON (c.fk_produto = p.id_produto)"
                 + "WHERE (p.pro_cod_barra) = ?";
         try {
+            //Preparar e Conecta o BD e organiza o comando SQL
             pst = conn.prepareStatement(sql);
             pst.setInt(1, pcode);
             rs = pst.executeQuery();
@@ -388,8 +283,9 @@ public class CompraDAO {
 
                 objc.setProduto(objp);
 
+                lista.add(objc);
             }
-            return objc;
+            return lista;
         } catch (SQLException ex) {
             Logger.getLogger(Venda.class.getName()).log(Level.SEVERE, null, ex);
         }

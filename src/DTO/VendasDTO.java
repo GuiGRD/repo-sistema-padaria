@@ -16,6 +16,7 @@ public class VendasDTO {
     // Atributos
     private int idVenda;
     private Date dataVenda;
+    private int numNota;
     private ProdutoDTO produto;
     private CompraDTO compra;
     private int qntVenda;
@@ -93,6 +94,14 @@ public class VendasDTO {
 
     public void setDataVenda(String datamysql) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public int getNumNota() {
+        return numNota;
+    }
+
+    public void setNumNota(int numNota) {
+        this.numNota = numNota;
     }
 
 }

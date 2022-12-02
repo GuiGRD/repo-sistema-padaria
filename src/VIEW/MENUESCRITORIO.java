@@ -4,7 +4,7 @@
  */
 package VIEW;
 
-import CONTROLE.Transparencia;
+import UTILIDADES.Transparencia;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.text.DateFormat;

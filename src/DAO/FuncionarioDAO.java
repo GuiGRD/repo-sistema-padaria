@@ -11,15 +11,10 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Pri
+ * @author Pri 
  */
 public class FuncionarioDAO {
-
-    /**
-     * Método Funcionário, serão utilizados os atributos que foram encapsulados
-     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
-     * informações no banco de dados na tabela funcionário.
-     */
+    
     //Cria a Conexão
     Connection conn;
     // Prepara a Conexão, cria um objeto para representar as instruções do SQL que será executada.
@@ -28,7 +23,12 @@ public class FuncionarioDAO {
     ResultSet rs;
     //Cria uma Lista das informações no banco de dados.
     ArrayList<FuncionarioDTO> lista = new ArrayList<>();
-
+    
+    /**
+     * Método Funcionário, serão utilizados os atributos que foram encapsulados
+     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informações no banco de dados na tabela funcionário.
+     */
     public FuncionarioDAO() {
         //Conecta com o banco de dados
         conn = new Conexao().conectaBD();
