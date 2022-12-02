@@ -1,17 +1,18 @@
 package DTO;
 
+import java.util.Vector;
+
 /**
  *
  * @author Pri
  */
 
+public class FornecedorDTO {
+
     /**
      * Método Fornecedor, contem os atributos que serao as informacoes de quem
      * ira fornecer os produtos para o sistema padaria.
      */
-
-public class FornecedorDTO {
-
     
     
     // Atributos
@@ -110,4 +111,9 @@ public class FornecedorDTO {
     public void setEstadoFornecedor(String estadoFornecedor) {
         this.estadoFornecedor = estadoFornecedor;
     }
+
+    public void setIdFornecedor(FornecedorDTO fdto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

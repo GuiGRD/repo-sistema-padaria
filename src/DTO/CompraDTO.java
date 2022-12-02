@@ -4,14 +4,13 @@ package DTO;
  *
  * @author Pri
  */
-//kfjakjçdfhg lkajdhflgkadhjf lgkajdhf glkajdfh gklajdfh glkadg kdfjkljdfhlg
+public class CompraDTO {
+
     /**
      * Método Compra, contem os atributos que serao as informacoes das
      * entradas/compras dos produtos.
      */
-public class CompraDTO {
-
-   
+    
     // Atributos
     private int idCompra;
     private String dataCompra;
@@ -89,5 +88,7 @@ public class CompraDTO {
     public void setCompraValorTotal(int compraValorTotal) {
         this.compraValorTotal = compraValorTotal;
     }
+
+
 
 }

@@ -1,15 +1,13 @@
 package MAIN;
 
 
-import VIEW.MENU;
-
-
+import VIEW.TelaLogin;
 
 public class Principal 
 {
     public static void main(String[] args)
     {
-        MENU obj = new MENU();
+        TelaLogin obj = new TelaLogin();
         obj.setVisible(true);
     }
 }

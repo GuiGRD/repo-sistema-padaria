@@ -6,12 +6,12 @@ import java.util.Date;
  *
  * @author Pri
  */
+public class VendasDTO {
 
     /**
      * Método Venda, contem os atributos que serao as informacoes das
      * saidas/vendas dos produtos.
      */
-public class VendasDTO {
     
     // Atributos
     private int idVenda;

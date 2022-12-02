@@ -410,8 +410,8 @@ public class Funcionario extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(btnBuscaNome))
                 .addGap(16, 16, 16)
-                .addComponent(Tabela, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                .addGap(228, 228, 228))
+                .addComponent(Tabela, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         JTPainelFuncionario.addTab("Consulta", painelConFuncionario);
@@ -448,7 +448,7 @@ public class Funcionario extends javax.swing.JPanel {
             .addGroup(jPanelLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JTPainelFuncionario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 722, Short.MAX_VALUE)
+                    .addComponent(JTPainelFuncionario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
                         .addGap(0, 305, Short.MAX_VALUE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -732,8 +732,8 @@ public class Funcionario extends javax.swing.JPanel {
     private void LimparBusca() {
         txtBuscaNome.setText("");
     }
-
-    private void Listar()//mostra as informacoes do banco na tabela
+//mostra as informacoes do banco na tabela
+    private void Listar()
     {
         FuncionarioDAO objdao = new FuncionarioDAO();
         List<FuncionarioDTO> lista = objdao.listarFuncionario();

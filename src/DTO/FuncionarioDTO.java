@@ -4,13 +4,12 @@ package DTO;
  *
  * @author Pri
  */
+public class FuncionarioDTO {
 
     /**
      * Método Funcionario, contem os atributos que serao as informacoes dos
      * funcionarios que serao cadastrados no sistema padaria
      */
-public class FuncionarioDTO {
-
     
     
     // Atributos

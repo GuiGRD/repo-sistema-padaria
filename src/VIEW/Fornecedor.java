@@ -55,7 +55,7 @@ public class Fornecedor extends javax.swing.JPanel {
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        setMaximumSize(new java.awt.Dimension(1280, 800));
         setPreferredSize(new java.awt.Dimension(730, 580));
 
         jNome.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
@@ -100,13 +100,13 @@ public class Fornecedor extends javax.swing.JPanel {
         jLabel30.setText("*Celular:");
 
         jLabel46.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel46.setText("*Rua:");
+        jLabel46.setText("Rua:");
 
         jLabel41.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel41.setText("*Nº:");
+        jLabel41.setText("Nº:");
 
         jLabel45.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel45.setText("*CEP:");
+        jLabel45.setText("CEP:");
 
         try {
             txtCep.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##.###-###")));
@@ -115,13 +115,13 @@ public class Fornecedor extends javax.swing.JPanel {
         }
 
         jLabel42.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel42.setText("*Bairro:");
+        jLabel42.setText("Bairro:");
 
         jLabel43.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel43.setText("*Cidade:");
+        jLabel43.setText("Cidade:");
 
         jLabel44.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel44.setText("*Estado:");
+        jLabel44.setText("Estado:");
 
         txtEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "AL", "AP", "AM", "BA", "CA", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
 
@@ -324,8 +324,8 @@ public class Fornecedor extends javax.swing.JPanel {
                     .addComponent(jLabel19)
                     .addComponent(btnBuscaNome))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Tabela, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                .addGap(185, 185, 185))
+                .addComponent(Tabela, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         jTabbedPane.addTab("Consulta", painelConFornecedor);
@@ -368,7 +368,7 @@ public class Fornecedor extends javax.swing.JPanel {
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 921, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 906, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
         jPanel1Layout.setVerticalGroup(
@@ -394,7 +394,7 @@ public class Fornecedor extends javax.swing.JPanel {
                         .addComponent(jNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 935, Short.MAX_VALUE)))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)))
                 .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
@@ -403,7 +403,7 @@ public class Fornecedor extends javax.swing.JPanel {
                 .addComponent(jNome)
                 .addGap(2, 2, 2)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -415,7 +415,7 @@ public class Fornecedor extends javax.swing.JPanel {
         // Comando para fazer uma busca no banco por nome;
         Pesquisar();
         LimparBusca();
-        
+
     }//GEN-LAST:event_btnBuscaNomeActionPerformed
 
     private void tabelaConFornecedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConFornecedorMouseClicked
@@ -449,8 +449,7 @@ public class Fornecedor extends javax.swing.JPanel {
     }//GEN-LAST:event_txtCelularActionPerformed
 
     private void txtBuscaNomeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscaNomeKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Pesquisar();
             LimparBusca();
         }
@@ -512,13 +511,7 @@ int id, numero;
 
         if (nome.isEmpty()
                 || cnpj.equals("  .   .   /    -  ")
-                || celular.equals("(  )        -     ")
-                || cep.equals("      -    ")
-                || rua.isEmpty()
-                || txtNumero.getText().equals("")
-                || bairro.isEmpty()
-                || cidade.isEmpty()
-                || estado.isEmpty()) {
+                || celular.equals("(  )        -     ")) {
             JOptionPane.showMessageDialog(null, "Preencher todos os campos obrigatórios");
 
         } else {
@@ -539,7 +532,7 @@ int id, numero;
         }
     }
 
-        private void Editar() {
+    private void Editar() {
 
         id = Integer.parseInt(txtId.getText().toString());
         nome = txtNome.getText();
@@ -552,7 +545,7 @@ int id, numero;
         cidade = txtCidade.getText();
         estado = txtEstado.getSelectedItem().toString();
 
-        if (       nome.isEmpty()
+        if (nome.isEmpty()
                 || cnpj.equals("  .   .   /    -  ")
                 || celular.equals("(  )        -     ")
                 || cep.equals("      -    ")
@@ -560,19 +553,18 @@ int id, numero;
                 || txtNumero.getText().equals("")
                 || bairro.isEmpty()
                 || cidade.isEmpty()
-                || estado.isEmpty()) 
-        {
+                || estado.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Preencher todos os campos obrigatórios");
 
         } else {
             int op;
-            Object[] options = {"Cancelar","Confirmar"};
+            Object[] options = {"Cancelar", "Confirmar"};
             op = JOptionPane.showOptionDialog(null, "Deseja realmente editar?", "ATENÇÃO", JOptionPane.DEFAULT_OPTION,
                     JOptionPane.WARNING_MESSAGE, null, options, options[1]);
             if (op == 1) {
 
                 FornecedorDTO obj = new FornecedorDTO();
-                
+
                 obj.setIdFornecedor(id);
                 obj.setNomeFornecedor(nome);
                 obj.setCnpjFornecedor(cnpj);
@@ -589,8 +581,7 @@ int id, numero;
             }
         }
     }
-    
-    
+
     private void Limpar() {
 
         new LimparCampos().Limpar(painelCadFornecedor);
@@ -598,9 +589,8 @@ int id, numero;
 
         txtEstado.setSelectedIndex(0);
     }
-    
-    private void LimparBusca()
-    {
+
+    private void LimparBusca() {
         txtBuscaNome.setText("");
     }
 
@@ -614,7 +604,7 @@ int id, numero;
         for (FornecedorDTO cont : lista) {
             model.addRow(new Object[]{
                 cont.getIdFornecedor(),
-                cont.getNomeFornecedor(),  
+                cont.getNomeFornecedor(),
                 cont.getCnpjFornecedor(),
                 cont.getCelularFornecedor(),
                 cont.getCepFornecedor(),
@@ -622,11 +612,10 @@ int id, numero;
                 cont.getNumeroFornecedor(),
                 cont.getBairroFornecedor(),
                 cont.getCidadeFornecedor(),
-                cont.getEstadoFornecedor()});
+                cont.getEstadoFornecedor()
+            });
         }
     }
-
-
 
     private void Excluir() {
         id = Integer.parseInt(txtId.getText());
@@ -673,8 +662,7 @@ int id, numero;
         }
     }
 
-    private void CarregarCampos() 
-    {
+    private void CarregarCampos() {
         jTabbedPane.setSelectedIndex(0);
         txtId.setText(tabelaConFornecedor.getValueAt(tabelaConFornecedor.getSelectedRow(), 0).toString());
         txtNome.setText(tabelaConFornecedor.getValueAt(tabelaConFornecedor.getSelectedRow(), 1).toString());

@@ -31,25 +31,25 @@ public class CompraDAO {
     {
         String sql = ""
                 + "INSERT INTO tbl_compra( "
-                //+ "compra_data, "
+                + "compra_data, "
                 + "fk_fornecedor, "
                 + "fk_produto, "
                 + "compra_qnt, "
                 + "compra_preco, "
                 + "compra_preco_venda, "
                 + "compra_valor_total) "
-                + "VALUES (?,?,?,?,?,?)";
+                + "VALUES (?,?,?,?,?,?,?)";
 
         try {
             pst = conn.prepareStatement(sql);
 
-            //pst.setString(1, obj.getDataCompra());
-            pst.setInt(1, obj.getFornecedor().getIdFornecedor());
-            pst.setInt(2, obj.getProduto().getIdProduto());
-            pst.setInt(3, obj.getCompraQnt());
-            pst.setInt(4, obj.getCompraPreco());
-            pst.setInt(5, obj.getCompraPrecoVenda());
-            pst.setInt(6, obj.getCompraValorTotal());
+            pst.setString(1, obj.getDataCompra());
+            pst.setInt(2, obj.getFornecedor().getIdFornecedor());
+            pst.setInt(3, obj.getProduto().getIdProduto());
+            pst.setInt(4, obj.getCompraQnt());
+            pst.setInt(5, obj.getCompraPreco());
+            pst.setInt(6, obj.getCompraPrecoVenda());
+            pst.setInt(7, obj.getCompraValorTotal());
 
             pst.execute();
             pst.close();
@@ -64,7 +64,7 @@ public class CompraDAO {
         String sql = ""
                 + "UPDATE INTO tbl_compra "
                 + "SET "
-               // + "compra_data = ?, "
+                + "compra_data = ?, "
                 + "fk_fornecedor = ?, "
                 + "fk_produto = ?, "
                 + "compra_qnt =?, "
@@ -77,15 +77,15 @@ public class CompraDAO {
 
             pst = conn.prepareStatement(sql);
 
-            //pst.setString(1, obj.getDataCompra());
-            pst.setInt(1, obj.getFornecedor().getIdFornecedor());
-            pst.setInt(2, obj.getProduto().getIdProduto());
-            pst.setInt(3, obj.getCompraQnt());
-            pst.setInt(4, obj.getCompraPreco());
-            pst.setInt(5, obj.getCompraPrecoVenda());
-            pst.setInt(6, obj.getCompraValorTotal());
+            pst.setString(1, obj.getDataCompra());
+            pst.setInt(2, obj.getFornecedor().getIdFornecedor());
+            pst.setInt(3, obj.getProduto().getIdProduto());
+            pst.setInt(4, obj.getCompraQnt());
+            pst.setInt(5, obj.getCompraPreco());
+            pst.setInt(6, obj.getCompraPrecoVenda());
+            pst.setInt(7, obj.getCompraValorTotal());
 
-            pst.setInt(7, obj.getIdCompra());
+            pst.setInt(8, obj.getIdCompra());
 
             pst.execute();
             pst.close();
@@ -138,7 +138,7 @@ public class CompraDAO {
                 ProdutoDTO p = new ProdutoDTO();
 
                 obj.setIdCompra(rs.getInt("c.id_compra"));
-                //obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
                 obj.setCompraQnt(rs.getInt("c.compra_qnt"));
                 obj.setCompraPreco(rs.getInt("c.compra_preco"));
                 obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
@@ -184,7 +184,7 @@ public class CompraDAO {
                 ProdutoDTO p = new ProdutoDTO();
 
                 obj.setIdCompra(rs.getInt("c.id_compra"));
-                //obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
                 obj.setCompraQnt(rs.getInt("c.compra_qnt"));
                 obj.setCompraPreco(rs.getInt("c.compra_preco"));
                 obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));

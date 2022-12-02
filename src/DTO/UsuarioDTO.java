@@ -6,14 +6,12 @@ import DTO.FuncionarioDTO;
  *
  * @author Pri
  */
+public class UsuarioDTO {
 
     /**
      * Método Usuário, contem os atributos que serao as informacoes que
      * definirao quem tera acesso ao sistema
      */
-public class UsuarioDTO {
-
-
     
     
     // Atributos

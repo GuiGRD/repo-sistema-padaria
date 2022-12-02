@@ -6,6 +6,7 @@ import DTO.FuncionarioDTO;
 import VIEW.MENUADM;
 import VIEW.MENUCAIXA;
 import VIEW.MENUESCRITORIO;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,14 +18,12 @@ import javax.swing.JOptionPane;
  * 
  * @author Pri
  */
-
+public class UsuarioDAO {
     /**
      * Método Usuário serão utilizados os atributos que foram encapsulados
      * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
      * informações no banco de dados na tabela usuário.
      */
-public class UsuarioDAO {
-
     //Cria a Conexão
     Connection conn = new Conexao().conectaBD();
     // Prepara a Conexão, cria um objeto para representar as instruções do SQL que será executada.
@@ -164,13 +163,7 @@ public class UsuarioDAO {
     public ArrayList<UsuarioDTO> listarUsuario() //traz as informações do banco de dados da tabela em questão retonando em uma lista
     {
         String sql = ""
-                + "SELECT"
-                + "u.fk_funcionario,"
-                + "u.usu_login,"
-                + "u.usu_senha,"
-                + "u.usu_perfil,"
-                + "f.fun_nome,"
-                + "f.fun_cpf,"
+                + "SELECT * "
                 + "FROM tbl_usuario AS u "
                 + "INNER JOIN tbl_funcionario AS f "
                 + "ON u.fk_funcionario = f.id_funcionario ";
@@ -184,13 +177,13 @@ public class UsuarioDAO {
                 UsuarioDTO obj = new UsuarioDTO();
                 FuncionarioDTO fundto = new FuncionarioDTO();
 
-                obj.setIdUsuario(rs.getInt("u.id_usuario "));
-                obj.setLoginUsuario(rs.getString("u.usu_login "));
-                obj.setSenhaUsuario(rs.getString("u.usu_senha "));
-                obj.setPerfilUsuario(rs.getString(" u.usu_perfil "));
+                obj.setIdUsuario(rs.getInt("u.id_usuario"));
+                obj.setLoginUsuario(rs.getString("u.usu_login"));
+                obj.setSenhaUsuario(rs.getString("u.usu_senha"));
+                obj.setPerfilUsuario(rs.getString(" u.usu_perfil"));
 
-                fundto.setNomeFuncionario(rs.getString("f.fun_nome "));
-                fundto.setCpfFuncionario(rs.getString("f.fun_cpf "));
+                fundto.setNomeFuncionario(rs.getString("f.fun_nome"));
+                fundto.setCpfFuncionario(rs.getString("f.fun_cpf"));
 
                 obj.setFuncionario(fundto);
                 lista.add(obj);
@@ -293,31 +286,31 @@ public class UsuarioDAO {
                 if (cargo == "Adm") {
                 //if(cargo.equals("Adm")){
                     JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-                    MENUADM menu = new MENUADM();
-                    menu.setVisible(true);
+                    MENUADM menuA = new MENUADM();
+                    menuA.setVisible(true);
 
-                    //menu.LoginUsuario = rs.getString("usu_login");
-                    //MENU.lblUsuario.setForeground(Color.gray);
+                    menuA.LoginUsuario = rs.getString("usu_login");
+                    MENUADM.lblUsuario.setForeground(Color.BLUE);
                     
                 } if (cargo == "Caixa") {
                 //} else if (cargo.equals("Caixa")){
                     JOptionPane.showMessageDialog(null, "Bem vindo(a)");
 
-                    MENUCAIXA menu = new MENUCAIXA();
-                    menu.setVisible(true);
+                    MENUCAIXA menuC = new MENUCAIXA();
+                    menuC.setVisible(true);
 
-                    //menu.LoginUsuario = rs.getString("usu_login");
-                    //MENU.lblUsuario.setForeground(Color.gray);
+                   menuC.LoginUsuario = rs.getString("usu_login");
+                   MENUCAIXA.lblUsuario.setForeground(Color.gray);
                     
                 } else if (cargo == "Escritorio") {
                 //} else if (cargo.equals("Escritorio")){
                     JOptionPane.showMessageDialog(null, " Bem vindo(a)");
 
-                    MENUESCRITORIO menu = new MENUESCRITORIO();
-                    menu.setVisible(true);
+                    MENUESCRITORIO menuE = new MENUESCRITORIO();
+                    menuE.setVisible(true);
 
-                    //menu.LoginUsuario = rs.getString(" usu_login");
-                    //MENU.lblUsuario.setForeground(Color.BLUE);
+                    menuE.LoginUsuario = rs.getString(" usu_login");
+                    MENUESCRITORIO.lblUsuario.setForeground(Color.gray);
                 }
 
             } else {

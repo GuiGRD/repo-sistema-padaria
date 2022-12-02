@@ -13,12 +13,6 @@ import javax.swing.JOptionPane;
  *
  * @author Pri
  */
-
-    /**
-     * Metodo Fornecedor, serao utilizados os atributos que foram encapsulados
-     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
-     * informacoes no banco de dados na tabela fornecedor.
-     */
 public class FornecedorDAO {
 
     /**
@@ -95,7 +89,9 @@ public class FornecedorDAO {
      */
     public void editarFornecedor(FornecedorDTO objforndto) {
         //Através dos comandos SQL edita as informações nas colunas da tabela fornecedor no banco de dados.
-        String sql = "UPDATE tbl_fornecedor SET "
+        String sql = ""
+                + "UPDATE tbl_fornecedor "
+                + "SET "
                 + "forn_nome=?, "
                 + "forn_cnpj=?, "
                 + "forn_celular=?, "
@@ -209,11 +205,11 @@ public class FornecedorDAO {
      * Método Buscar: Pega as informações do fornecedor escolhido no banco de
      * dados das colunas da tabela fornecedor e retorna listando em uma tabela
      * para o usuário.
-     * @param forn_nome informa o nome do fornecedor. 
+     *
      * @return lista retorna a lista com as informações do banco.
      */
     public ArrayList<FornecedorDTO> buscarFornecedor(String forn_nome) {
-        //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela fornecedor no banco de dados.
+        //Através dos comandos SQL lista, específicando o nome, todas as informacoes nas colunas da tabela fornecedor no banco de dados.
         String sql = "SELECT * "
                 + "FROM tbl_fornecedor "
                 + "WHERE forn_nome LIKE ? ";
@@ -257,9 +253,13 @@ public class FornecedorDAO {
      */
         public ResultSet CBXlistarNomeFornecedor()
         {
-        String sql = "SELECT * FROM tbl_fornecedor ORDER BY forn_nome ";
+            //Através dos comandos SQL lista, ordenado pelo nome, todas as informacoes nas colunas da tabela fornecedor no banco de dados.
+        String sql = "SELECT * "
+                + "FROM tbl_fornecedor "
+                + "ORDER BY forn_nome ";
         try 
         {
+            //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
             
             

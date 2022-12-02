@@ -37,6 +37,7 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel_ImagemFundo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1280, 800));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSair.setForeground(new java.awt.Color(255, 255, 255));

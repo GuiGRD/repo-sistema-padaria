@@ -13,15 +13,13 @@ import javax.swing.JOptionPane;
  *
  * @author Pri
  */
+public class FuncionarioDAO {
 
-/**
+    /**
      * Método Funcionário, serão utilizados os atributos que foram encapsulados
      * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
      * informações no banco de dados na tabela funcionário.
      */
-public class FuncionarioDAO {
-
-
     //Cria a Conexão
     Connection conn;
     // Prepara a Conexão, cria um objeto para representar as instruções do SQL que será executada.
@@ -101,7 +99,8 @@ public class FuncionarioDAO {
 
         //Através dos comandos SQL edita as informações nas colunas da tabela funcionário no banco de dados.
         String sql = ""
-                + "UPDATE tbl_funcionario SET "
+                + "UPDATE tbl_funcionario "
+                + "SET "
                 + "fun_nome=?, "
                 + "fun_cpf=?, "
                 + "fun_rg=?, "
@@ -194,6 +193,7 @@ public class FuncionarioDAO {
 
             while (rs.next()) {
                 FuncionarioDTO obj = new FuncionarioDTO();
+                
                 obj.setIdFuncionario(rs.getInt("id_funcionario"));
                 obj.setNomeFuncionario(rs.getString("fun_nome"));
                 obj.setCpfFuncionario(rs.getString("fun_cpf"));
@@ -210,7 +210,6 @@ public class FuncionarioDAO {
                 obj.setEstadoFuncionario(rs.getString("fun_estado"));
 
                 lista.add(obj);
-
             }
             return lista;
 

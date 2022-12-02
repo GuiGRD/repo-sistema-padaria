@@ -17,15 +17,13 @@ import javax.swing.JOptionPane;
  *
  * @author Pri
  */
+public class VendasDAO {
 
     /**
      * Método Venda serão utilizados os atributos que foram encapsulados em
      * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
      * informações no banco de dados na tabela vendas.
      */
-public class VendasDAO {
-
-
 
     //Cria a Conexão
     Connection conn;
@@ -82,7 +80,9 @@ public class VendasDAO {
         }
     }
 
- 
+ /*
+    
+    
 /**
  * Método Vendas:
  * Informa o valor total referente as vendas do dia.
@@ -91,6 +91,7 @@ public class VendasDAO {
  */
 
     //Método para calcular o total das vendas no dia 
+ 
     public double totalVendasNoDia(LocalDate venda_data) {
         try {
             double totalvendas = 0;

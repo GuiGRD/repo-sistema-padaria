@@ -7,8 +7,6 @@ package VIEW;
 import CONTROLE.Transparencia;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.text.DateFormat;
-import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -40,7 +38,8 @@ public class MENUADM extends javax.swing.JFrame {
 
     boolean a = false;
     
-    public MENUADM() {
+    public MENUADM() 
+    {
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -63,14 +62,15 @@ public class MENUADM extends javax.swing.JFrame {
         fluxo = new FluxoCaixa();
         
         
-        //Transparencia t = new Transparencia();
-        //t.aplicarTransparencia(this);
+        Transparencia t = new Transparencia();
+        t.aplicarTransparencia(this);
 
         initComponents();
         hidemenu();
         Home();
-
     }
+    
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -82,7 +82,6 @@ public class MENUADM extends javax.swing.JFrame {
         close = new javax.swing.JLabel();
         Buttonmax = new javax.swing.JPanel();
         fullmax = new javax.swing.JLabel();
-        lblData = new javax.swing.JLabel();
         Menu = new javax.swing.JPanel();
         MenuIcon = new javax.swing.JPanel();
         lineseting = new javax.swing.JPanel();
@@ -97,7 +96,6 @@ public class MENUADM extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         btnRelatorio = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
         btnFornecedor = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -117,15 +115,14 @@ public class MENUADM extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        btnFluxoCaixa = new javax.swing.JPanel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         PainelDashboard = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        setMinimumSize(new java.awt.Dimension(200, 160));
+        setMaximizedBounds(new java.awt.Rectangle(0, 0, 1280, 800));
+        setMaximumSize(null);
+        setPreferredSize(new java.awt.Dimension(1280, 800));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -183,10 +180,6 @@ public class MENUADM extends javax.swing.JFrame {
         iconminmaxclose.add(Buttonmax, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 50, 50));
 
         Header.add(iconminmaxclose, java.awt.BorderLayout.LINE_END);
-
-        lblData.setForeground(new java.awt.Color(255, 255, 255));
-        lblData.setText("DATA");
-        Header.add(lblData, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(Header, java.awt.BorderLayout.PAGE_START);
 
@@ -286,7 +279,6 @@ public class MENUADM extends javax.swing.JFrame {
         jSeparator1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         btnRelatorio.setBackground(new java.awt.Color(96, 101, 144));
-        btnRelatorio.setEnabled(false);
         btnRelatorio.setPreferredSize(new java.awt.Dimension(228, 45));
         btnRelatorio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -297,31 +289,23 @@ public class MENUADM extends javax.swing.JFrame {
         jLabel2.setBackground(new java.awt.Color(204, 204, 204));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel2.setText("Relatórios");
-
-        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/9.png"))); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Home");
 
         javax.swing.GroupLayout btnRelatorioLayout = new javax.swing.GroupLayout(btnRelatorio);
         btnRelatorio.setLayout(btnRelatorioLayout);
         btnRelatorioLayout.setHorizontalGroup(
             btnRelatorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnRelatorioLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel21)
-                .addGap(13, 13, 13)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(btnRelatorioLayout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         btnRelatorioLayout.setVerticalGroup(
             btnRelatorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnRelatorioLayout.createSequentialGroup()
-                .addGroup(btnRelatorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(btnRelatorioLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, btnRelatorioLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2)))
+                .addGap(10, 10, 10)
+                .addComponent(jLabel2)
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
@@ -545,43 +529,6 @@ public class MENUADM extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("TECNOLZ");
 
-        btnFluxoCaixa.setBackground(new java.awt.Color(56, 61, 103));
-        btnFluxoCaixa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnFluxoCaixaMousePressed(evt);
-            }
-        });
-
-        jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/1.png"))); // NOI18N
-        jLabel22.setIconTextGap(6);
-
-        jLabel23.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel23.setText("Fluxo Caixa");
-
-        javax.swing.GroupLayout btnFluxoCaixaLayout = new javax.swing.GroupLayout(btnFluxoCaixa);
-        btnFluxoCaixa.setLayout(btnFluxoCaixaLayout);
-        btnFluxoCaixaLayout.setHorizontalGroup(
-            btnFluxoCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnFluxoCaixaLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel22)
-                .addGap(20, 20, 20)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
-        );
-        btnFluxoCaixaLayout.setVerticalGroup(
-            btnFluxoCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnFluxoCaixaLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(btnFluxoCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
         lblUsuario.setText("USUARIO");
 
@@ -600,7 +547,6 @@ public class MENUADM extends javax.swing.JFrame {
             .addComponent(btnFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-            .addComponent(btnFluxoCaixa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(painelMenuLayout.createSequentialGroup()
                 .addGroup(painelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelMenuLayout.createSequentialGroup()
@@ -622,10 +568,8 @@ public class MENUADM extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(lblUsuario)
-                .addGap(10, 10, 10)
+                .addGap(30, 30, 30)
                 .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(btnFluxoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -638,9 +582,9 @@ public class MENUADM extends javax.swing.JFrame {
                 .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel7)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         menuhide.add(painelMenu, java.awt.BorderLayout.CENTER);
@@ -651,6 +595,7 @@ public class MENUADM extends javax.swing.JFrame {
 
         PainelDashboard.setBackground(new java.awt.Color(255, 255, 255));
         PainelDashboard.setFocusable(false);
+        PainelDashboard.setMaximumSize(new java.awt.Dimension(1280, 800));
         PainelDashboard.setLayout(new java.awt.BorderLayout());
         getContentPane().add(PainelDashboard, java.awt.BorderLayout.CENTER);
 
@@ -719,42 +664,38 @@ public class MENUADM extends javax.swing.JFrame {
         Fornecedor();
     }//GEN-LAST:event_btnFornecedorMousePressed
 
-    private void btnFuncionarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFuncionarioMousePressed
-        Funcionario();
-    }//GEN-LAST:event_btnFuncionarioMousePressed
-
     private void btnProdutoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProdutoMousePressed
         Produto();
 
     }//GEN-LAST:event_btnProdutoMousePressed
 
-    private void btnUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMousePressed
-        Usuario();
-    }//GEN-LAST:event_btnUsuarioMousePressed
-
-    private void btnCompraMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCompraMousePressed
-        Compra();
-    }//GEN-LAST:event_btnCompraMousePressed
-
-    private void btnVendaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVendaMousePressed
-        Venda();
-    }//GEN-LAST:event_btnVendaMousePressed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        Data();
+
     }//GEN-LAST:event_formWindowOpened
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowActivated
 
-    private void btnFluxoCaixaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFluxoCaixaMousePressed
-        FluxoCaixa();
-    }//GEN-LAST:event_btnFluxoCaixaMousePressed
+    private void btnCompraMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCompraMousePressed
+        Compra();
+    }//GEN-LAST:event_btnCompraMousePressed
 
     private void btnRelatorioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRelatorioMousePressed
         Relatorio();
     }//GEN-LAST:event_btnRelatorioMousePressed
+
+    private void btnFuncionarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFuncionarioMousePressed
+        Funcionario();
+    }//GEN-LAST:event_btnFuncionarioMousePressed
+
+    private void btnVendaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVendaMousePressed
+        Venda();
+    }//GEN-LAST:event_btnVendaMousePressed
+
+    private void btnUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMousePressed
+        Usuario();
+    }//GEN-LAST:event_btnUsuarioMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -766,7 +707,6 @@ public class MENUADM extends javax.swing.JFrame {
     public static javax.swing.JPanel PainelDashboard;
     public static javax.swing.JPanel btnCompra;
     public static javax.swing.JLabel btnConfig;
-    public static javax.swing.JPanel btnFluxoCaixa;
     public static javax.swing.JPanel btnFornecedor;
     public static javax.swing.JPanel btnFuncionario;
     public static javax.swing.JPanel btnProduto;
@@ -787,9 +727,6 @@ public class MENUADM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -797,7 +734,6 @@ public class MENUADM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel lblData;
     public static javax.swing.JLabel lblUsuario;
     private javax.swing.JPanel linehidemenu;
     private javax.swing.JPanel lineseting;
@@ -868,13 +804,6 @@ public class MENUADM extends javax.swing.JFrame {
         }
     }
 
-    private void Data() {
-        /* Substituição da Label Data para a data atual do sistema */
-        Date data = new Date();
-        DateFormat formata = DateFormat.getDateInstance(DateFormat.SHORT);
-        lblData.setText(formata.format(data));
-
-    }
 
     private void Home() {
 
@@ -893,7 +822,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         semCor(btnCompra);
         semCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(usuario);
@@ -910,7 +839,7 @@ public class MENUADM extends javax.swing.JFrame {
         comCor(btnProduto);
         semCor(btnCompra);
         semCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(produto);
@@ -927,7 +856,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         comCor(btnCompra);
         semCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(compra);
@@ -936,6 +865,7 @@ public class MENUADM extends javax.swing.JFrame {
         PainelDashboard.setVisible(true);
     }
 
+    /*
     private void FluxoCaixa() {
         semCor(btnRelatorio);
         semCor(btnFornecedor);
@@ -944,7 +874,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         semCor(btnCompra);
         semCor(btnVenda);
-        comCor(btnFluxoCaixa);
+        /comCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(fluxo);
@@ -952,7 +882,7 @@ public class MENUADM extends javax.swing.JFrame {
         PainelDashboard.revalidate();
         PainelDashboard.setVisible(true);
     }
-
+*/
     private void Funcionario() {
         semCor(btnRelatorio);
         semCor(btnFornecedor);
@@ -961,7 +891,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         semCor(btnCompra);
         semCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(funcionario);
@@ -978,7 +908,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         semCor(btnCompra);
         semCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(relatorio);
@@ -996,7 +926,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         semCor(btnCompra);
         semCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(fornecedor);
@@ -1013,7 +943,7 @@ public class MENUADM extends javax.swing.JFrame {
         semCor(btnProduto);
         semCor(btnCompra);
         comCor(btnVenda);
-        semCor(btnFluxoCaixa);
+        //semCor(btnFluxoCaixa);
 
         PainelDashboard.removeAll();
         PainelDashboard.add(venda);

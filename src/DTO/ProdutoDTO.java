@@ -5,13 +5,13 @@ package DTO;
  *
  * @author Pri
  */
+
+public class ProdutoDTO 
+{    
     /**
      * Método Produto, contem os atributos que serao as informacoes dos
      * produtos que serao cadastrados para serem vendidos no sistema padaria
      */
-public class ProdutoDTO 
-{    
-
     
     //Atributos
     private int idProduto;

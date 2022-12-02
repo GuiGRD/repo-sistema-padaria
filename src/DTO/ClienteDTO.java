@@ -6,6 +6,7 @@ public class ClienteDTO {
     private String nomeCliente;
     private String cpfCliente;
     private String nascCliente;
+    private String mensalCliente;
     private String celularCliente;
     private String cepCliente;
     private String ruaCliente;
@@ -13,7 +14,6 @@ public class ClienteDTO {
     private String bairroCliente;
     private String cidadeCliente;
     private String estadoCliente;
-    private double debitoCliente;
 
     public int getIdCliente() {
         return idCliente;
@@ -45,6 +45,14 @@ public class ClienteDTO {
 
     public void setNascCliente(String nascCliente) {
         this.nascCliente = nascCliente;
+    }
+
+    public String getMensalCliente() {
+        return mensalCliente;
+    }
+
+    public void setMensalCliente(String mensalCliente) {
+        this.mensalCliente = mensalCliente;
     }
 
     public String getCelularCliente() {
@@ -101,14 +109,6 @@ public class ClienteDTO {
 
     public void setEstadoCliente(String estadoCliente) {
         this.estadoCliente = estadoCliente;
-    }
-
-    public double getDebitoCliente() {
-        return debitoCliente;
-    }
-
-    public void setDebitoCliente(double debitoCliente) {
-        this.debitoCliente = debitoCliente;
     }
 
 }
