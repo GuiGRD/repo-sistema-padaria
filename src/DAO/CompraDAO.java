@@ -42,26 +42,20 @@ public class CompraDAO {
         //Através dos comandos SQL salva as informações nas colunas da tabela compra no banco de dados.
         String sql = ""
                 + "INSERT INTO tbl_compra( "
-                + "compra_data, "
-                + "fk_fornecedor, "
-                + "fk_produto, "
-                + "compra_qnt, "
-                + "compra_preco, "
-                + "compra_preco_venda, "
-                + "compra_valor_total) "
-                + "VALUES (?,?,?,?,?,?,?)";
+                + " date_format(compra_data,'%d/%m/%Y') as data_format ,"
+                + " fk_fornecedor, "
+                + " compra_total) "
+                + " VALUES (?,?,?)";
 
         try {
             //Preparar e Conecta o BD e organiza o comando SQL
             pst = conn.prepareStatement(sql);
 
+
             pst.setString(1, obj.getDataCompra());
             pst.setInt(2, obj.getFornecedor().getIdFornecedor());
-            pst.setInt(3, obj.getProduto().getIdProduto());
-            pst.setInt(4, obj.getCompraQnt());
-            pst.setInt(5, obj.getCompraPreco());
-            pst.setInt(6, obj.getCompraPrecoVenda());
-            pst.setInt(7, obj.getCompraValorTotal());
+            pst.setInt(3, obj.getCompraValorTotal());
+
             
             //Executar o comando SQL
             pst.execute();
@@ -84,13 +78,10 @@ public class CompraDAO {
         String sql = ""
                 + "UPDATE INTO tbl_compra "
                 + "SET "
-                + "compra_data = ?, "
-                + "fk_fornecedor = ?, "
-                + "fk_produto = ?, "
-                + "compra_qnt =?, "
-                + "compra_preco =?, "
-                + "compra_preco_venda=?, "
-                + "compra_valor_total=? "
+                + " date_format(compra_data,'%d/%m/%Y') "
+                + " AS data_format=?, "
+                + " fk_fornecedor=?, "
+                + " compra_total=? "
                 + "WHERE id_compra=?";
 
         try {
@@ -99,13 +90,9 @@ public class CompraDAO {
 
             pst.setString(1, obj.getDataCompra());
             pst.setInt(2, obj.getFornecedor().getIdFornecedor());
-            pst.setInt(3, obj.getProduto().getIdProduto());
-            pst.setInt(4, obj.getCompraQnt());
-            pst.setInt(5, obj.getCompraPreco());
-            pst.setInt(6, obj.getCompraPrecoVenda());
-            pst.setInt(7, obj.getCompraValorTotal());
+            pst.setInt(3, obj.getCompraValorTotal());
 
-            pst.setInt(8, obj.getIdCompra());
+            pst.setInt(4, obj.getIdCompra());
             //Executar o comando SQL
             pst.execute();
             pst.close();
@@ -156,9 +143,9 @@ public class CompraDAO {
         //Através dos comandos SQL lista todas informações nas colunas da tabela compra no banco de dados.
         String sql = " SELECT * "
                 + " FROM tbl_compra as c "
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
-                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)";
-
+                + " INNER JOIN tbl_fornecedor AS f "
+                + "ON(c.fk_fornecedor = f.id_fornecedor) ";
+                
         try {
         //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
@@ -168,21 +155,19 @@ public class CompraDAO {
                 
                 CompraDTO obj = new CompraDTO();
                 FornecedorDTO f = new FornecedorDTO();
-                ProdutoDTO p = new ProdutoDTO();
 
+
+                
                 obj.setIdCompra(rs.getInt("c.id_compra"));
                 obj.setDataCompra(rs.getString("c.compra_data"));
-                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
-                obj.setCompraPreco(rs.getInt("c.compra_preco"));
-                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
+
+                obj.setCompraValorTotal(rs.getInt("c.compra_total"));
 
                 f.setNomeFornecedor(rs.getString("f.forn_nome"));
-                p.setNomeProduto(rs.getString("p.pro_nome"));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
+
 
                 obj.setFornecedor(f);
-                obj.setProduto(p);
+
 
                 lista.add(obj);
             }
@@ -221,21 +206,18 @@ public class CompraDAO {
             while (rs.next()) {
                 CompraDTO obj = new CompraDTO();
                 FornecedorDTO f = new FornecedorDTO();
-                ProdutoDTO p = new ProdutoDTO();
 
+
+                
                 obj.setIdCompra(rs.getInt("c.id_compra"));
                 obj.setDataCompra(rs.getString("c.compra_data"));
-                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
-                obj.setCompraPreco(rs.getInt("c.compra_preco"));
-                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
+
+                obj.setCompraValorTotal(rs.getInt("c.compra_total"));
 
                 f.setNomeFornecedor(rs.getString("f.forn_nome"));
-                p.setNomeProduto(rs.getString("p.pro_nome"));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
+
 
                 obj.setFornecedor(f);
-                obj.setProduto(p);
 
                 lista.add(obj);
             }
@@ -248,48 +230,6 @@ public class CompraDAO {
 
     }
     
-        /**
-     * Método Buscar: Pega as informações do codigo do produto escolhido no
-     * banco de dados das colunas da tabela produto e retorna listando em uma
-     * tabela para o usuário.
-     *
-     * @return lista retorna a lista com as informações do banco.
-     */
-
-    public ArrayList<CompraDTO> PesquisaCodProd(int pcode)
-    {
-    //Através dos comandos SQL salva as informações nas colunas da tabela compra no banco de dados.
-        String sql = ""
-                + "SELECT * "
-                + "FROM tbl_compra as c "
-                + "INNER JOIN tbl_produto as p "
-                + "ON (c.fk_produto = p.id_produto)"
-                + "WHERE (p.pro_cod_barra) = ?";
-        try {
-            //Preparar e Conecta o BD e organiza o comando SQL
-            pst = conn.prepareStatement(sql);
-            pst.setInt(1, pcode);
-            rs = pst.executeQuery();
-            ProdutoDTO objp = new ProdutoDTO();
-            CompraDTO objc = new CompraDTO();
-
-            if (rs.next() == false) {
-                JOptionPane.showMessageDialog(null, "Produto não Encontrado");
-            } else {
-
-                objp.setNomeProduto(rs.getString("p.pro_nome"));
-
-                objc.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
-
-                objc.setProduto(objp);
-
-                lista.add(objc);
-            }
-            return lista;
-        } catch (SQLException ex) {
-            Logger.getLogger(Venda.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+      
     
-    }
 }

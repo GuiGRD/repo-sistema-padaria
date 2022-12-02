@@ -15,10 +15,6 @@ public class CompraDTO {
     private int idCompra;
     private String dataCompra;
     private FornecedorDTO fornecedor;
-    private ProdutoDTO produto;
-    private int compraQnt;
-    private int compraPreco;
-    private int compraPrecoVenda;
     private int compraValorTotal;
 
     /**
@@ -49,37 +45,6 @@ public class CompraDTO {
         this.fornecedor = fornecedor;
     }
 
-    public ProdutoDTO getProduto() {
-        return produto;
-    }
-
-    public void setProduto(ProdutoDTO produto) {
-        this.produto = produto;
-    }
-
-    public int getCompraQnt() {
-        return compraQnt;
-    }
-
-    public void setCompraQnt(int compraQnt) {
-        this.compraQnt = compraQnt;
-    }
-
-    public int getCompraPreco() {
-        return compraPreco;
-    }
-
-    public void setCompraPreco(int compraPreco) {
-        this.compraPreco = compraPreco;
-    }
-
-    public int getCompraPrecoVenda() {
-        return compraPrecoVenda;
-    }
-
-    public void setCompraPrecoVenda(int compraPrecoVenda) {
-        this.compraPrecoVenda = compraPrecoVenda;
-    }
 
     public int getCompraValorTotal() {
         return compraValorTotal;

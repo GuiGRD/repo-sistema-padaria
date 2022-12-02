@@ -154,6 +154,7 @@ public class ProdutoDAO {
                 objdto.setCodbarraProduto(rs.getInt("pro_cod_barra"));
                 objdto.setNomeProduto(rs.getString("pro_nome"));
                 objdto.setEstoqueProduto(rs.getInt("pro_estoque"));
+                objdto.setPrecoVendaProduto(rs.getInt("pro_preco_venda"));
 
                 lista.add(objdto);
             }
@@ -192,6 +193,7 @@ public class ProdutoDAO {
                 obj.setIdProduto(rs.getInt("id_produto "));
                 obj.setCodbarraProduto(rs.getInt("pro_cod_barra "));
                 obj.setNomeProduto(rs.getString("pro_nome "));
+                obj.setPrecoVendaProduto(rs.getInt("pro_preco_venda"));
 
                 lista.add(obj);
             }
@@ -229,6 +231,7 @@ public class ProdutoDAO {
                 obj.setIdProduto(rs.getInt("id_produto"));
                 obj.setCodbarraProduto(rs.getInt("pro_cod_barra"));
                 obj.setNomeProduto(rs.getString("pro_nome"));
+                
             }
             return obj;
 

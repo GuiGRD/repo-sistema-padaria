@@ -376,9 +376,7 @@ public class Venda extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(painelVendasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtBalanco, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(painelVendasLayout.createSequentialGroup()
-                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(17, 17, 17)))
+                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(109, 109, 109))
@@ -433,14 +431,14 @@ public class Venda extends javax.swing.JPanel {
 
         tabelaConVenda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null}
+                {null, null}
             },
             new String [] {
-                "DATA", "Nº VENDA", "VALOR"
+                "DATA", "VALOR"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -680,10 +678,8 @@ public class Venda extends javax.swing.JPanel {
 
         String sql = ""
                 + "SELECT * "
-                + "FROM tbl_compra as c "
-                + "INNER JOIN tbl_produto as p "
-                + "ON (c.fk_produto = p.id_produto)"
-                + "WHERE (p.pro_cod_barra) = ?";
+                + "FROM tbl_produto "
+                + "WHERE (pro_cod_barra) = ?";
 
         try {
 
@@ -693,8 +689,8 @@ public class Venda extends javax.swing.JPanel {
             if (rs.next() == false) {
                 JOptionPane.showMessageDialog(this, "Produto não Encontrado");
             } else {
-                String pnome = rs.getString("p.pro_nome");
-                String ppreco = rs.getString("c.compra_preco_venda");
+                String pnome = rs.getString("pro_nome");
+                String ppreco = rs.getString("pro_preco_venda");
 
                 txtNomeProduto.setText(pnome.trim());
                 txtPreco.setText(ppreco.trim());

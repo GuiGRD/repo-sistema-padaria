@@ -1,13 +1,15 @@
 package VIEW;
 
 import CONEXAO.Conexao;
+import DAO.CompraDAO;
 import UTILIDADES.LimparCampos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import DAO.CompraDAO;
+import DAO.CompraItensDAO;
 import DAO.FornecedorDAO;
 import DAO.ProdutoDAO;
 import DTO.CompraDTO;
+import DTO.CompraItensDTO;
 import DTO.FornecedorDTO;
 import DTO.ProdutoDTO;
 import java.awt.event.KeyEvent;
@@ -554,7 +556,7 @@ public class Compra extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarCompraActionPerformed
-        Cadastrar();
+        //Cadastrar();
     }//GEN-LAST:event_btnSalvarCompraActionPerformed
 
     private void btnExcluirItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirItemActionPerformed
@@ -574,7 +576,7 @@ public class Compra extends javax.swing.JPanel {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // Comando para editar os dados no BD;
-        Editar();
+        //Editar();
         Limpar();
         Listar();
     }//GEN-LAST:event_btnEditarActionPerformed
@@ -734,6 +736,7 @@ public class Compra extends javax.swing.JPanel {
         }
     }
 
+/*
     private void Cadastrar() {
 
         if (cbxFornecedor.getSelectedItem().toString().isEmpty()
@@ -750,7 +753,7 @@ public class Compra extends javax.swing.JPanel {
                     JOptionPane.WARNING_MESSAGE, null, options, options[1]);
             if (op == 1) {
 
-                CompraDTO cdto = new CompraDTO();
+                CompraItensDTO cdto = new CompraItensDTO();
 
                 cdto.setDataCompra(txtData.getText());
                 cdto.setCompraQnt(Integer.parseInt(txtQtd.getValue().toString()));
@@ -784,7 +787,7 @@ public class Compra extends javax.swing.JPanel {
                 cdto.setFornecedor(fdto);
                 cdto.setProduto(pdto);
 
-                CompraDAO dao = new CompraDAO();
+                CompraItensDAO dao = new CompraItensDAO();
                 dao.cadastrarCompra(cdto);
             }
         }
@@ -824,12 +827,12 @@ public class Compra extends javax.swing.JPanel {
                 cdto.setFornecedor(fdto);
                 cdto.setProduto(pdto);
 
-                CompraDAO dao = new CompraDAO();
+                CompraItensDAO dao = new CompraItensDAO();
                 dao.editarCompra(cdto);
             }
         }
     }
-
+*/
     private void AdicionarItens() {
         //Adicionar os  produtos na tabela de compra
         itenscompra = (DefaultTableModel) tabelaCompra.getModel();

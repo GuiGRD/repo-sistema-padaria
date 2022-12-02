@@ -684,9 +684,8 @@
                 <Component class="javax.swing.JTable" name="tabelaConVenda">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="3" rowCount="1">
+                      <Table columnCount="2" rowCount="1">
                         <Column editable="false" title="DATA" type="java.lang.Object"/>
-                        <Column editable="false" title="N&#xba; VENDA" type="java.lang.Object"/>
                         <Column editable="false" title="VALOR" type="java.lang.Object"/>
                       </Table>
                     </Property>

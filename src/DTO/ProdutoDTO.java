@@ -18,7 +18,7 @@ public class ProdutoDTO
     private int codbarraProduto;
     private String nomeProduto;
     private int estoqueProduto;
-    private FornecedorDTO Fornecedor;
+    private int precoVendaProduto;
     
     
      /**
@@ -59,12 +59,12 @@ public class ProdutoDTO
         this.estoqueProduto = estoqueProduto;
     }
 
-    public FornecedorDTO getFornecedor() {
-        return Fornecedor;
+    public int getPrecoVendaProduto() {
+        return precoVendaProduto;
     }
 
-    public void setFornecedor(FornecedorDTO Fornecedor) {
-        this.Fornecedor = Fornecedor;
+    public void setPrecoVendaProduto(int precoVendaProduto) {
+        this.precoVendaProduto = precoVendaProduto;
     }
 
 
