@@ -363,13 +363,12 @@ public class Fornecedor extends javax.swing.JPanel {
                 .addGap(2, 2, 2)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 815, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 921, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
         jPanel1Layout.setVerticalGroup(
@@ -388,22 +387,23 @@ public class Fornecedor extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 829, Short.MAX_VALUE))
-                    .addComponent(jNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 935, Short.MAX_VALUE)))
                 .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jNome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(2, 2, 2)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -414,6 +414,8 @@ public class Fornecedor extends javax.swing.JPanel {
     private void btnBuscaNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaNomeActionPerformed
         // Comando para fazer uma busca no banco por nome;
         Pesquisar();
+        LimparBusca();
+        
     }//GEN-LAST:event_btnBuscaNomeActionPerformed
 
     private void tabelaConFornecedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConFornecedorMouseClicked
@@ -450,6 +452,7 @@ public class Fornecedor extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
             Pesquisar();
+            LimparBusca();
         }
     }//GEN-LAST:event_txtBuscaNomeKeyPressed
 
@@ -594,6 +597,11 @@ int id, numero;
         new LimparCampos().Limpar(painelDadosPessoais);
 
         txtEstado.setSelectedIndex(0);
+    }
+    
+    private void LimparBusca()
+    {
+        txtBuscaNome.setText("");
     }
 
     private void Listar()//mostra as informacoes do banco na tabela

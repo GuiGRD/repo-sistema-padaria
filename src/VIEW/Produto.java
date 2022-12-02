@@ -150,14 +150,14 @@ public class Produto extends javax.swing.JPanel {
 
         tabelaConProduto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null}
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "CÓDIGO DE BARRA", "NOME", "ESTOQUE", "FORNECEDOR"
+                "ID", "CÓDIGO DE BARRA", "NOME", "ESTOQUE"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -411,7 +411,8 @@ String nome ;
                 cont.getIdProduto(),
                 cont.getCodbarraProduto(),
                 cont.getNomeProduto(),
-                cont.getEstoqueProduto()});
+                cont.getEstoqueProduto()
+            });
         }
     }
 
@@ -438,9 +439,6 @@ String nome ;
                 objdto.setCodbarraProduto(codigo);
                 objdto.setNomeProduto(nome);
 
-                FornecedorDTO fdto = new FornecedorDTO();
-
-                objdto.setFornecedor(fdto);
 
                 ProdutoDAO dao = new ProdutoDAO();
                 dao.editarProduto(objdto);
@@ -475,7 +473,7 @@ String nome ;
         buscanome = "%" + txtBusca.getText() + "%";
 
         ProdutoDAO objdao = new ProdutoDAO();
-        java.util.ArrayList<ProdutoDTO> lista = objdao.buscarNomeProduto(buscanome);
+        List<ProdutoDTO> lista = objdao.buscarNomeProduto(buscanome);
         DefaultTableModel dado = (DefaultTableModel) tabelaConProduto.getModel();
         dado.setNumRows(0);
 

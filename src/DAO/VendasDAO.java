@@ -1,7 +1,7 @@
 
 package DAO;
 
-import DTO.ClienteDTO;
+
 import DTO.CompraDTO;
 import DTO.ProdutoDTO;
 import DTO.VendasDTO;
@@ -36,25 +36,24 @@ public class VendasDAO
             
             String sql = "INSERT INTO tbl_vendas ("
                     + "venda_data, "
-                    + "fk_cliente, "
                     + "fk_produto, "
                     + "fk_compra, "
                     + "venda_qnt, "   
                     + "venda_valor"
                     + "venda_desconto, "
                     + "venda_total)"
-                    + "VALUES(?,?,?,?,?,?,?,?)";
+                    + "VALUES(?,?,?,?,?,?,?)";
 
             //Preparar e Conecta o BD e organiza o comando SQL
             pst = conn.prepareStatement(sql);
             pst.setDate(1, (Date) obj.getDataVenda());
-            pst.setInt(2, obj.getCliente().getIdCliente());
-            pst.setInt(3, obj.getProduto().getIdProduto());
-            pst.setInt(4, obj.getCompra().getIdCompra());
-            pst.setInt(5, obj.getQntVenda());
-            pst.setDouble(6, obj.getTotalVenda());
-            pst.setDouble(7, obj.getDescontoVenda());
-            pst.setDouble(8, obj.getTotalVenda());
+
+            pst.setInt(2, obj.getProduto().getIdProduto());
+            pst.setInt(3, obj.getCompra().getIdCompra());
+            pst.setInt(4, obj.getQntVenda());
+            pst.setDouble(5, obj.getTotalVenda());
+            pst.setDouble(6, obj.getDescontoVenda());
+            pst.setDouble(7, obj.getTotalVenda());
             
             
             //Executar o comando SQL
@@ -83,10 +82,10 @@ public class VendasDAO
             String sql = "SELECT venda_data , "
                     + "FROM tbl_vendas as v,  "
                     + "venda_data(v.venda_data,'%d/%m/%Y/ H%/%i/%S') , "
-                    + " INNER JOIN tbl_cliente AS c ON(v.fk_cliente = c.id_cliente), "
+
                     + " INNER JOIN tbl_produto AS p ON(v.fk_produto = p.id_produto), "
                     + " INNER JOIN tbl_compra AS cp ON(v.fk_compra = cp.id_compra), "
-                    + "c.cli_nome, "
+
                     + "c.cli_cpf,  "
                     + "p.pro_cod_barra, "
                     + "p.pro_nome, "
@@ -105,27 +104,25 @@ public class VendasDAO
             while (rs.next()) 
             {
                 VendasDTO obj = new VendasDTO();
-                ClienteDTO c = new ClienteDTO();
+
                 ProdutoDTO p = new ProdutoDTO();
                 CompraDTO cp = new CompraDTO();
                 
                 obj.setIdVenda(rs.getInt("v.id_venda"));
                 obj.setDataVenda(rs.getDate("v.venda_data"));  
                 obj.setQntVenda(rs.getInt("v.venda_qnt"));
-                obj.setValorProd(rs.getDouble("venda_valor"));
-                obj.setDescontoVenda(rs.getDouble("v.venda_desconto"));
-                obj.setTotalVenda(rs.getDouble("v.venda_total"));
+                obj.setValorProd(rs.getInt("venda_valor"));
+                obj.setDescontoVenda(rs.getInt("v.venda_desconto"));
+                obj.setTotalVenda(rs.getInt("v.venda_total"));
                 
                 
-                c.setNomeCliente(rs.getString("c.cli_nome"));
-                c.setCpfCliente(rs.getString("c.cli_cpf"));
                 
-                cp.setCompraPrecoVenda(rs.getDouble("cp.compra_preco_venda"));
+                cp.setCompraPrecoVenda(rs.getInt("cp.compra_preco_venda"));
                 
                 p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
                 p.setNomeProduto(rs.getString("p.pro_nome"));
 
-                obj.setCliente(c);
+
                 obj.setProduto(p);
                 obj.setCompra(cp);
 
@@ -232,9 +229,5 @@ public class VendasDAO
             throw new RuntimeException(e);
         }
     }
-    
-    
-    
-    
-    
+ 
 }

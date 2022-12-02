@@ -3,7 +3,7 @@ package DAO;
 import CONEXAO.Conexao;
 import DTO.UsuarioDTO;
 import DTO.FuncionarioDTO;
-import VIEW.MENU;
+import VIEW.MENUADM;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 public class UsuarioDAO {
 
-    Connection conn = new Conexao().conectaBD();
+    Connection conn ;
 
     PreparedStatement pst;
     ResultSet rs;
@@ -27,8 +27,9 @@ public class UsuarioDAO {
                 + "FROM tbl_usuario "
                 + "WHERE usu_login = ? "
                 + "AND usu_senha = ? ";
-
+        
         try {
+            conn = new Conexao().conectaBD();
             pst = conn.prepareStatement(sql);
             pst.setString(1, objusuariodto.getLoginUsuario());// preenche os valores (1 = ao 1º ponto de ? informado na minha String sql)
             pst.setString(2, objusuariodto.getSenhaUsuario());

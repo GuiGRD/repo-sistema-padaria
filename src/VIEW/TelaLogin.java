@@ -15,6 +15,10 @@ import java.sql.PreparedStatement;
 
 public class TelaLogin extends javax.swing.JFrame {
 
+    Connection conn;
+    PreparedStatement pst;
+    ResultSet rs;
+
     public TelaLogin() {
         Transparencia t = new Transparencia();
         t.aplicarTransparencia(this);
@@ -23,7 +27,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
         btnLogin.setBackground(new java.awt.Color(0, 0, 0, 0));
         btnSair.setBackground(new java.awt.Color(0, 0, 0, 0));
-        txtNome.requestFocus();
+        
 
     }
 
@@ -143,7 +147,6 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 
-   
     private void Logar() {
 
         try {
@@ -166,11 +169,11 @@ public class TelaLogin extends javax.swing.JFrame {
             //Se existir um usuário e senha correspondente  
             if (rsUsuariodao.next()) {
 
-                MENU obj = new MENU();
+                MENUADM obj = new MENUADM();
                 obj.setVisible(true);
 
-                MENU.lblUsuario.setText(rsUsuariodao.getString(2));
-                MENU.lblUsuario.setForeground(Color.white);
+                MENUADM.lblUsuario.setText(rsUsuariodao.getString(2));
+                MENUADM.lblUsuario.setForeground(Color.white);
 
                 dispose();
 
@@ -205,29 +208,25 @@ private void Logar2() {
             JOptionPane.showMessageDialog(null, "Entrar em contato com o Suporte");
         }
     }
-*/
-
-    private void Loga3(String Login, String Senha) {
+     */
+    private void Logar3() {
+        String sql = "SELECT usu_perfil "
+                + "FROM tbl_usuario "
+                + "WHERE usu_login = ? AND usu_senha = ?";
         try {
-            String sql = "SELECT usu_perfil FROM tbl_usuario WHERE usu_login = ? AND usu_senha = ?";
+            //Declara as variaveis
+            String Login, Senha;
 
-
-
-            
             //recebe as informacoes do usuario
             Login = txtNome.getText();
             Senha = txtSenha.getText();
-            
-           
+
             //passa para o dto conferir
             UsuarioDTO objusuariodto = new UsuarioDTO();
             objusuariodto.setLoginUsuario(Login);
             objusuariodto.setSenhaUsuario(Senha);
 
-            Connection conn = new Conexao().conectaBD();
-            PreparedStatement pst;
-            ResultSet rs;
-            
+            conn = new Conexao().conectaBD();
             pst = conn.prepareStatement(sql);
 
             pst.setString(1, Login);// preenche os valores (1 = ao 1º ponto de ? informado na minha String sql)
@@ -237,47 +236,37 @@ private void Logar2() {
 
             //Se existir um usuário e senha correspondente
             if (rs.next()) {
-            //Fazendo o tratamento do perfil do usuario
-		String cargo;              
-               		
-		cargo = rs.getString("usu_perfil");
+                //Fazendo o tratamento do perfil do usuario
+                String cargo;
+                cargo = rs.getString("usu_perfil");
 
-			
-                if (cargo == "Administrador")
-		{
-                   // JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-                    MENU menu = new MENU();
-                   menu.setVisible(true);
-			
-
-                    //menu.LoginUsuario = rs.getString("usu_login");
-                    //MENU.lblUsuario.setForeground(Color.gray);
-
-                    
-                    
-                } if (cargo == "Caixa") {
-                    //JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-                    
-		    MENU menu = new MENU();
-                    //menu.setVisible(false);
-                    menu.btnVenda.setVisible(true);
-
-                    //menu.LoginUsuario = rs.getString("usu_login");
-                    //MENU.lblUsuario.setForeground(Color.gray);
-
-
-                } if (cargo == "Escritorio") {
-                    //JOptionPane.showMessageDialog(null, " Bem vindo(a)");
-                    
-                    MENU menu = new MENU();
+                if (cargo == "Adm") {
+                    JOptionPane.showMessageDialog(null, "Bem vindo(a)");
+                    MENUADM menu = new MENUADM();
                     menu.setVisible(true);
-		    menu.btnVenda.setVisible(false);
-                    
-                    
+
+                    //menu.LoginUsuario = rs.getString("usu_login");
+                    //MENU.lblUsuario.setForeground(Color.gray);
+                }
+                if (cargo == "Caixa") {
+                    JOptionPane.showMessageDialog(null, "Bem vindo(a)");
+
+                    MENUCAIXA menu = new MENUCAIXA();
+                    menu.setVisible(true);
+
+                    //menu.LoginUsuario = rs.getString("usu_login");
+                    //MENU.lblUsuario.setForeground(Color.gray);
+                }
+                if (cargo == "Escritorio") {
+                    JOptionPane.showMessageDialog(null, " Bem vindo(a)");
+
+                    MENUESCRITORIO menu = new MENUESCRITORIO();
+                    menu.setVisible(true);
+
                     //menu.LoginUsuario = rs.getString(" usu_login");
                     //MENU.lblUsuario.setForeground(Color.BLUE);
                 }
-
+                dispose();
             } else {
                 //Envia mensagem dizendo que está incorreto.(usuario e/ou senha incorreto)
                 JOptionPane.showMessageDialog(null, "Usuário e/ou Senha Inválida");
@@ -287,6 +276,5 @@ private void Logar2() {
         }
 
     }
-
 
 }

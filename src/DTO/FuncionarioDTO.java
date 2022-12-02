@@ -13,8 +13,6 @@ public class FuncionarioDTO {
     private String celularFuncionario;
     private String cargoFuncionario;
     private String admissaoFuncionario;
-    private String demissaoFuncionario;
-    private String ativoFuncionario;
     private String cepFuncionario;
     private String ruaFuncionario;
     private int numeroFuncionario;
@@ -127,14 +125,6 @@ public class FuncionarioDTO {
         this.admissaoFuncionario = admissaoFuncionario;
     }
 
-    public String getDemissaoFuncionario() {
-        return demissaoFuncionario;
-    }
-
-    public void setDemissaoFuncionario(String demissaoFuncionario) {
-        this.demissaoFuncionario = demissaoFuncionario;
-    }
-
     public String getCargoFuncionario() {
         return cargoFuncionario;
     }
@@ -143,12 +133,5 @@ public class FuncionarioDTO {
         this.cargoFuncionario = cargoFuncionario;
     }
 
-    public String getAtivoFuncionario() {
-        return ativoFuncionario;
-    }
-
-    public void setAtivoFuncionario(String ativoFuncionario) {
-        this.ativoFuncionario = ativoFuncionario;
-    }
 
 }

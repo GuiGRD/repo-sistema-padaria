@@ -61,7 +61,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jTabbedPane" alignment="1" pref="722" max="32767" attributes="0"/>
+                      <Component id="JTPainelFuncionario" alignment="1" pref="722" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="305" max="32767" attributes="0"/>
                           <Component id="btnExcluir" min="-2" pref="135" max="-2" attributes="0"/>
@@ -78,7 +78,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="jTabbedPane" min="-2" pref="502" max="-2" attributes="0"/>
+                  <Component id="JTPainelFuncionario" min="-2" pref="502" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnExcluir" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -91,7 +91,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JTabbedPane" name="jTabbedPane">
+        <Container class="javax.swing.JTabbedPane" name="JTPainelFuncionario">
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
           <SubComponents>
@@ -193,23 +193,14 @@
                                           <Component id="txtCelular" alignment="0" min="-2" pref="167" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jLabel63" min="-2" pref="68" max="-2" attributes="0"/>
+                                          <Component id="jLabel62" min="-2" pref="65" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel64" min="-2" pref="65" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="txtDemissao" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="jLabel63" min="-2" pref="68" max="-2" attributes="0"/>
-                                                  <Component id="jLabel62" min="-2" pref="65" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="txtAdmissao" max="32767" attributes="0"/>
-                                                  <Component id="txtCargo" max="32767" attributes="0"/>
-                                              </Group>
-                                          </Group>
+                                          <Component id="txtAdmissao" max="32767" attributes="0"/>
+                                          <Component id="txtCargo" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="txtNome" alignment="0" pref="550" max="32767" attributes="0"/>
@@ -287,11 +278,6 @@
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel63" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="txtAdmissao" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel64" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="txtDemissao" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -410,19 +396,6 @@
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="4"/>
                         <Property name="text" type="java.lang.String" value="*Admiss&#xe3;o:"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel64">
-                      <Properties>
-                        <Property name="horizontalAlignment" type="int" value="4"/>
-                        <Property name="text" type="java.lang.String" value="Demiss&#xe3;o"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JFormattedTextField" name="txtDemissao">
-                      <Properties>
-                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
-                          <Format format="##/##/####" subtype="-1" type="5"/>
-                        </Property>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel65">
@@ -607,6 +580,9 @@
               </Layout>
               <SubComponents>
                 <Component class="javax.swing.JTextField" name="txtBuscaNome">
+                  <Events>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscaNomeKeyPressed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
@@ -640,7 +616,7 @@
                     <Component class="javax.swing.JTable" name="tabelaConFuncionario">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="15" rowCount="1">
+                          <Table columnCount="14" rowCount="1">
                             <Column editable="false" title="ID" type="java.lang.Object"/>
                             <Column editable="false" title="NOME" type="java.lang.Object"/>
                             <Column editable="false" title="CPF" type="java.lang.Object"/>
@@ -649,7 +625,6 @@
                             <Column editable="false" title="CELULAR" type="java.lang.Object"/>
                             <Column editable="false" title="CARGO" type="java.lang.Object"/>
                             <Column editable="false" title="ADMISS&#xc3;O" type="java.lang.Object"/>
-                            <Column editable="false" title="DEMISS&#xc3;O" type="java.lang.Object"/>
                             <Column editable="false" title="CEP" type="java.lang.Object"/>
                             <Column editable="false" title="RUA" type="java.lang.Object"/>
                             <Column editable="false" title="N&#xba;" type="java.lang.Object"/>

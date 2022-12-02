@@ -2,6 +2,7 @@
 package DTO;
 
 
+
 public class ProdutoDTO 
 
 {
@@ -9,7 +10,7 @@ public class ProdutoDTO
     private int codbarraProduto;
     private String nomeProduto;
     private int estoqueProduto;
-    private FornecedorDTO fornecedor;
+
 
     public int getIdProduto() {
         return idProduto;
@@ -42,14 +43,5 @@ public class ProdutoDTO
     public void setEstoqueProduto(int estoqueProduto) {
         this.estoqueProduto = estoqueProduto;
     }
-
-    public FornecedorDTO getFornecedor() {
-        return fornecedor;
-    }
-
-    public void setFornecedor(FornecedorDTO fornecedor) {
-        this.fornecedor = fornecedor;
-    }
-
 
 }

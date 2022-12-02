@@ -18,22 +18,22 @@ public class FuncionarioDAO {
     ArrayList<FuncionarioDTO> lista = new ArrayList<>();
 
     public void cadastrarFuncionario(FuncionarioDTO objfundto) {
-        String sql = "INSERT INTO tbl_funcionario("
-                + "fun_nome, "
+        String sql = ""
+                + "INSERT INTO tbl_funcionario"
+                + "(fun_nome, "
                 + "fun_cpf, "
                 + "fun_rg, "
                 + "fun_nascimento, "
                 + "fun_celular, "
                 + "fun_cargo, "
                 + "fun_data_entrada, "
-                + "fun_data_saida, "
                 + "fun_cep, "
                 + "fun_rua, "
                 + "fun_numero, "
                 + "fun_bairro, "
                 + "fun_cidade, "
-                + "fun_estado )"
-                + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "fun_estado)"
+                + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -45,13 +45,12 @@ public class FuncionarioDAO {
             pst.setString(5, objfundto.getCelularFuncionario());
             pst.setString(6, objfundto.getCargoFuncionario());
             pst.setString(7, objfundto.getAdmissaoFuncionario());
-            pst.setString(8, objfundto.getDemissaoFuncionario());
-            pst.setString(9, objfundto.getCepFuncionario());
-            pst.setString(10, objfundto.getRuaFuncionario());
-            pst.setInt(11, objfundto.getNumeroFuncionario());
-            pst.setString(12, objfundto.getBairroFuncionario());
-            pst.setString(13, objfundto.getCidadeFuncionario());
-            pst.setString(14, objfundto.getEstadoFuncionario());
+            pst.setString(8, objfundto.getCepFuncionario());
+            pst.setString(9, objfundto.getRuaFuncionario());
+            pst.setInt(10, objfundto.getNumeroFuncionario());
+            pst.setString(11, objfundto.getBairroFuncionario());
+            pst.setString(12, objfundto.getCidadeFuncionario());
+            pst.setString(13, objfundto.getEstadoFuncionario());
 
             pst.execute();
             pst.close();
@@ -64,22 +63,22 @@ public class FuncionarioDAO {
     }
 
     public void editarFuncionario(FuncionarioDTO objfundto) {
-        String sql = " UPDATE tbl_funcionario"
-                + "SET fun_nome=?, "
+        String sql = ""
+                + "UPDATE tbl_funcionario SET "
+                + "fun_nome=?, "
                 + "fun_cpf=?, "
                 + "fun_rg=?, "
                 + "fun_nascimento=?, "
                 + "fun_celular=?, "
                 + "fun_cargo=?, "
                 + "fun_data_entrada=?, "
-                + "fun_data_saida=?, "
                 + "fun_cep=?, "
                 + "fun_rua=?, "
                 + "fun_numero=?, "
                 + "fun_bairro=?, "
                 + "fun_cidade=?, "
                 + "fun_estado=? "
-                + "WHERE id_funcionario";
+                + "WHERE id_funcionario=?";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -91,13 +90,12 @@ public class FuncionarioDAO {
             pst.setString(5, objfundto.getCelularFuncionario());
             pst.setString(6, objfundto.getCargoFuncionario());
             pst.setString(7, objfundto.getAdmissaoFuncionario());
-            pst.setString(8, objfundto.getDemissaoFuncionario());
-            pst.setString(9, objfundto.getCepFuncionario());
-            pst.setString(10, objfundto.getRuaFuncionario());
-            pst.setInt(11, objfundto.getNumeroFuncionario());
-            pst.setString(12, objfundto.getBairroFuncionario());
-            pst.setString(13, objfundto.getCidadeFuncionario());
-            pst.setString(14, objfundto.getEstadoFuncionario());
+            pst.setString(8, objfundto.getCepFuncionario());
+            pst.setString(9, objfundto.getRuaFuncionario());
+            pst.setInt(10, objfundto.getNumeroFuncionario());
+            pst.setString(11, objfundto.getBairroFuncionario());
+            pst.setString(12, objfundto.getCidadeFuncionario());
+            pst.setString(13, objfundto.getEstadoFuncionario());
 
             pst.execute();
             pst.close();
@@ -111,7 +109,7 @@ public class FuncionarioDAO {
 
     public void excluirFuncionario(FuncionarioDTO objfundto) {
         String sql = "DELETE FROM tbl_funcionario "
-                    + "WHERE id_funcionario = ?)";
+                    + "WHERE id_funcionario = ?";
 
         
         try {
@@ -131,7 +129,8 @@ public class FuncionarioDAO {
     }
 
     public ArrayList<FuncionarioDTO> listarFuncionario() {
-        String sql = "SELECT * FROM tbl_funcionario ";
+        String sql = "SELECT * "
+                + "FROM tbl_funcionario ";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -148,7 +147,6 @@ public class FuncionarioDAO {
                 obj.setCelularFuncionario(rs.getString("fun_celular"));
                 obj.setCargoFuncionario(rs.getString("fun_cargo"));
                 obj.setAdmissaoFuncionario(rs.getString("fun_data_entrada"));
-                obj.setDemissaoFuncionario(rs.getString("fun_data_saida"));
                 obj.setCepFuncionario(rs.getString("fun_cep"));
                 obj.setRuaFuncionario(rs.getString("fun_rua"));
                 obj.setNumeroFuncionario(rs.getInt("fun_numero"));
@@ -169,7 +167,7 @@ public class FuncionarioDAO {
     }
 
     public ArrayList<FuncionarioDTO> buscarFuncionario(String fun_nome) {
-        String sql = "SELECT * FROM tbl_funcionario WHERE fun_nome LIKE ? ";
+        String sql = "SELECT * FROM tbl_funcionario WHERE fun_nome = ? ";
 
         
         try {
@@ -188,7 +186,6 @@ public class FuncionarioDAO {
                 obj.setCelularFuncionario(rs.getString("fun_celular"));
                 obj.setCargoFuncionario(rs.getString("fun_cargo"));
                 obj.setAdmissaoFuncionario(rs.getString("fun_data_entrada"));
-                obj.setDemissaoFuncionario(rs.getString("fun_data_saida"));
                 obj.setCepFuncionario(rs.getString("fun_cep"));
                 obj.setRuaFuncionario(rs.getString("fun_rua"));
                 obj.setNumeroFuncionario(rs.getInt("fun_numero"));

@@ -1,6 +1,7 @@
 
 package DTO;
 
+
 public class CompraDTO 
 {
     private int idCompra;
@@ -8,12 +9,10 @@ public class CompraDTO
 
     private FornecedorDTO fornecedor;
     private ProdutoDTO produto;
-
-    private double compraPreco;
-    private double compraPrecoVenda;
-    private double compraValorTotal;
-
-    private String compraValidade;
+    private int compraQnt;
+    private int compraPreco;
+    private int compraPrecoVenda;
+    private int compraValorTotal;
 
     public int getIdCompra() {
         return idCompra;
@@ -47,38 +46,36 @@ public class CompraDTO
         this.produto = produto;
     }
 
-    public double getCompraPreco() {
+    public int getCompraQnt() {
+        return compraQnt;
+    }
+
+    public void setCompraQnt(int compraQnt) {
+        this.compraQnt = compraQnt;
+    }
+
+    public int getCompraPreco() {
         return compraPreco;
     }
 
-    public void setCompraPreco(double compraPreco) {
+    public void setCompraPreco(int compraPreco) {
         this.compraPreco = compraPreco;
     }
 
-    public double getCompraPrecoVenda() {
+    public int getCompraPrecoVenda() {
         return compraPrecoVenda;
     }
 
-    public void setCompraPrecoVenda(double compraPrecoVenda) {
+    public void setCompraPrecoVenda(int compraPrecoVenda) {
         this.compraPrecoVenda = compraPrecoVenda;
     }
 
-    public double getCompraValorTotal() {
+    public int getCompraValorTotal() {
         return compraValorTotal;
     }
 
-    public void setCompraValorTotal(double compraValorTotal) {
+    public void setCompraValorTotal(int compraValorTotal) {
         this.compraValorTotal = compraValorTotal;
     }
 
-    public String getCompraValidade() {
-        return compraValidade;
-    }
-
-    public void setCompraValidade(String compraValidade) {
-        this.compraValidade = compraValidade;
-    }
-    
-    
-    
 }

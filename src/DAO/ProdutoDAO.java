@@ -1,13 +1,17 @@
 package DAO;
 
 import CONEXAO.Conexao;
+import DTO.CompraDTO;
 import DTO.FornecedorDTO;
 import DTO.ProdutoDTO;
+import VIEW.Venda;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ProdutoDAO {
@@ -38,16 +42,17 @@ public class ProdutoDAO {
             pst.close();
 
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso ");
-
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto, verifique se todos os campos foram preenchidos\n  " + erro);
         }
     }
 
     public void editarProduto(ProdutoDTO obj) {
-        String sql = "UPDATE tbl_produto SET "
+        String sql = ""
+                + "UPDATE tbl_produto "
+                + "SET "
                 + "pro_cod_barra=?, "
-                + "pro_nome=?"
+                + "pro_nome=? "
                 + "WHERE id_produto=?";
 
         try {
@@ -89,12 +94,8 @@ public class ProdutoDAO {
     }
 
     public ArrayList<ProdutoDTO> listarProduto() {
-        String sql = "SELECT "
-                + "p.id_produto, "
-                + "p.pro_cod_barra, "
-                + "p.pro_nome, "
-                + "p.pro_estoque "
-                + "FROM tbl_produto AS p ";
+        String sql = "SELECT * "
+                + "FROM tbl_produto";
 
         try {
 
@@ -106,10 +107,10 @@ public class ProdutoDAO {
                 ProdutoDTO objdto = new ProdutoDTO();
 
 
-                objdto.setIdProduto(rs.getInt("p.id_produto"));
-                objdto.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
-                objdto.setNomeProduto(rs.getString("p.pro_nome"));
-                objdto.setEstoqueProduto(rs.getInt("p.pro_estoque"));
+                objdto.setIdProduto(rs.getInt("id_produto"));
+                objdto.setCodbarraProduto(rs.getInt("pro_cod_barra"));
+                objdto.setNomeProduto(rs.getString("pro_nome"));
+                objdto.setEstoqueProduto(rs.getInt("pro_estoque"));
 
                 lista.add(objdto);
             }
@@ -125,13 +126,9 @@ public class ProdutoDAO {
 
     public ArrayList<ProdutoDTO> buscarNomeProduto(String nome) {
 
-        String sql = "SELECT "
-                + " p.id_produto,"
-                + " p.pro_cod_barra,"
-                + " p.pro_nome,"
-                + " p.pro_estoque"
-                + " FROM tbl_produto AS p"
-                + " WHERE pro_nome LIKE ?";
+        String sql = "SELECT * "
+                + "FROM tbl_produto "
+                + "WHERE pro_nome LIKE ?";
 
         try {
 
@@ -142,7 +139,7 @@ public class ProdutoDAO {
 
             while (rs.next()) {
                 ProdutoDTO obj = new ProdutoDTO();
-                FornecedorDTO f = new FornecedorDTO();
+
 
                 obj.setIdProduto(rs.getInt("id_produto "));
                 obj.setCodbarraProduto(rs.getInt("pro_cod_barra "));
@@ -161,6 +158,7 @@ public class ProdutoDAO {
         // Esse metodo retorna o produto cadastrados
     }
 
+    /*
     public ArrayList<ProdutoDTO> buscarCodigoProduto(int pro_cod_barra) {
 
         String sql = "SELECT *"
@@ -192,8 +190,71 @@ public class ProdutoDAO {
         }
 
     }
+*/
+  
+    public ProdutoDTO pesquisarNomeProduto(String pro_nome) {
 
-    /**
+        String sql = "SELECT * "
+                + "FROM tbl_produto "
+                + "WHERE pro_nome = ? ";
+
+        try {
+
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, pro_nome);
+            rs = pst.executeQuery();
+            ProdutoDTO obj = new ProdutoDTO();
+
+            if (rs.next()) {
+
+                obj.setIdProduto(rs.getInt("id_produto"));
+                obj.setCodbarraProduto(rs.getInt("pro_cod_barra"));
+                obj.setNomeProduto(rs.getString("pro_nome"));
+
+            }
+            return obj;
+
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Produto não selecionado para busca " + erro);
+            return null;
+        }
+
+        // Esse metodo retorna o produto cadastrados
+    }
+
+    public ProdutoDTO pesquisarCodigoProduto(int pro_cod_barra) {
+
+        String sql = "SELECT * "
+                + "FROM tbl_produto "
+                + "WHERE pro_cod_barra = ? ";
+
+        try {
+            pst = conn.prepareStatement(sql);
+
+            pst.setInt(1, pro_cod_barra);
+            rs = pst.executeQuery();
+            ProdutoDTO obj = new ProdutoDTO();
+
+            if (rs.next()) {
+
+                obj.setIdProduto(rs.getInt("id_produto"));
+                obj.setCodbarraProduto(rs.getInt("pro_cod_barra"));
+                obj.setNomeProduto(rs.getString("pro_nome"));
+            }
+            return obj;
+
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Produto não selecionado para busca " + erro);
+            return null;
+        }
+
+    }
+ 
+    
+
+    
+    
+      /**
      * Método baixa de estoque Realiza a baixa de estoque no momento da venda
      */
     public void atualizarEstoque(int id_produto, int pro_estoque) {
@@ -245,99 +306,7 @@ public class ProdutoDAO {
         return 0;
     }
 
-    public ProdutoDTO pesquisarNomeProduto(String pro_nome) {
-
-        String sql = "SELECT * "
-                + "FROM tbl_produto "
-                + "WHERE pro_nome = ? ";
-
-        try {
-
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, pro_nome);
-            rs = pst.executeQuery();
-            ProdutoDTO obj = new ProdutoDTO();
-
-            if (rs.next()) {
-
-                obj.setIdProduto(rs.getInt("id_produto"));
-                obj.setCodbarraProduto(rs.getInt("pro_cod_barra"));
-                obj.setNomeProduto(rs.getString("pro_nome"));
-
-            }
-            return obj;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Produto não selecionado para busca " + erro);
-            return null;
-        }
-
-        // Esse metodo retorna o produto cadastrados
-    }
-
-    public ProdutoDTO pesquisarCodigoProduto(int pro_cod_barra) {
-
-        String sql = "SELECT * "
-                + "FROM tbl_produto "
-                + "WHERE pro_cod_barra = ? ";
-
-        try {
-
-            pst = conn.prepareStatement(sql);
-
-            pst.setInt(1, pro_cod_barra);
-            rs = pst.executeQuery();
-            ProdutoDTO obj = new ProdutoDTO();
-
-            if (rs.next()) {
-
-                obj.setIdProduto(rs.getInt("id_produto"));
-                obj.setCodbarraProduto(rs.getInt("pro_cod_barra"));
-                obj.setNomeProduto(rs.getString("pro_nome"));
-
-            }
-            return obj;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Produto não selecionado para busca " + erro);
-            return null;
-
-        }
-
-    }
-
-    public ResultSet CBXlistarNomeProduto() // lista o nome  para jogar na combobox
-    {
-        String sql = "SELECT * "
-                + "FROM tbl_produto "
-                + "ORDER BY pro_nome ";
-        try {
-            pst = conn.prepareStatement(sql);
-
-            return pst.executeQuery();
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, " ListarNomeProdutoDAO" + erro);
-            return null;
-        }
-
-    }
-
-    public ResultSet CBXlistarCodigoProduto() // lista o nome  para jogar na combobox
-    {
-        String sql = "SELECT * "
-                + "FROM tbl_produto "
-                + "ORDER BY pro_cod_barra ";
-        try {
-            pst = conn.prepareStatement(sql);
-
-            return pst.executeQuery();
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, " ListarCod.BarraProdutoDAO" + erro);
-            return null;
-        }
-
-    }
+    
+    
 
 }

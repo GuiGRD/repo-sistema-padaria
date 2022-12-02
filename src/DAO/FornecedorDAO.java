@@ -62,8 +62,8 @@ public class FornecedorDAO {
 
     public void editarFornecedor(FornecedorDTO objforndto) 
     {
-        String sql = "UPDATE tbl_fornecedor"
-                + "SET forn_nome=?, "
+        String sql = "UPDATE tbl_fornecedor SET "
+                + "forn_nome=?, "
                 + "forn_cnpj=?, "
                 + "forn_celular=?, "
                 + "forn_cep=?, "
@@ -72,7 +72,7 @@ public class FornecedorDAO {
                 + "forn_bairro=?, "
                 + "forn_cidade=?, "
                 + "forn_estado=? "
-                + "WHERE id_fornecedor=? ";
+                + "WHERE id_fornecedor=?";
         
         ///conn = new Conexao().conectaBD();
 

@@ -1,5 +1,6 @@
- package VIEW;
+package VIEW;
 
+import CONEXAO.Conexao;
 import CONTROLE.LimparCampos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,34 +9,52 @@ import DAO.FornecedorDAO;
 import DAO.ProdutoDAO;
 import DTO.CompraDTO;
 import DTO.FornecedorDTO;
-import DTO.ProdutoDTO; 
+import DTO.ProdutoDTO;
+import java.awt.event.KeyEvent;
+import static java.lang.Integer.max;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class Compra extends javax.swing.JPanel {
 
+    int qnt;
+    int total;
+    int preco;
+    int precosub;
+    int ex;
+    int i;
     DefaultTableModel itenscompra;
-    double total, preco, subtotal, ex;
-    int qtd;
+        DefaultTableModel limpartabela;
+
+    Connection conn; //Cria a Conexão
+    PreparedStatement pst; // Prepara a Conexão
+    ResultSet rs;
 
     public Compra() {
-        initComponents();
-        AutoCompleteDecorator.decorate(cbxFornecedor);
-        AutoCompleteDecorator.decorate(cbxCodigoProduto);
 
+        conn = new Conexao().conectaBD();
+        initComponents();
+        Data();
+
+        AutoCompleteDecorator.decorate(cbxFornecedor);
         FornecedorCbx();
-        //ProdutoCbx();
-        ProdutoCodCbx();
+
         Listar();
         Limpar();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -48,31 +67,33 @@ public class Compra extends javax.swing.JPanel {
         jLabel23 = new javax.swing.JLabel();
         txtvalorCompra = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
-        txtPreco = new javax.swing.JTextField();
         txtNomeProduto = new javax.swing.JTextField();
         btnAdicionar = new javax.swing.JButton();
-        jLabel26 = new javax.swing.JLabel();
-        txtValidade = new javax.swing.JFormattedTextField();
         btnCancelar = new javax.swing.JButton();
         jScrollPane = new javax.swing.JScrollPane();
         tabelaCompra = new javax.swing.JTable();
         btnSalvarCompra = new javax.swing.JButton();
         jLabel27 = new javax.swing.JLabel();
         txtTotal = new javax.swing.JTextField();
-        txtId = new javax.swing.JTextField();
+        txtPrecoSub = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        txtDataCompra = new javax.swing.JFormattedTextField();
         jLabel29 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnExcluirItem = new javax.swing.JButton();
         cbxFornecedor = new javax.swing.JComboBox<>();
-        cbxCodigoProduto = new javax.swing.JComboBox<>();
         txtPrecoVenda = new javax.swing.JTextField();
         txtvalorVenda = new javax.swing.JLabel();
         txtItemExcluido = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         txtQtd = new javax.swing.JSpinner();
+        txtPreco = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        txtCodigoProduto = new javax.swing.JTextField();
+        btnBuscarProdutoVenda = new javax.swing.JButton();
+        txtData = new javax.swing.JFormattedTextField();
+        txtNomeFornecedor = new javax.swing.JTextField();
         painelConFuncionario = new javax.swing.JPanel();
         txtBuscaNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -98,16 +119,9 @@ public class Compra extends javax.swing.JPanel {
 
         jLabel25.setText("*Qtd:");
 
-        txtPreco.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-
         txtNomeProduto.setEditable(false);
-        txtNomeProduto.setBackground(java.awt.SystemColor.controlHighlight);
+        txtNomeProduto.setBackground(new java.awt.Color(255, 255, 255));
         txtNomeProduto.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        txtNomeProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeProdutoActionPerformed(evt);
-            }
-        });
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/img_TC_salvar.png"))); // NOI18N
         btnAdicionar.setLabel("Adicionar Item");
@@ -116,14 +130,6 @@ public class Compra extends javax.swing.JPanel {
                 btnAdicionarActionPerformed(evt);
             }
         });
-
-        jLabel26.setText("Validade");
-
-        try {
-            txtValidade.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/img_excluir.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
@@ -139,20 +145,15 @@ public class Compra extends javax.swing.JPanel {
 
             },
             new String [] {
-                "CÓD. BARRA", "PRODUTO", "QNT", "VALIDADE", "R$ COMPRA", "R$ VENDA", "SUBTOTAL"
+                "CÓD. BARRA", "PRODUTO", "QNT", "R$ COMPRA", "R$ VENDA", "SUBTOTAL"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, true, true, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        tabelaCompra.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaCompraMouseClicked(evt);
             }
         });
         jScrollPane.setViewportView(tabelaCompra);
@@ -173,37 +174,14 @@ public class Compra extends javax.swing.JPanel {
         txtTotal.setBackground(java.awt.SystemColor.controlHighlight);
         txtTotal.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         txtTotal.setBorder(null);
-        txtTotal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTotalActionPerformed(evt);
-            }
-        });
 
-        txtId.setEditable(false);
-        txtId.setBackground(java.awt.SystemColor.controlHighlight);
-        txtId.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        txtId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdActionPerformed(evt);
-            }
-        });
+        txtPrecoSub.setEditable(false);
+        txtPrecoSub.setBackground(new java.awt.Color(255, 255, 255));
+        txtPrecoSub.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
 
         jLabel35.setText("ID");
 
         jLabel28.setText("Data da Compra");
-
-        txtDataCompra.setEditable(false);
-        txtDataCompra.setBackground(java.awt.SystemColor.controlHighlight);
-        try {
-            txtDataCompra.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtDataCompra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDataCompraActionPerformed(evt);
-            }
-        });
 
         jLabel29.setText("*Fornecedor");
 
@@ -220,25 +198,79 @@ public class Compra extends javax.swing.JPanel {
         });
 
         cbxFornecedor.setEditable(true);
-        cbxFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+        cbxFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         cbxFornecedor.setAutoscrolls(true);
         cbxFornecedor.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        cbxFornecedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxFornecedorActionPerformed(evt);
+        cbxFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cbxFornecedorKeyPressed(evt);
             }
         });
 
-        cbxCodigoProduto.setEditable(true);
-        cbxCodigoProduto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Buscar Produto" }));
-
         txtPrecoVenda.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        txtPrecoVenda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPrecoVendaKeyPressed(evt);
+            }
+        });
 
         txtvalorVenda.setText("*Preço Venda R$:");
 
         txtItemExcluido.setEditable(false);
 
         jLabel24.setText("*Código:");
+
+        txtQtd.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        txtQtd.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                txtQtdStateChanged(evt);
+            }
+        });
+
+        txtPreco.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        txtPreco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPrecoKeyPressed(evt);
+            }
+        });
+
+        jLabel26.setText("Subtotal:");
+
+        txtId.setEditable(false);
+        txtId.setBackground(java.awt.SystemColor.controlHighlight);
+        txtId.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+
+        txtCodigoProduto.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        txtCodigoProduto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCodigoProdutoKeyPressed(evt);
+            }
+        });
+
+        btnBuscarProdutoVenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/img_TC_buscar.png"))); // NOI18N
+        btnBuscarProdutoVenda.setText("Pesquisar Produto");
+        btnBuscarProdutoVenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProdutoVendaActionPerformed(evt);
+            }
+        });
+
+        txtData.setEditable(false);
+        txtData.setBackground(new java.awt.Color(255, 255, 255));
+        try {
+            txtData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtNomeFornecedor.setEditable(false);
+        txtNomeFornecedor.setBackground(new java.awt.Color(255, 255, 255));
+        txtNomeFornecedor.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        txtNomeFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomeFornecedorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout painelCadCompraLayout = new javax.swing.GroupLayout(painelCadCompra);
         painelCadCompra.setLayout(painelCadCompraLayout);
@@ -250,36 +282,37 @@ public class Compra extends javax.swing.JPanel {
                         .addGap(20, 20, 20)
                         .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelCadCompraLayout.createSequentialGroup()
-                                .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6)
-                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(166, 166, 166)
-                                .addComponent(jLabel28)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDataCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(painelCadCompraLayout.createSequentialGroup()
                                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                                         .addComponent(txtvalorCompra)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(painelCadCompraLayout.createSequentialGroup()
-                                        .addComponent(jLabel25)
                                         .addGap(18, 18, 18)
-                                        .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(63, 63, 63))
-                                    .addGroup(painelCadCompraLayout.createSequentialGroup()
-                                        .addComponent(jLabel26)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtValidade, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(39, 39, 39))
                                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                                         .addComponent(txtvalorVenda)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtPrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(51, 51, 51)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(txtPrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(40, 40, 40))
+                                    .addGroup(painelCadCompraLayout.createSequentialGroup()
+                                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel25)
+                                            .addComponent(jLabel26))
+                                        .addGap(29, 29, 29)
+                                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtPrecoSub, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(41, 41, 41)))
                                 .addComponent(btnExcluirItem, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(painelCadCompraLayout.createSequentialGroup()
+                                .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(154, 154, 154)
+                                .addComponent(jLabel28)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelCadCompraLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
@@ -301,14 +334,16 @@ public class Compra extends javax.swing.JPanel {
                                         .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbxFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(painelCadCompraLayout.createSequentialGroup()
-                                            .addComponent(cbxCodigoProduto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGap(123, 123, 123))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 296, Short.MAX_VALUE))))
+                                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(painelCadCompraLayout.createSequentialGroup()
+                                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(cbxFornecedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtCodigoProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnBuscarProdutoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtNomeProduto)
+                                    .addComponent(txtNomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelCadCompraLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -324,27 +359,26 @@ public class Compra extends javax.swing.JPanel {
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(painelCadCompraLayout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel35))
+                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel35)
                             .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(painelCadCompraLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(painelCadCompraLayout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(jLabel28))
-                            .addComponent(txtDataCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(6, 6, 6)
+                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel28)
+                            .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(10, 10, 10)
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbxFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel29))
-                .addGap(10, 10, 10)
+                .addGap(7, 7, 7)
+                .addComponent(txtNomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel24))
-                .addGap(10, 10, 10)
+                    .addComponent(jLabel24)
+                    .addComponent(txtCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscarProdutoVenda))
+                .addGap(8, 8, 8)
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23))
@@ -352,41 +386,40 @@ public class Compra extends javax.swing.JPanel {
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtvalorCompra)
                     .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtvalorVenda)
-                    .addComponent(txtPrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
+                .addGap(15, 15, 15)
                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelCadCompraLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel26))
-                    .addGroup(painelCadCompraLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
+                        .addComponent(txtvalorVenda)
+                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(painelCadCompraLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel25))
+                            .addGroup(painelCadCompraLayout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(txtQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtValidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAdicionar)
-                            .addComponent(btnExcluirItem))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(txtItemExcluido, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnCancelar)
-                        .addComponent(btnSalvarCompra))
-                    .addGroup(painelCadCompraLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtTotal)
-                            .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnExcluirItem)
+                            .addComponent(jLabel26)
+                            .addComponent(txtPrecoSub, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(txtItemExcluido, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnCancelar)
+                                .addComponent(btnSalvarCompra))
+                            .addGroup(painelCadCompraLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtTotal)
+                                    .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addComponent(txtPrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(114, 114, 114))
         );
 
@@ -426,11 +459,6 @@ public class Compra extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        tabelaConCompra.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaConCompraMouseClicked(evt);
             }
         });
         TblConCompra.setViewportView(tabelaConCompra);
@@ -517,53 +545,29 @@ public class Compra extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void txtNomeProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeProdutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeProdutoActionPerformed
-
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        tabelaItemCompra();
+        //tabelaItemCompra();
+        AdicionarItens();
+        //Limpar();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        CancelarCompra() ;
+        CancelarCompra();
+        LimparTabela();
+        Limpar();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void tabelaCompraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCompraMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabelaCompraMouseClicked
-
     private void btnSalvarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarCompraActionPerformed
-       Cadastrar();
+        Cadastrar();
     }//GEN-LAST:event_btnSalvarCompraActionPerformed
 
-    private void txtTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTotalActionPerformed
-
-    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdActionPerformed
-
-    private void txtDataCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataCompraActionPerformed
-        Data();
-    }//GEN-LAST:event_txtDataCompraActionPerformed
- 
     private void btnExcluirItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirItemActionPerformed
         ExcluirItem();
     }//GEN-LAST:event_btnExcluirItemActionPerformed
 
     private void btnBuscaNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaNomeActionPerformed
-       Listar();
+        Listar();
     }//GEN-LAST:event_btnBuscaNomeActionPerformed
-
-    private void tabelaConCompraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaConCompraMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabelaConCompraMouseClicked
-
-    private void cbxFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxFornecedorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbxFornecedorActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // Comando para excluir dados no BD;
@@ -579,18 +583,68 @@ public class Compra extends javax.swing.JPanel {
         Listar();
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void txtQtdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtQtdStateChanged
+        // Pega os dados e envia para aba Cadastro
+        qnt = 0;
+        preco = 0;
+        precosub = 0;
+
+        qnt = Integer.parseInt(txtQtd.getValue().toString());
+        preco = Integer.parseInt(txtPreco.getText());
+
+        precosub = qnt * preco;
+        txtPrecoSub.setText(String.valueOf(precosub));
+
+    }//GEN-LAST:event_txtQtdStateChanged
+
+    private void btnBuscarProdutoVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProdutoVendaActionPerformed
+        PesquisaCodProd();
+    }//GEN-LAST:event_btnBuscarProdutoVendaActionPerformed
+
+    private void txtCodigoProdutoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProdutoKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            PesquisaCodProd();
+
+        }
+    }//GEN-LAST:event_txtCodigoProdutoKeyPressed
+
+    private void txtPrecoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecoKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtPrecoVenda.requestFocus();
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecoKeyPressed
+
+    private void txtPrecoVendaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecoVendaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtQtd.requestFocus();
+
+        }
+    }//GEN-LAST:event_txtPrecoVendaKeyPressed
+
+    private void cbxFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbxFornecedorKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtCodigoProduto.requestFocus();
+        }
+    }//GEN-LAST:event_cbxFornecedorKeyPressed
+
+    private void txtNomeFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeFornecedorActionPerformed
+                       String forn = (String)cbxFornecedor.getSelectedItem();
+                txtNomeFornecedor.setText(forn);
+    }//GEN-LAST:event_txtNomeFornecedorActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane JTPainelCompra;
     private javax.swing.JScrollPane TblConCompra;
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnBuscaNome;
+    javax.swing.JButton btnBuscarProdutoVenda;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnExcluirItem;
     private javax.swing.JButton btnSalvarCompra;
-    private javax.swing.JComboBox<String> cbxCodigoProduto;
     private javax.swing.JComboBox<String> cbxFornecedor;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel23;
@@ -609,34 +663,33 @@ public class Compra extends javax.swing.JPanel {
     private javax.swing.JTable tabelaCompra;
     private javax.swing.JTable tabelaConCompra;
     private javax.swing.JTextField txtBuscaNome;
-    private javax.swing.JFormattedTextField txtDataCompra;
+    private javax.swing.JTextField txtCodigoProduto;
+    private javax.swing.JFormattedTextField txtData;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtItemExcluido;
+    private javax.swing.JTextField txtNomeFornecedor;
     private javax.swing.JTextField txtNomeProduto;
     private javax.swing.JTextField txtPreco;
+    private javax.swing.JTextField txtPrecoSub;
     private javax.swing.JTextField txtPrecoVenda;
     private javax.swing.JSpinner txtQtd;
     private javax.swing.JTextField txtTotal;
-    private javax.swing.JFormattedTextField txtValidade;
     private javax.swing.JLabel txtvalorCompra;
     private javax.swing.JLabel txtvalorVenda;
     // End of variables declaration//GEN-END:variables
-    
-    
+
     int id;
-    
+
     CompraDTO dtocompra = new CompraDTO();
     FornecedorDTO fdto = new FornecedorDTO();
     FornecedorDAO fdao = new FornecedorDAO();
 
     ProdutoDTO dtoproduto = new ProdutoDTO();
     ProdutoDAO daoproduto = new ProdutoDAO();
-    
-    
-    
+
     public void Listar() {
 
-        CompraDAO dao = new CompraDAO();        
+        CompraDAO dao = new CompraDAO();
         ArrayList<CompraDTO> lista = dao.listarCompra();
         DefaultTableModel model = (DefaultTableModel) tabelaConCompra.getModel();
         model.setNumRows(0);
@@ -652,7 +705,22 @@ public class Compra extends javax.swing.JPanel {
 
     private void Limpar() {
         new LimparCampos().Limpar(painelCadCompra);
+        cbxFornecedor.setSelectedIndex(0);
+        txtQtd.setValue(0);
+   
+
+
     }
+
+    private void LimparTabela() {
+        limpartabela = (DefaultTableModel) tabelaCompra.getModel();
+        while (limpartabela.getRowCount() > 0)
+        {
+            limpartabela.removeRow(0);
+        }
+    }
+     
+    
 
     private void CancelarCompra() {
 
@@ -663,7 +731,7 @@ public class Compra extends javax.swing.JPanel {
         if (op == 1) {
             CompraDTO obj = new CompraDTO();
 
-            obj.setIdCompra(Integer.parseInt(txtId.getText()));
+            obj.setIdCompra(Integer.parseInt(txtPrecoSub.getText()));
 
             CompraDAO dao = new CompraDAO();
             dao.excluirCompra(obj);
@@ -674,9 +742,9 @@ public class Compra extends javax.swing.JPanel {
     private void Cadastrar() {
 
         if (cbxFornecedor.getSelectedItem().toString().isEmpty()
-                || cbxCodigoProduto.getSelectedItem().equals("")
-                || txtPreco.getText().isEmpty()
-                || txtQtd.getText().isEmpty()) {
+                || txtCodigoProduto.getText().equals("")
+                || txtPreco.getText().isEmpty() //|| txtQtd.getValue().equals("")
+                ) {
             JOptionPane.showMessageDialog(null, "Preencha os campos Obrigatórios");
 
         } else {
@@ -688,13 +756,16 @@ public class Compra extends javax.swing.JPanel {
             if (op == 1) {
 
                 CompraDTO cdto = new CompraDTO();
-                cdto.setCompraPreco(Double.parseDouble(txtPreco.getText()));
-                cdto.setCompraPrecoVenda(Double.parseDouble(txtPrecoVenda.getText()));
+
+                cdto.setDataCompra(txtData.getText());
+                cdto.setCompraQnt(Integer.parseInt(txtQtd.getValue().toString()));
+                cdto.setCompraPreco(Integer.parseInt(txtPreco.getText()));
+                cdto.setCompraPrecoVenda(Integer.parseInt(txtPrecoVenda.getText()));
+                cdto.setCompraValorTotal(Integer.parseInt(txtPrecoSub.getText()));
 
                 ProdutoDTO pdto = new ProdutoDTO();
-                pdto.setCodbarraProduto(Integer.parseInt(cbxCodigoProduto.getSelectedItem().toString()));
+                pdto.setCodbarraProduto(Integer.parseInt(txtCodigoProduto.getText().toString()));
                 pdto.setNomeProduto(txtNomeProduto.getText());
-                pdto.setEstoqueProduto(Integer.parseInt(txtQtd.getText()));
 
                 FornecedorDTO fdto = new FornecedorDTO();
                 fdto.setNomeFornecedor(cbxFornecedor.getSelectedItem().toString());
@@ -711,9 +782,9 @@ public class Compra extends javax.swing.JPanel {
     private void Editar() {
 
         if (cbxFornecedor.getSelectedItem().toString().isEmpty()
-                || cbxCodigoProduto.getSelectedItem().equals("")
+                || txtCodigoProduto.getText().equals("")
                 || txtPreco.getText().isEmpty()
-                || txtQtd.getText().isEmpty()) {
+                || txtQtd.getValue().equals("")) {
             JOptionPane.showMessageDialog(null, "Preencha os campos Obrigatórios");
 
         } else {
@@ -725,14 +796,16 @@ public class Compra extends javax.swing.JPanel {
             if (op == 1) {
 
                 CompraDTO cdto = new CompraDTO();
-                cdto.setCompraPreco(Double.parseDouble(txtPreco.getText()));
-                cdto.setCompraPrecoVenda(Double.parseDouble(txtPrecoVenda.getText()));
-                cdto.setIdCompra(Integer.parseInt(txtId.getText()));
+                cdto.setIdCompra(Integer.parseInt(txtId.getText().toString()));
+                cdto.setDataCompra(txtData.getText());
+                cdto.setCompraQnt(Integer.parseInt(txtQtd.getValue().toString()));
+                cdto.setCompraPreco(Integer.parseInt(txtPreco.getText()));
+                cdto.setCompraPrecoVenda(Integer.parseInt(txtPrecoVenda.getText()));
+                cdto.setCompraValorTotal(Integer.parseInt(txtPrecoSub.getText()));
 
                 ProdutoDTO pdto = new ProdutoDTO();
-                pdto.setCodbarraProduto(Integer.parseInt(cbxCodigoProduto.getSelectedItem().toString()));
+                pdto.setCodbarraProduto(Integer.parseInt(txtCodigoProduto.getText()));
                 pdto.setNomeProduto(txtNomeProduto.getText());
-                pdto.setEstoqueProduto(Integer.parseInt(txtQtd.getText()));
 
                 FornecedorDTO fdto = new FornecedorDTO();
                 fdto.setNomeFornecedor(cbxFornecedor.getSelectedItem().toString());
@@ -746,14 +819,13 @@ public class Compra extends javax.swing.JPanel {
         }
     }
 
-
-
-    private void tabelaItemCompra() {
+    /*
+private void tabelaItemCompra() {
         // Pega os dados e envia para aba Cadastro
 
-        dtoproduto = daoproduto.pesquisarCodigoProduto(Integer.parseInt(cbxCodigoProduto.getSelectedItem().toString()));
+        dtoproduto = daoproduto.pesquisarCodigoProduto(Integer.parseInt(txtCodigoProduto.getText()));
         dtoproduto = daoproduto.pesquisarNomeProduto(txtNomeProduto.getText());
-        qtd = Integer.parseInt(txtQtd.getText());
+        qtd = Integer.parseInt(txtQtd.getValue().toString());
 
         if (qtd > 0) {
             if (dtoproduto.getEstoqueProduto() > 0 && dtoproduto.getEstoqueProduto() >= qtd) {
@@ -768,10 +840,9 @@ public class Compra extends javax.swing.JPanel {
                 itenscompra = (DefaultTableModel) tabelaCompra.getModel();
 
                 itenscompra.addRow(new Object[]{
-                    cbxCodigoProduto.getSelectedItem(),
+                    txtCodigoProduto.getText(),
                     txtNomeProduto.getText(),
-                    txtQtd.getText(),
-                    txtValidade.getText(),
+                    txtQtd.getValue().toString(),
                     txtPreco.getText(),
                     txtPrecoVenda.getText(),
                     subtotal
@@ -780,6 +851,30 @@ public class Compra extends javax.swing.JPanel {
 
             }
         }
+    }
+     */
+    private void AdicionarItens() {
+        //Adicionar os  produtos na tabela de compra
+        itenscompra = (DefaultTableModel) tabelaCompra.getModel();
+
+        itenscompra.addRow(new Object[]{
+            txtCodigoProduto.getText(),
+            txtNomeProduto.getText(),
+            txtQtd.getValue().toString(),
+            txtPreco.getText(),
+            txtPrecoVenda.getText(),
+            txtPrecoSub.getText()
+        });
+
+        total = 0;
+        for (i = 0; i < tabelaCompra.getRowCount(); i++) {
+
+            total = total + Integer.parseInt(tabelaCompra.getValueAt(i, 5).toString());
+        }
+
+        //txtTotal.setText("R$ " + String.valueOf(total));
+        txtTotal.setText("R$ " + Integer.toString(total));
+
     }
 
     //Pega com o vetor a chava primaria para adicionar a informação nesse caso o nome dos fornecedores e nao o id na combobox
@@ -793,81 +888,44 @@ public class Compra extends javax.swing.JPanel {
             while (rs.next()) {
                 idForn.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
                 cbxFornecedor.addItem(rs.getString(2));// Armazenando o 2 elemento do sql que é o nome do fornecedor
-                
+
+                //Listar();
+                String forn = (String)cbxFornecedor.getSelectedItem();
+                txtNomeFornecedor.setText(forn);
             }
+                            String forn = (String)cbxFornecedor.getSelectedItem();
+                txtNomeFornecedor.setText(forn);
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Carregar Compra");
         }
     }
 
-    Vector<Integer> idPro = new Vector<Integer>();
-
-    public void ProdutoCbx() {
-        try {
-            ProdutoDTO obj = new ProdutoDTO();
-            ProdutoDAO dao = new ProdutoDAO();
-            ResultSet rs = dao.CBXlistarNomeProduto();
-            //obj = dao.pesquisarNomeProduto(txtNomeProduto.getText());
-            
-            
-
-            while (rs.next()) {
-                idPro.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
-                cbxCodigoProduto.addItem(rs.getString(2));// Armazenando o 2 elemento do sql que é o codigo 
-                txtNomeProduto.setText(obj.getNomeProduto());
-                
-            }
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Carregar");
-        }
-
-    }
-    Vector<Integer> idCodProd = new Vector<Integer>();
-    public void ProdutoCodCbx() {
-        try {
-            ProdutoDAO obj = new ProdutoDAO();
-
-            ResultSet rs = obj.CBXlistarCodigoProduto();
-
-            while (rs.next()) {
-                idCodProd.addElement(rs.getInt(1));//Armazenando o 1 elemento do sql no id, Na minha chave primaria
-                cbxCodigoProduto.addItem(rs.getString(2));// Armazenando o 3 elemento do sql que é o codigo de barra
-            }
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Carregar");
-        }
-
-    }
-
     private void Data() {
         Date data = new Date();
-        SimpleDateFormat dataAtual = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dataAtual = new SimpleDateFormat("dd/MM/yyyy  ");
         String dataformat = dataAtual.format(data);
-        txtDataCompra.setText(dataformat);
+        txtData.setText(dataformat);
     }
 
     private void ExcluirItem() {
-
         itenscompra = (DefaultTableModel) tabelaCompra.getModel();
+        txtItemExcluido.setText(tabelaCompra.getValueAt(tabelaCompra.getSelectedRow(), 5).toString());
 
         itenscompra.removeRow(tabelaCompra.getSelectedRow());
         tabelaCompra.setModel(itenscompra);
 
-        ex = Double.parseDouble(txtItemExcluido.getText());
+        ex = Integer.parseInt(txtItemExcluido.getText());
 
         total = total - ex;
         txtTotal.setText("R$ " + String.valueOf(total));
         txtItemExcluido.setText("");
     }
 
-    private void ExcluirCompra()
-    {
-        id = Integer.parseInt(txtId.getText());
+    private void ExcluirCompra() {
+        id = Integer.parseInt(txtPrecoSub.getText());
 
-        if (txtId.getText().isEmpty()) {
+        if (txtPrecoSub.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Não há Compra selecionada para exclusão");
         } else {
             int op;
@@ -885,5 +943,33 @@ public class Compra extends javax.swing.JPanel {
             }
         }
     }
+
+    private void PesquisaCodProd() {
+
+        int pcode = Integer.parseInt(txtCodigoProduto.getText());
+
+        String sql = ""
+                + "SELECT * "
+                + "FROM tbl_produto "
+                + "WHERE (pro_cod_barra) = ?";
+
+        try {
+
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1, pcode);
+            rs = pst.executeQuery();
+            if (rs.next() == false) {
+                JOptionPane.showMessageDialog(this, "Produto não Encontrado");
+            } else {
+                String pnome = rs.getString("pro_nome");
+
+                txtNomeProduto.setText(pnome.trim());
+                txtPreco.requestFocus();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Venda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     
 }

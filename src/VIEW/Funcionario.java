@@ -3,6 +3,7 @@ package VIEW;
 import CONTROLE.LimparCampos;
 import DAO.FuncionarioDAO;
 import DTO.FuncionarioDTO;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +14,7 @@ public class Funcionario extends javax.swing.JPanel {
         initComponents();
         Listar();
         Limpar();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -20,7 +22,7 @@ public class Funcionario extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel = new javax.swing.JPanel();
-        jTabbedPane = new javax.swing.JTabbedPane();
+        JTPainelFuncionario = new javax.swing.JTabbedPane();
         painelCadFuncionario = new javax.swing.JPanel();
         painelDadosPessoais = new javax.swing.JPanel();
         jLabel56 = new javax.swing.JLabel();
@@ -36,8 +38,6 @@ public class Funcionario extends javax.swing.JPanel {
         jLabel62 = new javax.swing.JLabel();
         txtAdmissao = new javax.swing.JFormattedTextField();
         jLabel63 = new javax.swing.JLabel();
-        jLabel64 = new javax.swing.JLabel();
-        txtDemissao = new javax.swing.JFormattedTextField();
         jLabel65 = new javax.swing.JLabel();
         txtCidade = new javax.swing.JTextField();
         jLabel66 = new javax.swing.JLabel();
@@ -142,15 +142,6 @@ public class Funcionario extends javax.swing.JPanel {
         jLabel63.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel63.setText("*Admissão:");
 
-        jLabel64.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel64.setText("Demissão");
-
-        try {
-            txtDemissao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
         jLabel65.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel65.setText("*Cidade:");
 
@@ -229,19 +220,13 @@ public class Funcionario extends javax.swing.JPanel {
                                 .addComponent(txtRg, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE))
                             .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(72, 72, 72)
+                        .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(painelDadosPessoaisLayout.createSequentialGroup()
-                                .addComponent(jLabel64, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtDemissao))
-                            .addGroup(painelDadosPessoaisLayout.createSequentialGroup()
-                                .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtAdmissao)
-                                    .addComponent(txtCargo)))))
+                            .addComponent(txtAdmissao)
+                            .addComponent(txtCargo)))
                     .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
                     .addComponent(txtRua)
                     .addGroup(painelDadosPessoaisLayout.createSequentialGroup()
@@ -301,11 +286,7 @@ public class Funcionario extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel63)
-                            .addComponent(txtAdmissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel64)
-                            .addComponent(txtDemissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtAdmissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(10, 10, 10)
                 .addGroup(painelDadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel67)
@@ -356,9 +337,15 @@ public class Funcionario extends javax.swing.JPanel {
                 .addGap(5, 5, 5))
         );
 
-        jTabbedPane.addTab("Cadastrar", painelCadFuncionario);
+        JTPainelFuncionario.addTab("Cadastrar", painelCadFuncionario);
 
         painelConFuncionario.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtBuscaNome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBuscaNomeKeyPressed(evt);
+            }
+        });
 
         jLabel1.setText("Buscar por Nome");
 
@@ -376,14 +363,14 @@ public class Funcionario extends javax.swing.JPanel {
 
         tabelaConFuncionario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "NOME", "CPF", "RG", "NASCIMENTO", "CELULAR", "CARGO", "ADMISSÃO", "DEMISSÃO", "CEP", "RUA", "Nº", "BAIRRO", "CIDADE", "ESTADO"
+                "ID", "NOME", "CPF", "RG", "NASCIMENTO", "CELULAR", "CARGO", "ADMISSÃO", "CEP", "RUA", "Nº", "BAIRRO", "CIDADE", "ESTADO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -427,7 +414,7 @@ public class Funcionario extends javax.swing.JPanel {
                 .addGap(228, 228, 228))
         );
 
-        jTabbedPane.addTab("Consulta", painelConFuncionario);
+        JTPainelFuncionario.addTab("Consulta", painelConFuncionario);
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/img_TP_cad.png"))); // NOI18N
         btnSalvar.setText("Cadastrar");
@@ -461,7 +448,7 @@ public class Funcionario extends javax.swing.JPanel {
             .addGroup(jPanelLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
+                    .addComponent(JTPainelFuncionario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 722, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
                         .addGap(0, 305, Short.MAX_VALUE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -474,7 +461,7 @@ public class Funcionario extends javax.swing.JPanel {
         jPanelLayout.setVerticalGroup(
             jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
-                .addComponent(jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JTPainelFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnExcluir)
@@ -561,8 +548,17 @@ public class Funcionario extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCPFActionPerformed
 
+    private void txtBuscaNomeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscaNomeKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            Pesquisar();
+            LimparBusca();
+        }
+    }//GEN-LAST:event_txtBuscaNomeKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTabbedPane JTPainelFuncionario;
     private javax.swing.JScrollPane Tabela;
     private javax.swing.JButton btnBuscaNome;
     private javax.swing.JButton btnEditar;
@@ -577,7 +573,6 @@ public class Funcionario extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
-    private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
@@ -587,7 +582,6 @@ public class Funcionario extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jNome;
     private javax.swing.JPanel jPanel;
-    private javax.swing.JTabbedPane jTabbedPane;
     private javax.swing.JPanel painelCadFuncionario;
     private javax.swing.JPanel painelConFuncionario;
     private javax.swing.JPanel painelDadosPessoais;
@@ -600,7 +594,6 @@ public class Funcionario extends javax.swing.JPanel {
     private javax.swing.JFormattedTextField txtCelular;
     private javax.swing.JFormattedTextField txtCep;
     private javax.swing.JTextField txtCidade;
-    private javax.swing.JFormattedTextField txtDemissao;
     private javax.swing.JComboBox<String> txtEstado;
     private javax.swing.JTextField txtId;
     private javax.swing.JFormattedTextField txtNasc;
@@ -610,18 +603,17 @@ public class Funcionario extends javax.swing.JPanel {
     private javax.swing.JTextField txtRua;
     // End of variables declaration//GEN-END:variables
  int id, numero;
-    String nome, cpf, rg, celular, nascimento, cargo, admissao, demissao;
+    String nome, cpf, rg, celular, nascimento, cargo, admissao;
     String cep, rua, bairro, cidade, estado;
 
     private void Cadastrar() {
-        id = Integer.parseInt(txtId.getText());
+        
         nome = txtNome.getText();
         cpf = txtCPF.getText();
         rg = txtRg.getText();
         nascimento = txtNasc.getText();
         celular = txtCelular.getText();
         admissao = txtAdmissao.getText();
-        demissao = txtDemissao.getText();
         cargo = txtCargo.getText();
         cep = txtCep.getText();
         rua = txtRua.getText();
@@ -654,7 +646,6 @@ public class Funcionario extends javax.swing.JPanel {
             obj.setCelularFuncionario(celular);
             obj.setCargoFuncionario(cargo);
             obj.setAdmissaoFuncionario(admissao);
-            obj.setDemissaoFuncionario(demissao);
             obj.setCepFuncionario(cep);
             obj.setRuaFuncionario(rua);
             obj.setNumeroFuncionario(numero);
@@ -668,12 +659,28 @@ public class Funcionario extends javax.swing.JPanel {
         }
     }
 
-    private void Editar() {
+    private void Editar() 
+    {
+        id = Integer.parseInt(txtId.getText());
+        nome = txtNome.getText();
+        cpf = txtCPF.getText();
+        rg = txtRg.getText();
+        nascimento = txtNasc.getText();
+        celular = txtCelular.getText();
+        admissao = txtAdmissao.getText();
+        cargo = txtCargo.getText();
+        cep = txtCep.getText();
+        rua = txtRua.getText();
+        numero = Integer.parseInt(txtNumero.getText());
+        bairro = txtCidade.getText();
+        cidade = txtBairro.getText();
+        estado = txtEstado.getSelectedItem().toString();
 
-        if (nome.isEmpty()
+        if (
+                nome.isEmpty()
                 || cpf.equals("   .   .   -  ")
                 || rg.equals("  .   .   - ")
-                || celular.isEmpty()
+                || celular.equals("(  )        -     ")
                 || nascimento.equals("   /  /   ")
                 || cargo.isEmpty()
                 || admissao.equals("   /  /   ")
@@ -692,6 +699,8 @@ public class Funcionario extends javax.swing.JPanel {
             if (op == 1) {
 
                 FuncionarioDTO obj = new FuncionarioDTO();
+                
+                obj.setIdFuncionario(id);
                 obj.setNomeFuncionario(nome);
                 obj.setCpfFuncionario(cpf);
                 obj.setRgFuncionario(rg);
@@ -699,7 +708,6 @@ public class Funcionario extends javax.swing.JPanel {
                 obj.setCelularFuncionario(celular);
                 obj.setCargoFuncionario(cargo);
                 obj.setAdmissaoFuncionario(admissao);
-                obj.setDemissaoFuncionario(demissao);
                 obj.setCepFuncionario(cep);
                 obj.setRuaFuncionario(rua);
                 obj.setNumeroFuncionario(numero);
@@ -707,18 +715,18 @@ public class Funcionario extends javax.swing.JPanel {
                 obj.setCidadeFuncionario(cidade);
                 obj.setEstadoFuncionario(estado);
 
-                obj.setIdFuncionario(id);
+                
 
                 FuncionarioDAO objdao = new FuncionarioDAO();
-                objdao.cadastrarFuncionario(obj);
+                objdao.editarFuncionario(obj);
             }
         }
     }
 
     private void Limpar() {
 
-        new LimparCampos().Limpar(painelCadFuncionario);
-
+        new LimparCampos().Limpar(painelDadosPessoais);
+       
     }
 
     private void LimparBusca() {
@@ -742,18 +750,21 @@ public class Funcionario extends javax.swing.JPanel {
                 cont.getCelularFuncionario(),
                 cont.getCargoFuncionario(),
                 cont.getAdmissaoFuncionario(),
-                cont.getDemissaoFuncionario(),
                 cont.getCepFuncionario(),
                 cont.getRuaFuncionario(),
                 cont.getNumeroFuncionario(),
                 cont.getBairroFuncionario(),
                 cont.getCidadeFuncionario(),
-                cont.getEstadoFuncionario(),});
+                cont.getEstadoFuncionario()
+            });
         }
     }
 
     private void Excluir() {
-
+        id = Integer.parseInt(txtId.getText());
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há Funcionario selecionado para exclusão");
+        } else {
         int op;
         Object[] options = {"Cancelar", "Confirmar"};
         op = JOptionPane.showOptionDialog(null, "Deseja realmente excluir?", "Atenção", JOptionPane.DEFAULT_OPTION,
@@ -768,9 +779,10 @@ public class Funcionario extends javax.swing.JPanel {
             dao.excluirFuncionario(obj);
         }
     }
-
+    }
     private void Pesquisar() {
-        String nome = "%" + txtBuscaNome.getText() + "%";
+        String nome;
+                nome = "%" + txtBuscaNome.getText() + "%";
 
         FuncionarioDAO objdao = new FuncionarioDAO();
         List<FuncionarioDTO> lista = objdao.buscarFuncionario(nome);
@@ -787,17 +799,20 @@ public class Funcionario extends javax.swing.JPanel {
                 cont.getCelularFuncionario(),
                 cont.getCargoFuncionario(),
                 cont.getAdmissaoFuncionario(),
-                cont.getDemissaoFuncionario(),
                 cont.getCepFuncionario(),
                 cont.getRuaFuncionario(),
                 cont.getNumeroFuncionario(),
                 cont.getBairroFuncionario(),
                 cont.getCidadeFuncionario(),
-                cont.getEstadoFuncionario(),});
+                cont.getEstadoFuncionario()
+            });
         }
     }
 
-    private void CarregarCampos() {
+    private void CarregarCampos() 
+    {
+        JTPainelFuncionario.setSelectedIndex(0);
+        
         txtId.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 0).toString());
         txtNome.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 1).toString());
         txtCPF.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 2).toString());
@@ -806,13 +821,12 @@ public class Funcionario extends javax.swing.JPanel {
         txtCelular.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 5).toString());
         txtCargo.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 6).toString());
         txtAdmissao.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 7).toString());
-        txtDemissao.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 8).toString());
-        txtCep.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 9).toString());
-        txtRua.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 10).toString());
-        txtNumero.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 11).toString());
-        txtBairro.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 12).toString());
-        txtCidade.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 13).toString());
-        txtEstado.setSelectedItem(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 14).toString());
+        txtCep.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 8).toString());
+        txtRua.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 9).toString());
+        txtNumero.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 10).toString());
+        txtBairro.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 11).toString());
+        txtCidade.setText(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 12).toString());
+        txtEstado.setSelectedItem(tabelaConFuncionario.getValueAt(tabelaConFuncionario.getSelectedRow(), 13).toString());
     }
 
 }

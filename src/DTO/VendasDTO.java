@@ -11,7 +11,7 @@ public class VendasDTO
 
     private int idVenda;
     private Date dataVenda; // no banco esta como DATE
-    private ClienteDTO cliente;
+
     private ProdutoDTO produto;
     private CompraDTO compra;
     private int qntVenda;
@@ -35,14 +35,6 @@ public class VendasDTO
 
     public void setDataVenda(Date dataVenda) {
         this.dataVenda = dataVenda;
-    }
-
-    public ClienteDTO getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(ClienteDTO cliente) {
-        this.cliente = cliente;
     }
 
     public ProdutoDTO getProduto() {

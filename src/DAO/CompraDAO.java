@@ -4,12 +4,15 @@ import CONEXAO.Conexao;
 import DTO.CompraDTO;
 import DTO.FornecedorDTO;
 import DTO.ProdutoDTO;
+import VIEW.Venda;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class CompraDAO {
@@ -21,28 +24,26 @@ public class CompraDAO {
 
     public void cadastrarCompra(CompraDTO obj) {
         String sql = ""
-                + "INSERT INTO tbl_compra"
-                + "compra_data('%d/%m/%Y/), "
+                + "INSERT INTO tbl_compra( "
+                //+ "compra_data, "
                 + "fk_fornecedor, "
                 + "fk_produto, "
-                + "compra_pro_qnt, "
+                + "compra_qnt, "
                 + "compra_preco, "
                 + "compra_preco_venda, "
-                + "compra_valor_total,"
-                + "compra_validade"
-                + "VALUES (?,?,?,?,?,?,?,?)";
+                + "compra_valor_total) "
+                + "VALUES (?,?,?,?,?,?)";
 
         try {
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, obj.getDataCompra());
-            pst.setInt(2, obj.getFornecedor().getIdFornecedor());
-            pst.setInt(3, obj.getProduto().getIdProduto());
-
-            pst.setDouble(4, obj.getCompraPreco());
-            pst.setDouble(5, obj.getCompraPrecoVenda());
-            pst.setDouble(6, obj.getCompraValorTotal());
-            pst.setString(7, obj.getCompraValidade());
+            //pst.setString(1, obj.getDataCompra());
+            pst.setInt(1, obj.getFornecedor().getIdFornecedor());
+            pst.setInt(2, obj.getProduto().getIdProduto());
+            pst.setInt(3, obj.getCompraQnt());
+            pst.setInt(4, obj.getCompraPreco());
+            pst.setInt(5, obj.getCompraPrecoVenda());
+            pst.setInt(6, obj.getCompraValorTotal());
 
             pst.execute();
             pst.close();
@@ -57,30 +58,28 @@ public class CompraDAO {
         String sql = ""
                 + "UPDATE INTO tbl_compra "
                 + "SET "
-                + "compra_data = ?, "
+               // + "compra_data = ?, "
                 + "fk_fornecedor = ?, "
-                + "fk_produto = ?,"
-                + "compra_preco =?,"
+                + "fk_produto = ?, "
+                + "compra_qnt =?, "
+                + "compra_preco =?, "
                 + "compra_preco_venda=?, "
-                + "compra_valor_total=?, "
-                + "compra_validade = ?)"
+                + "compra_valor_total=? "
                 + "WHERE id_compra=?";
 
         try {
 
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, obj.getDataCompra());
+            //pst.setString(1, obj.getDataCompra());
+            pst.setInt(1, obj.getFornecedor().getIdFornecedor());
+            pst.setInt(2, obj.getProduto().getIdProduto());
+            pst.setInt(3, obj.getCompraQnt());
+            pst.setInt(4, obj.getCompraPreco());
+            pst.setInt(5, obj.getCompraPrecoVenda());
+            pst.setInt(6, obj.getCompraValorTotal());
 
-            pst.setInt(2, obj.getFornecedor().getIdFornecedor());
-            pst.setInt(3, obj.getProduto().getIdProduto());
-
-            pst.setDouble(4, obj.getCompraPreco());
-            pst.setDouble(5, obj.getCompraPrecoVenda());
-            pst.setDouble(6, obj.getCompraValorTotal());
-            pst.setString(7, obj.getCompraValidade());
-
-            pst.setInt(8, obj.getIdCompra());
+            pst.setInt(7, obj.getIdCompra());
 
             pst.execute();
             pst.close();
@@ -94,7 +93,9 @@ public class CompraDAO {
     }
 
     public void excluirCompra(CompraDTO obj) {
-        String sql = "DELETE FROM tbl_compra WHERE id_compra = ?";
+        String sql = ""
+                + "DELETE FROM tbl_compra "
+                + "WHERE id_compra = ?";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -114,19 +115,9 @@ public class CompraDAO {
 
     public ArrayList<CompraDTO> listarCompra() {
 
-        String sql = "SELECT"
-                + " c.compra_data,"
-                + " c.id_compra,"
-                + " c.compra_preco,"
-                + " c.compra_preco_venda,"
-                + " c.compra_valor_total,"
-                + " c.compra_validade,"
-                + " f.forn_nome,"
-                + " p.pro_cod_barra,"
-                + " p.pro_nome,"
-                + " p.pro_estoque"
-                + " FROM tbl_compra as c"
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
+        String sql = " SELECT * "
+                + " FROM tbl_compra as c "
+                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
                 + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)";
 
         try {
@@ -135,21 +126,21 @@ public class CompraDAO {
             rs = pst.executeQuery();
 
             while (rs.next()) {
+                
                 CompraDTO obj = new CompraDTO();
                 FornecedorDTO f = new FornecedorDTO();
                 ProdutoDTO p = new ProdutoDTO();
 
-                obj.setIdCompra(rs.getInt("id_compra"));
-                obj.setDataCompra(rs.getString("compra_data"));
-                obj.setCompraPreco(rs.getDouble("compra_preco"));
-                obj.setCompraPrecoVenda(rs.getDouble("compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getDouble("compra_valor_total"));
-                obj.setCompraValidade(rs.getString("compra_validade"));
+                obj.setIdCompra(rs.getInt("c.id_compra"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
+                obj.setCompraPreco(rs.getInt("c.compra_preco"));
+                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
+                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
 
                 f.setNomeFornecedor(rs.getString("f.forn_nome"));
                 p.setNomeProduto(rs.getString("p.pro_nome"));
                 p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
-                p.setEstoqueProduto(rs.getInt("p.pro_estoque"));
 
                 obj.setFornecedor(f);
                 obj.setProduto(p);
@@ -160,27 +151,18 @@ public class CompraDAO {
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "CompraDAO LISTAR " + erro);
+            return null;
         }
-        return null; // Esse metodo retorna toda a lista dos usuarios cadastrado
+         // Esse metodo retorna toda a lista dos usuarios cadastrado
     }
 
     public ArrayList<CompraDTO> buscarCompraFornecedor(String forn_nome) {
 
-        String sql = "SELECT"
-                + " c.compra_data,"
-                + " c.id_compra,"
-                + " c.compra_preco,"
-                + " c.compra_preco_venda,"
-                + " c.compra_valor_total,"
-                + " c.compra_validade,"
-                + " f.forn_nome,"
-                + " p.pro_cod_barra,"
-                + " p.pro_nome,"
-                + " p.pro_estoque"
-                + " FROM tbl_compra as c"
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
-                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
-                + " WHERE f.forn_nome=?";
+        String sql = "SELECT *"
+                + " FROM tbl_compra as c "
+                + "INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
+                + "INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto) "
+                + "WHERE f.forn_nome=?";
 
         conn = new Conexao().conectaBD();
 
@@ -195,17 +177,16 @@ public class CompraDAO {
                 FornecedorDTO f = new FornecedorDTO();
                 ProdutoDTO p = new ProdutoDTO();
 
-                obj.setIdCompra(rs.getInt(" id_compra "));
-                obj.setDataCompra(rs.getString(" compra_data "));
-                obj.setCompraPreco(rs.getDouble(" compra_preco "));
-                obj.setCompraPrecoVenda(rs.getDouble(" compra_preco_venda "));
-                obj.setCompraValorTotal(rs.getDouble(" compra_valor_total "));
-                obj.setCompraValidade(rs.getString(" compra_validade "));
+                obj.setIdCompra(rs.getInt("c.id_compra"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
+                obj.setCompraPreco(rs.getInt("c.compra_preco"));
+                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
+                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
 
-                f.setNomeFornecedor(rs.getString(" f.forn_nome "));
-                p.setNomeProduto(rs.getString(" p.pro_nome "));
-                p.setCodbarraProduto(rs.getInt(" p.pro_cod_barra "));
-                p.setEstoqueProduto(rs.getInt(" p.pro_estoque "));
+                f.setNomeFornecedor(rs.getString("f.forn_nome"));
+                p.setNomeProduto(rs.getString("p.pro_nome"));
+                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
 
                 obj.setFornecedor(f);
                 obj.setProduto(p);
@@ -223,20 +204,10 @@ public class CompraDAO {
 
     public ArrayList<CompraDTO> buscarCompraProdutoNome(String pro_nome) {
 
-        String sql = "SELECT"
-                + " c.compra_data,"
-                + " c.id_compra,"
-                + " c.compra_preco,"
-                + " c.compra_preco_venda,"
-                + " c.compra_valor_total,"
-                + " c.compra_validade,"
-                + " f.forn_nome,"
-                + " p.pro_cod_barra,"
-                + " p.pro_nome,"
-                + " p.pro_estoque"
-                + " FROM tbl_compra as c"
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
-                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
+        String sql = "SELECT * "
+                + "FROM tbl_compra as c "
+                + "INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor) "
+                + "INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto) "
                 + "WHERE p.pro_nome=?";
 
         try {
@@ -250,17 +221,16 @@ public class CompraDAO {
                 FornecedorDTO f = new FornecedorDTO();
                 ProdutoDTO p = new ProdutoDTO();
 
-                obj.setIdCompra(rs.getInt("id_compra "));
-                obj.setDataCompra(rs.getString("compra_data "));
-                obj.setCompraPreco(rs.getDouble("compra_preco "));
-                obj.setCompraPrecoVenda(rs.getDouble("compra_preco_venda "));
-                obj.setCompraValorTotal(rs.getDouble("compra_valor_total "));
-                obj.setCompraValidade(rs.getString("compra_validade "));
+                obj.setIdCompra(rs.getInt("c.id_compra"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
+                obj.setCompraPreco(rs.getInt("c.compra_preco"));
+                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
+                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
 
-                f.setNomeFornecedor(rs.getString("f.forn_nome "));
-                p.setNomeProduto(rs.getString("p.pro_nome "));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra "));
-                p.setEstoqueProduto(rs.getInt("p.pro_estoque "));
+                f.setNomeFornecedor(rs.getString("f.forn_nome"));
+                p.setNomeProduto(rs.getString("p.pro_nome"));
+                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
 
                 obj.setFornecedor(f);
                 obj.setProduto(p);
@@ -277,21 +247,11 @@ public class CompraDAO {
 
     public ArrayList<CompraDTO> buscarCompraProdutoCodigoBarra(int pro_cod_barra) {
 
-        String sql = "SELECT"
-                + " c.compra_data,"
-                + " c.id_compra,"
-                + " c.compra_preco,"
-                + " c.compra_preco_venda,"
-                + " c.compra_valor_total,"
-                + " c.compra_validade,"
-                + " f.forn_nome,"
-                + " p.pro_cod_barra,"
-                + " p.pro_nome,"
-                + " p.pro_estoque"
+        String sql = "SELECT * "
                 + " FROM tbl_compra as c"
                 + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
                 + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
-                + "WHERE p.pro_cod_barra=?";
+                + " WHERE p.pro_cod_barra=?";
 
         try {
             pst = conn.prepareStatement(sql);
@@ -304,17 +264,16 @@ public class CompraDAO {
                 FornecedorDTO f = new FornecedorDTO();
                 ProdutoDTO p = new ProdutoDTO();
 
-                obj.setIdCompra(rs.getInt("id_compra "));
-                obj.setDataCompra(rs.getString("compra_data "));
-                obj.setCompraPreco(rs.getDouble("compra_preco "));
-                obj.setCompraPrecoVenda(rs.getDouble("compra_preco_venda "));
-                obj.setCompraValorTotal(rs.getDouble("compra_valor_total "));
-                obj.setCompraValidade(rs.getString("compra_validade "));
+                obj.setIdCompra(rs.getInt("c.id_compra"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
+                obj.setCompraPreco(rs.getInt("c.compra_preco"));
+                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
+                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
 
-                f.setNomeFornecedor(rs.getString("f.forn_nome "));
-                p.setNomeProduto(rs.getString("p.pro_nome "));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra "));
-                p.setEstoqueProduto(rs.getInt("p.pro_estoque "));
+                f.setNomeFornecedor(rs.getString("f.forn_nome"));
+                p.setNomeProduto(rs.getString("p.pro_nome"));
+                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
 
                 obj.setFornecedor(f);
                 obj.setProduto(p);
@@ -329,7 +288,52 @@ public class CompraDAO {
         return null;
     }
 
-    public void atualizarEstoque(int id_compra, int novo_estoque) {
+    public CompraDTO buscarCompraProduto(int pro_cod_barra) {
+
+        String sql = "SELECT * "
+                + " FROM tbl_compra as c"
+                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
+                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto) "
+                + "WHERE p.pro_cod_barra=?";
+
+        try {
+            pst = conn.prepareStatement(sql);
+
+            pst.setInt(1, pro_cod_barra);
+            rs = pst.executeQuery();
+
+            CompraDTO obj = new CompraDTO();
+            FornecedorDTO f = new FornecedorDTO();
+            ProdutoDTO p = new ProdutoDTO();
+
+            while (rs.next()) {
+
+                obj.setIdCompra(rs.getInt("c.id_compra"));
+                obj.setDataCompra(rs.getString("c.compra_data"));
+                obj.setCompraQnt(rs.getInt("c.compra_qnt"));
+                obj.setCompraPreco(rs.getInt("c.compra_preco"));
+                obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
+                obj.setCompraValorTotal(rs.getInt("c.compra_valor_total"));
+
+                f.setNomeFornecedor(rs.getString("f.forn_nome"));
+                p.setNomeProduto(rs.getString("p.pro_nome"));
+                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
+
+                obj.setFornecedor(f);
+                obj.setProduto(p);
+
+            }
+            return obj;
+
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "ERRO buscarCompraDAO " + erro);
+            return null;
+        }
+
+    }
+
+    /*
+        public void atualizarEstoque(int id_compra, int novo_estoque) {
         try {
             String sql = "SELECT fk_produto"
                     + " FROM tbl_compras as c "
@@ -350,59 +354,40 @@ public class CompraDAO {
             JOptionPane.showMessageDialog(null, "ERRO CompraDAO: " + e);
         }
     }
+    
+     */
+    public CompraDTO PesquisaCodProd(int pcode)
+    {
 
-    public CompraDTO buscarCompraProduto(int pro_cod_barra) {
-
-        String sql = "SELECT"
-                + " c.compra_data,"
-                + " c.id_compra,"
-                + " c.compra_preco,"
-                + " c.compra_preco_venda,"
-                + " c.compra_valor_total,"
-                + " c.compra_validade,"
-                + " f.forn_nome,"
-                + " p.pro_cod_barra,"
-                + " p.pro_nome,"
-                + " p.pro_estoque"
-                + " FROM tbl_compra as c"
-                + " INNER JOIN tbl_fornecedor AS f ON(c.fk_fornecedor = f.id_fornecedor)"
-                + " INNER JOIN tbl_produto AS p ON(c.fk_produto = p.id_produto)"
-                + "WHERE p.pro_cod_barra=?";
-
+        String sql = ""
+                + "SELECT * "
+                + "FROM tbl_compra as c "
+                + "INNER JOIN tbl_produto as p "
+                + "ON (c.fk_produto = p.id_produto)"
+                + "WHERE (p.pro_cod_barra) = ?";
         try {
             pst = conn.prepareStatement(sql);
-
-            pst.setInt(1, pro_cod_barra);
+            pst.setInt(1, pcode);
             rs = pst.executeQuery();
-            CompraDTO obj = new CompraDTO();
-            FornecedorDTO f = new FornecedorDTO();
-            ProdutoDTO p = new ProdutoDTO();
+            ProdutoDTO objp = new ProdutoDTO();
+            CompraDTO objc = new CompraDTO();
 
-            while (rs.next()) {
+            if (rs.next() == false) {
+                JOptionPane.showMessageDialog(null, "Produto não Encontrado");
+            } else {
 
-                obj.setIdCompra(rs.getInt("id_compra"));
-                obj.setDataCompra(rs.getString("compra_data"));
-                obj.setCompraPreco(rs.getDouble("compra_preco"));
-                obj.setCompraPrecoVenda(rs.getDouble("compra_preco_venda"));
-                obj.setCompraValorTotal(rs.getDouble("compra_valor_total"));
-                obj.setCompraValidade(rs.getString("compra_validade"));
+                objp.setNomeProduto(rs.getString("p.pro_nome"));
 
-                f.setNomeFornecedor(rs.getString("f.forn_nome"));
-                p.setNomeProduto(rs.getString("p.pro_nome"));
-                p.setCodbarraProduto(rs.getInt("p.pro_cod_barra"));
-                p.setEstoqueProduto(rs.getInt("p.pro_estoque"));
+                objc.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
 
-                obj.setFornecedor(f);
-                obj.setProduto(p);
+                objc.setProduto(objp);
 
             }
-            return obj;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "ERRO buscarCompraDAO " + erro);
-            return null;
+            return objc;
+        } catch (SQLException ex) {
+            Logger.getLogger(Venda.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return null;
+    
     }
 }
-   
