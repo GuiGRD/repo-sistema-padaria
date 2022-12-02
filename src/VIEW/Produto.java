@@ -122,7 +122,7 @@ public class Produto extends javax.swing.JPanel {
                 .addGroup(painelCadProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
+                .addGap(84, 84, 84)
                 .addGroup(painelCadProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel33)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -130,7 +130,7 @@ public class Produto extends javax.swing.JPanel {
                 .addGroup(painelCadProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23))
-                .addGap(82, 82, 82)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel31)
                 .addGap(48, 48, 48))
         );
@@ -140,6 +140,11 @@ public class Produto extends javax.swing.JPanel {
         panielConProduto.setBackground(new java.awt.Color(255, 255, 255));
         panielConProduto.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
+        txtBusca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscaActionPerformed(evt);
+            }
+        });
         txtBusca.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtBuscaKeyPressed(evt);
@@ -247,7 +252,7 @@ public class Produto extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(JTPainelProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE))
+                        .addComponent(JTPainelProduto))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -288,7 +293,7 @@ public class Produto extends javax.swing.JPanel {
                 .addComponent(jNome, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("");
@@ -344,6 +349,10 @@ public class Produto extends javax.swing.JPanel {
             //PesquisarCod();
         }
     }//GEN-LAST:event_txtBuscaKeyPressed
+
+    private void txtBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -485,28 +494,7 @@ String nome ;
         }
     }
 
-    private void PesquisarCod() {
 
-        /*
-        int buscacod;
-        Integer.parseInt(buscacod = "%" + txtBusca.getText() + "%");
-        
-        
-        
-        ProdutoDAO objdao = new ProdutoDAO();
-        List<ProdutoDTO> lista = objdao.buscarCodigoProduto(buscacod);
-        DefaultTableModel dado = (DefaultTableModel) tabelaConProduto.getModel();
-        dado.setNumRows(0);
-
-        for (ProdutoDTO cont : lista) {
-            dado.addRow(new Object[]{
-                cont.getIdProduto(),
-                cont.getCodbarraProduto(),
-                cont.getNomeProduto(), 
-                cont.getAtivoProduto()});
-        }
-         */
-    }
 
     private void CarregarCampos() {
         JTPainelProduto.setSelectedIndex(0);

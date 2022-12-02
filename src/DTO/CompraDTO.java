@@ -1,12 +1,20 @@
-
 package DTO;
 
+/**
+ *
+ * @author Pri
+ */
+//kfjakjçdfhg lkajdhflgkadhjf lgkajdhf glkajdfh gklajdfh glkadg kdfjkljdfhlg
+    /**
+     * Método Compra, contem os atributos que serao as informacoes das
+     * entradas/compras dos produtos.
+     */
+public class CompraDTO {
 
-public class CompraDTO 
-{
+   
+    // Atributos
     private int idCompra;
     private String dataCompra;
-
     private FornecedorDTO fornecedor;
     private ProdutoDTO produto;
     private int compraQnt;
@@ -14,6 +22,10 @@ public class CompraDTO
     private int compraPrecoVenda;
     private int compraValorTotal;
 
+    /**
+     * Métodos Getters e Setters utilizados para padronizacao do gerenciamento
+     * sobre os atributos informados.
+     */
     public int getIdCompra() {
         return idCompra;
     }

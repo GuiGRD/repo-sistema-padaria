@@ -1,10 +1,19 @@
 package DTO;
 
-import java.util.Date;
-import java.lang.Enum;
+/**
+ *
+ * @author Pri
+ */
 
+    /**
+     * Método Funcionario, contem os atributos que serao as informacoes dos
+     * funcionarios que serao cadastrados no sistema padaria
+     */
 public class FuncionarioDTO {
 
+    
+    
+    // Atributos
     private int idFuncionario;
     private String nomeFuncionario;
     private String cpfFuncionario;
@@ -20,7 +29,12 @@ public class FuncionarioDTO {
     private String cidadeFuncionario;
     private String estadoFuncionario;
 
-
+     /**
+     * Métodos Getters e Setters utilizados para padronizacao do gerenciamento
+     * sobre os atributos informados.
+     */
+    
+    
     public int getIdFuncionario() {
         return idFuncionario;
     }
@@ -132,6 +146,5 @@ public class FuncionarioDTO {
     public void setCargoFuncionario(String cargoFuncionario) {
         this.cargoFuncionario = cargoFuncionario;
     }
-
 
 }

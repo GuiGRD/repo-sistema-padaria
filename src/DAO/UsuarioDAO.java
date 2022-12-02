@@ -4,7 +4,8 @@ import CONEXAO.Conexao;
 import DTO.UsuarioDTO;
 import DTO.FuncionarioDTO;
 import VIEW.MENUADM;
-import java.awt.Color;
+import VIEW.MENUCAIXA;
+import VIEW.MENUESCRITORIO;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,13 +13,27 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
+/**
+ * 
+ * @author Pri
+ */
+
+    /**
+     * Método Usuário serão utilizados os atributos que foram encapsulados
+     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informações no banco de dados na tabela usuário.
+     */
 public class UsuarioDAO {
 
-    Connection conn ;
-
+    //Cria a Conexão
+    Connection conn = new Conexao().conectaBD();
+    // Prepara a Conexão, cria um objeto para representar as instruções do SQL que será executada.
     PreparedStatement pst;
+    //Retorna todo o resultado encontrado percorrendo cada linha do banco de dados
     ResultSet rs;
+    //Cria uma Lista das informações no banco de dados
     ArrayList<UsuarioDTO> lista = new ArrayList<>();
+
     public String LoginUsuario;
 
     public ResultSet autenticarUsuario(UsuarioDTO objusuariodto) {
@@ -27,7 +42,7 @@ public class UsuarioDAO {
                 + "FROM tbl_usuario "
                 + "WHERE usu_login = ? "
                 + "AND usu_senha = ? ";
-        
+
         try {
             conn = new Conexao().conectaBD();
             pst = conn.prepareStatement(sql);
@@ -43,6 +58,13 @@ public class UsuarioDAO {
         }
     }
 
+       /**
+     * Método Cadastrar:
+     * Insere as informações no banco de dados nas colunas da tabela
+     * usuário de acordo com os atributos informados pelo usuário.
+     *
+     * @param objusuariodto UsuarioDTO conecta com banco para inserir as informações.
+     */ 
     public void cadastrarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "INSERT INTO tbl_usuario"
@@ -70,7 +92,12 @@ public class UsuarioDAO {
         }
 
     }
+	/**
+	 * Método Editar:
+	 * Altera as informações no banco de dados na tabela usuário de acordo com os atributos informados pelo usuário.
 
+	 * @param objusuariodto UsuarioDTO conecta com banco para fazer as alterações das informações.
+	 */
     public void editarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "UPDATE tbl_usuario"
@@ -100,6 +127,13 @@ public class UsuarioDAO {
         }
     }
 
+    /**
+     * Método Excluir:
+     * Exclui as informações no banco de dados nas colunas da tabela
+     * usuário informado pelo usuário.
+     *
+     * @param objusuariodto UsuarioDTO conecta com banco para excluir as informações.
+     */
     public void excluirUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "DELETE FROM tbl_usuario "
@@ -119,7 +153,14 @@ public class UsuarioDAO {
             JOptionPane.showMessageDialog(null, "Usuário não selecionado para exclusão " + erro);
         }
     }
-
+    
+    /**
+     * Método Listar:
+     * Pega as informações do banco de dados das colunas da tabela
+     * usuário e retorna listando em uma tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
     public ArrayList<UsuarioDTO> listarUsuario() //traz as informações do banco de dados da tabela em questão retonando em uma lista
     {
         String sql = ""
@@ -164,18 +205,25 @@ public class UsuarioDAO {
         // Esse metodo retorna toda a lista dos usuarios cadastrado
 
     }
-
+    
+    /**
+     * Método Buscar:
+     * Pega as informações do usuário escolhido no banco de dados das colunas da tabela
+     * usuário e retorna listando em uma tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
     public ArrayList<UsuarioDTO> buscarUsuario(String fun_nome) {
         String sql = "SELECT "
-                + "u.fk_funcionario,"
-                + "u.usu_login,"
-                + "u.usu_senha,"
-                + "u.usu_perfil,"
-                + "f.fun_nome,"
-                + "f.fun_cpf,"
+                + "u.fk_funcionario, "
+                + "u.usu_login, "
+                + "u.usu_senha, "
+                + "u.usu_perfil, "
+                + "f.fun_nome, "
+                + "f.fun_cpf "
                 + "FROM tbl_usuario AS u "
                 + "INNER JOIN tbl_funcionario AS f "
-                + "ON u.fk_funcionario = f.id_funcionario "
+                + "ON (u.fk_funcionario = f.id_funcionario) "
                 + "WHERE f.fun_nome LIKE ? ";
 
         try {
@@ -210,98 +258,76 @@ public class UsuarioDAO {
 
     }
 
-    public ArrayList<UsuarioDTO> buscarPerfilUsuario(String usu_perfil) {
-        String sql = ""
-                + "SELECT "
-                + "fk_funcionario "
-                + "FROM tbl_usuario AS u"
-                + "u.usu_login, "
-                + "u.usu_senha, "
-                + "u.usu_perfil, "
-                + "f.fun_nome, "
-                + "f.fun_cpf, "
-                + "INNER JOIN tbl_funcionario AS f ON(u.fk_funcionario = f.id_funcionario)"
-                + " WHERE u.usu_perfil LIKE ? ";
 
-        conn = new Conexao().conectaBD();
+
+    /**
+     * Método Logar;
+     * Compara com o banco as informações passada pelo usuário
+     * @param Login Compara com o banco as informações passada pelo usuário
+     * @param Senha Compara com o banco as informações passada pelo usuário
+     */
+
+    public void LogarUsuario(String Login, String Senha) {
 
         try {
+            String sql = ""
+                    + "SELECT * "
+                    + "FROM tbl_usuario "
+                    + "WHERE usu_login = ? "
+                    + "AND usu_senha = ?";
+
+            conn = new Conexao().conectaBD();
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, usu_perfil);
-            rs = pst.executeQuery();
+            pst.setString(1, Login);// preenche os valores (1 = ao 1º ponto de ? informado na minha String sql)
+            pst.setString(2, Senha);
 
-            while (rs.next()) {
-                UsuarioDTO obj = new UsuarioDTO();
-                FuncionarioDTO fundto = new FuncionarioDTO();
+            rs = pst.executeQuery();// executa  Query(consulta)
 
-                obj.setIdUsuario(rs.getInt("u.id_usuario"));
-                obj.setLoginUsuario(rs.getString("u.usu_login"));
-                obj.setSenhaUsuario(rs.getString("u.usu_senha"));
-                obj.setPerfilUsuario(rs.getString("u.usu_perfil"));
-
-                fundto.setNomeFuncionario(rs.getString("f.fun_nome"));
-                fundto.setCpfFuncionario(rs.getString("f.fun_cpf"));
-
-                obj.setFuncionario(fundto);
-                lista.add(obj);
-
-            }
-            return lista;
-
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Perfil do usuário não selecionado para busca " + erro);
-            return null;
-        }
-        // Esse metodo retorna o usuario cadastrado
-
-    }
-
-    public UsuarioDTO PesquisarUsuario(String fun_nome) {
-
-        String sql = "SELECT"
-                + " u.usu_login,"
-                + " u.usu_senha,"
-                + " u.usu_perfil,"
-                + " fk_funcionario,"
-                + " f.fun_nome,"
-                + " f.fun_cpf "
-                + " FROM tbl_usuario AS u"
-                + " INNER JOIN tbl_funcionario AS f ON(u.fk_funcionario = f.id_funcionario)"
-                + " WHERE f.fun_nome LIKE ?";
-
-        try {
-            pst = conn.prepareStatement(sql);
-
-            pst.setString(1, fun_nome);
-            rs = pst.executeQuery();
-
-            UsuarioDTO obj = new UsuarioDTO();
-            FuncionarioDTO fundto = new FuncionarioDTO();
-
+            //Se existir um usuário e senha correspondente
             if (rs.next()) {
+                //Fazendo o tratamento do perfil do usuario
+                String cargo;
+                cargo = rs.getString("usu_perfil");
 
-                obj.setIdUsuario(rs.getInt("u.id_usuario"));
-                obj.setLoginUsuario(rs.getString("u.usu_login"));
-                obj.setSenhaUsuario(rs.getString("u.usu_senha"));
-                obj.setPerfilUsuario(rs.getString("u.usu_perfil "));
+                if (cargo == "Adm") {
+                //if(cargo.equals("Adm")){
+                    JOptionPane.showMessageDialog(null, "Bem vindo(a)");
+                    MENUADM menu = new MENUADM();
+                    menu.setVisible(true);
 
-                fundto.setNomeFuncionario(rs.getString("f.fun_nome"));
-                fundto.setCpfFuncionario(rs.getString("f.fun_cpf"));
+                    //menu.LoginUsuario = rs.getString("usu_login");
+                    //MENU.lblUsuario.setForeground(Color.gray);
+                    
+                } if (cargo == "Caixa") {
+                //} else if (cargo.equals("Caixa")){
+                    JOptionPane.showMessageDialog(null, "Bem vindo(a)");
 
-                obj.setFuncionario(fundto);
+                    MENUCAIXA menu = new MENUCAIXA();
+                    menu.setVisible(true);
 
+                    //menu.LoginUsuario = rs.getString("usu_login");
+                    //MENU.lblUsuario.setForeground(Color.gray);
+                    
+                } else if (cargo == "Escritorio") {
+                //} else if (cargo.equals("Escritorio")){
+                    JOptionPane.showMessageDialog(null, " Bem vindo(a)");
+
+                    MENUESCRITORIO menu = new MENUESCRITORIO();
+                    menu.setVisible(true);
+
+                    //menu.LoginUsuario = rs.getString(" usu_login");
+                    //MENU.lblUsuario.setForeground(Color.BLUE);
+                }
+
+            } else {
+                //Envia mensagem dizendo que está incorreto.(usuario e/ou senha incorreto)
+                JOptionPane.showMessageDialog(null, "Usuário e/ou Senha Inválida");
             }
-            return obj;
-
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Usuário não selecionado para pesquisa " + erro);
-            return null;
+            JOptionPane.showMessageDialog(null, "TELALOGIN3" + erro);
         }
 
     }
-
 
 }
-
-

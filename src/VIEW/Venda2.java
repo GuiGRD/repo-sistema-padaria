@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 
-public class Venda extends javax.swing.JPanel {
+public class Venda2 extends javax.swing.JPanel {
 
     int qnt;
     int total;
@@ -29,7 +29,7 @@ public class Venda extends javax.swing.JPanel {
     PreparedStatement pst; // Prepara a Conexão
     ResultSet rs;
 
-    public Venda() {
+    public Venda2() {
 
         conn = new Conexao().conectaBD();
 
@@ -519,7 +519,7 @@ public class Venda extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     /**
-     *
+     * 
      */
     private void Data() {
         Date data = new Date();
@@ -529,8 +529,9 @@ public class Venda extends javax.swing.JPanel {
     }
 
     /**
-     *
+     * 
      */
+    
     private void Limpar() {
         txtCodigoProduto.setText("");
         txtNomeProduto.setText("");
@@ -541,13 +542,8 @@ public class Venda extends javax.swing.JPanel {
 
     }
 
-    /**
-     * Método utilizado para calcular o preco dos produtos multiplicados pela
-     * quantidade
-     *
-     * @param qnt quantidade do produto
-     * @param preco preco do produto
-     */
+ // Método utilizado para calcular o preco dos produtos multiplicados pela quantidade
+
     public void Quantidade() {
         qnt=0;
         preco=0;
@@ -556,7 +552,7 @@ public class Venda extends javax.swing.JPanel {
         preco = Integer.parseInt(txtPreco.getText());
         precosub = qnt * preco;
         txtPrecoSub.setText(String.valueOf(precosub));
-        
+
     }
 
     private void AdicionarItens() {
@@ -621,7 +617,7 @@ public class Venda extends javax.swing.JPanel {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Venda.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Venda2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -644,7 +640,7 @@ public class Venda extends javax.swing.JPanel {
         txtPrint.setText(txtPrint.getText() + "****************************************************************\n");
         txtPrint.setText(txtPrint.getText() + "                          Impressão                             \n");
         txtPrint.setText(txtPrint.getText() + "****************************************************************\n");
-        txtPrint.setText(txtPrint.getText() + "Produto" + " Qnt" + " Preço" + "\t" + " Subtotal" + "\n");
+        txtPrint.setText(txtPrint.getText() + "Produto" + "Qnt" + "Preço" + "\t" + "Subtotal" + "\n");
 
         for (int i = 0; i < itensvenda.getRowCount(); i++) {
             String pnome = (String) itensvenda.getValueAt(i, 1);
@@ -663,5 +659,6 @@ public class Venda extends javax.swing.JPanel {
         txtPrint.setText(txtPrint.getText() + "****************************************************************\n");
         txtPrint.setText(txtPrint.getText() + "                      OBRIGADO, VOLTE SEMPRE!               \n");
     }
+
 
 }

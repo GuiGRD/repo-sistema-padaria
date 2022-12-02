@@ -9,15 +9,42 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-public class FuncionarioDAO {
-    //Criando o metodo cadastrar
+/**
+ *
+ * @author Pri
+ */
 
-    Connection conn = new Conexao().conectaBD();
+/**
+     * Método Funcionário, serão utilizados os atributos que foram encapsulados
+     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informações no banco de dados na tabela funcionário.
+     */
+public class FuncionarioDAO {
+
+
+    //Cria a Conexão
+    Connection conn;
+    // Prepara a Conexão, cria um objeto para representar as instruções do SQL que será executada.
     PreparedStatement pst;
+    //Retorna todo o resultado encontrado percorrendo cada linha do banco de dados.
     ResultSet rs;
+    //Cria uma Lista das informações no banco de dados.
     ArrayList<FuncionarioDTO> lista = new ArrayList<>();
 
-    public void cadastrarFuncionario(FuncionarioDTO objfundto) {
+    public FuncionarioDAO() {
+        //Conecta com o banco de dados
+        conn = new Conexao().conectaBD();
+    }
+
+    /**
+     * Método Cadastrar: Insere as informações no banco de dados nas colunas da
+     * tabela funcionário de acordo com os atributos informados pelo usuário.
+     *
+     * @param obj FuncionarioDTO conecta com banco para inserir as informações.
+     */
+    public void cadastrarFuncionario(FuncionarioDTO obj) {
+
+        //Através dos comandos SQL salva as informações nas colunas da tabela funcionário no banco de dados.
         String sql = ""
                 + "INSERT INTO tbl_funcionario"
                 + "(fun_nome, "
@@ -36,21 +63,22 @@ public class FuncionarioDAO {
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
+            //Conecta no banco e prepara organizando o comando SQL de acordo com a ordem dos nome das colunas informadas na String SQL.
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, objfundto.getNomeFuncionario());
-            pst.setString(2, objfundto.getCpfFuncionario());
-            pst.setString(3, objfundto.getRgFuncionario());
-            pst.setString(4, objfundto.getNascimentoFucionario());
-            pst.setString(5, objfundto.getCelularFuncionario());
-            pst.setString(6, objfundto.getCargoFuncionario());
-            pst.setString(7, objfundto.getAdmissaoFuncionario());
-            pst.setString(8, objfundto.getCepFuncionario());
-            pst.setString(9, objfundto.getRuaFuncionario());
-            pst.setInt(10, objfundto.getNumeroFuncionario());
-            pst.setString(11, objfundto.getBairroFuncionario());
-            pst.setString(12, objfundto.getCidadeFuncionario());
-            pst.setString(13, objfundto.getEstadoFuncionario());
+            pst.setString(1, obj.getNomeFuncionario());
+            pst.setString(2, obj.getCpfFuncionario());
+            pst.setString(3, obj.getRgFuncionario());
+            pst.setString(4, obj.getNascimentoFucionario());
+            pst.setString(5, obj.getCelularFuncionario());
+            pst.setString(6, obj.getCargoFuncionario());
+            pst.setString(7, obj.getAdmissaoFuncionario());
+            pst.setString(8, obj.getCepFuncionario());
+            pst.setString(9, obj.getRuaFuncionario());
+            pst.setInt(10, obj.getNumeroFuncionario());
+            pst.setString(11, obj.getBairroFuncionario());
+            pst.setString(12, obj.getCidadeFuncionario());
+            pst.setString(13, obj.getEstadoFuncionario());
 
             pst.execute();
             pst.close();
@@ -62,7 +90,16 @@ public class FuncionarioDAO {
         }
     }
 
-    public void editarFuncionario(FuncionarioDTO objfundto) {
+    /**
+     * Método Editar: Altera as informações no banco de dados na tabela
+     * funcionário de acordo com as atributos informados pelo usuário.
+     *
+     * @param obj FuncionarioDTO conecta com banco para fazer as alterações das
+     * informações.
+     */
+    public void editarFuncionario(FuncionarioDTO obj) {
+
+        //Através dos comandos SQL edita as informações nas colunas da tabela funcionário no banco de dados.
         String sql = ""
                 + "UPDATE tbl_funcionario SET "
                 + "fun_nome=?, "
@@ -81,41 +118,51 @@ public class FuncionarioDAO {
                 + "WHERE id_funcionario=?";
 
         try {
+            //Conecta no banco e prepara organizando o comando SQL de acordo e na ordem dos nome das colunas informadas na String SQL.
             pst = conn.prepareStatement(sql);
 
-            pst.setString(1, objfundto.getNomeFuncionario());
-            pst.setString(2, objfundto.getCpfFuncionario());
-            pst.setString(3, objfundto.getRgFuncionario());
-            pst.setString(4, objfundto.getNascimentoFucionario());
-            pst.setString(5, objfundto.getCelularFuncionario());
-            pst.setString(6, objfundto.getCargoFuncionario());
-            pst.setString(7, objfundto.getAdmissaoFuncionario());
-            pst.setString(8, objfundto.getCepFuncionario());
-            pst.setString(9, objfundto.getRuaFuncionario());
-            pst.setInt(10, objfundto.getNumeroFuncionario());
-            pst.setString(11, objfundto.getBairroFuncionario());
-            pst.setString(12, objfundto.getCidadeFuncionario());
-            pst.setString(13, objfundto.getEstadoFuncionario());
+            pst.setString(1, obj.getNomeFuncionario());
+            pst.setString(2, obj.getCpfFuncionario());
+            pst.setString(3, obj.getRgFuncionario());
+            pst.setString(4, obj.getNascimentoFucionario());
+            pst.setString(5, obj.getCelularFuncionario());
+            pst.setString(6, obj.getCargoFuncionario());
+            pst.setString(7, obj.getAdmissaoFuncionario());
+            pst.setString(8, obj.getCepFuncionario());
+            pst.setString(9, obj.getRuaFuncionario());
+            pst.setInt(10, obj.getNumeroFuncionario());
+            pst.setString(11, obj.getBairroFuncionario());
+            pst.setString(12, obj.getCidadeFuncionario());
+            pst.setString(13, obj.getEstadoFuncionario());
+            pst.setInt(14, obj.getIdFuncionario());
 
             pst.execute();
             pst.close();
 
-            JOptionPane.showMessageDialog(null, "Funcionario alterado com sucesso");
+            JOptionPane.showMessageDialog(null, "Funcionario editado com sucesso");
 
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Funcionario nao alterado, erro" + erro);
+            JOptionPane.showMessageDialog(null, "Erro ao editar o Funcionario" + erro);
         }
     }
 
-    public void excluirFuncionario(FuncionarioDTO objfundto) {
-        String sql = "DELETE FROM tbl_funcionario "
-                    + "WHERE id_funcionario = ?";
+    /**
+     * Método Excluir: Exclui as informações no banco de dados nas colunas da
+     * tabela funcionário informado pelo usuário.
+     *
+     * @param obj FuncionarioDTO conecta com banco para excluir as informações.
+     */
+    public void excluirFuncionario(FuncionarioDTO obj) {
+        //Através dos comandos SQL exclui as informações nas colunas da tabela funcionário no banco de dados.
+        String sql = ""
+                + "DELETE FROM tbl_funcionario "
+                + "WHERE id_funcionario = ?";
 
-        
         try {
+            //Conecta no banco e prepara organizando o comando SQL de acordo com o  nome da coluna informada na String SQL.
             pst = conn.prepareStatement(sql);
 
-            pst.setInt(1, objfundto.getIdFuncionario());
+            pst.setInt(1, obj.getIdFuncionario());
 
             pst.execute();
             pst.close();
@@ -128,17 +175,25 @@ public class FuncionarioDAO {
 
     }
 
+    /**
+     * Método Listar: Pega as informações do banco de dados das colunas da
+     * tabela funcionário e retorna listando em uma tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
     public ArrayList<FuncionarioDTO> listarFuncionario() {
-        String sql = "SELECT * "
+        //Através dos comandos SQL lista todas informações nas colunas da tabela funcionário no banco de dados.
+        String sql = ""
+                + "SELECT * "
                 + "FROM tbl_funcionario ";
 
         try {
+            //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
 
             while (rs.next()) {
                 FuncionarioDTO obj = new FuncionarioDTO();
-
                 obj.setIdFuncionario(rs.getInt("id_funcionario"));
                 obj.setNomeFuncionario(rs.getString("fun_nome"));
                 obj.setCpfFuncionario(rs.getString("fun_cpf"));
@@ -166,11 +221,21 @@ public class FuncionarioDAO {
 
     }
 
+    /**
+     * Método Buscar: Pega as informações do funcionario escolhido no banco de
+     * dados das colunas da tabela funcionário e retorna listando em uma tabela
+     * para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
     public ArrayList<FuncionarioDTO> buscarFuncionario(String fun_nome) {
-        String sql = "SELECT * FROM tbl_funcionario WHERE fun_nome = ? ";
+        //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela funcionário no banco de dados.
+        String sql = "SELECT * "
+                + "FROM tbl_funcionario "
+                + "WHERE fun_nome = ? ";
 
-        
         try {
+            //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
 
             pst.setString(1, fun_nome);

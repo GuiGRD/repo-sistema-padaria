@@ -1,9 +1,20 @@
-
 package DTO;
 
-public class FornecedorDTO 
+/**
+ *
+ * @author Pri
+ */
 
-{
+    /**
+     * Método Fornecedor, contem os atributos que serao as informacoes de quem
+     * ira fornecer os produtos para o sistema padaria.
+     */
+
+public class FornecedorDTO {
+
+    
+    
+    // Atributos
     private int idFornecedor;
     private String nomeFornecedor;
     private String cnpjFornecedor;
@@ -15,6 +26,11 @@ public class FornecedorDTO
     private String cidadeFornecedor;
     private String estadoFornecedor;
 
+    /**
+     * Métodos Getters e Setters utilizados para padronizacao do gerenciamento
+     * sobre os atributos informados.
+     */
+    
     public int getIdFornecedor() {
         return idFornecedor;
     }

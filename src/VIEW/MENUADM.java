@@ -322,7 +322,7 @@ public class MENUADM extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, btnRelatorioLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         btnFornecedor.setBackground(new java.awt.Color(56, 61, 103));
@@ -766,11 +766,11 @@ public class MENUADM extends javax.swing.JFrame {
     public static javax.swing.JPanel PainelDashboard;
     public static javax.swing.JPanel btnCompra;
     public static javax.swing.JLabel btnConfig;
-    private javax.swing.JPanel btnFluxoCaixa;
+    public static javax.swing.JPanel btnFluxoCaixa;
     public static javax.swing.JPanel btnFornecedor;
     public static javax.swing.JPanel btnFuncionario;
     public static javax.swing.JPanel btnProduto;
-    private javax.swing.JPanel btnRelatorio;
+    public static javax.swing.JPanel btnRelatorio;
     public static javax.swing.JPanel btnUsuario;
     public static javax.swing.JPanel btnVenda;
     private javax.swing.JLabel buttonhidemenu;
@@ -798,7 +798,7 @@ public class MENUADM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblData;
-    private javax.swing.JLabel lblUsuario;
+    public static javax.swing.JLabel lblUsuario;
     private javax.swing.JPanel linehidemenu;
     private javax.swing.JPanel lineseting;
     private javax.swing.JPanel menuhide;

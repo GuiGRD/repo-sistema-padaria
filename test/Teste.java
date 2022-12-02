@@ -5,9 +5,14 @@ import org.junit.Test;
 
 public class Teste {
   private Venda obj = new Venda();
+  
+  
   @Test
-  public void testeQntInteiro(){
-      assertEquals(4,obj.Quantidade(2,2));
+  public void testeQnt(){
+      assertEquals(4, obj.Quantidade(2,2));
+      
+
   }
+  
 }
 

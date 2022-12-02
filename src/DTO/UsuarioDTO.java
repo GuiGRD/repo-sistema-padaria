@@ -2,23 +2,31 @@ package DTO;
 
 import DTO.FuncionarioDTO;
 
+/**
+ *
+ * @author Pri
+ */
+
+    /**
+     * Método Usuário, contem os atributos que serao as informacoes que
+     * definirao quem tera acesso ao sistema
+     */
 public class UsuarioDTO {
 
-    /*
-     ** Atributos
-     */
+
+    
+    
+    // Atributos
     private int idUsuario;
     private FuncionarioDTO funcionario;
-    
     private String loginUsuario;
     private String senhaUsuario;
     private String perfilUsuario;
-    
 
-    /*
-     ** Getters e Setters
+    /**
+     * Métodos Getters e Setters utilizados para padronizacao do gerenciamento
+     * sobre os atributos informados.
      */
-
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -58,5 +66,5 @@ public class UsuarioDTO {
     public void setPerfilUsuario(String perfilUsuario) {
         this.perfilUsuario = perfilUsuario;
     }
-    
+
 }

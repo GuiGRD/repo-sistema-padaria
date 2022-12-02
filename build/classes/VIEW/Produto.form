@@ -41,7 +41,7 @@
               <Component id="jNome" min="-2" pref="39" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -75,7 +75,7 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="JTPainelProduto" pref="771" max="32767" attributes="0"/>
+                          <Component id="JTPainelProduto" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
@@ -172,7 +172,7 @@
                               <Component id="jLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtId" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
                               <Component id="txtCodigo" min="-2" max="-2" attributes="0"/>
@@ -182,7 +182,7 @@
                               <Component id="txtNome" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                           <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                       </Group>
@@ -296,6 +296,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTextField" name="txtBusca">
                   <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtBuscaActionPerformed"/>
                     <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBuscaKeyPressed"/>
                   </Events>
                 </Component>
@@ -314,12 +315,11 @@
                     <Component class="javax.swing.JTable" name="tabelaConProduto">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="5" rowCount="1">
+                          <Table columnCount="4" rowCount="1">
                             <Column editable="false" title="ID" type="java.lang.Object"/>
                             <Column editable="false" title="C&#xd3;DIGO DE BARRA" type="java.lang.Object"/>
                             <Column editable="false" title="NOME" type="java.lang.Object"/>
                             <Column editable="false" title="ESTOQUE" type="java.lang.Object"/>
-                            <Column editable="false" title="FORNECEDOR" type="java.lang.Object"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

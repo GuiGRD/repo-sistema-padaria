@@ -9,20 +9,48 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
+/**
+ *
+ * @author Pri
+ */
+
+    /**
+     * Metodo Fornecedor, serao utilizados os atributos que foram encapsulados
+     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informacoes no banco de dados na tabela fornecedor.
+     */
 public class FornecedorDAO {
-//Metodo para Cadastrar,Alterar,Excluir,Consultar (para consultar é preciso listar
-// as informacoes dos fornecedores armazenadas no banco de dados e mostrar em uma tabela para o usuario)
-    
-    Connection conn = new Conexao().conectaBD(); //Connection conn ; // Faz a conexao com o banco de dados
-    PreparedStatement pst; // preparando a conexao, cria um obj para representar as instrucoes do SQL que será executada
-    ResultSet rs; // resultado em forma de tabela no banco da consulta no banco de dados 
+
+    /**
+     * Metodo Fornecedor, serao utilizados os atributos que foram encapsulados
+     * em getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informacoes no banco de dados na tabela fornecedor.
+     */
+    //Cria a Conexão
+    Connection conn;
+    // Prepara a Conexão, cria um obj para representar as instrucoes do SQL que será executada.
+    PreparedStatement pst;
+    //Retorna todo o resultado encontrado percorrendo cada linha do banco de dados
+    ResultSet rs;
+    //Cria uma Lista das informações no banco de dados
     ArrayList<FornecedorDTO> lista = new ArrayList<>();
 
-    public void cadastrarFornecedor(FornecedorDTO objforndto) 
-     //Criar o comando SQL para pegar(.get)os valores no campo do usuario e setar(.set) esses valores dentro dos campos no banco de dados
-            
-    {
-        String sql = "INSERT INTO tbl_fornecedor("
+    public FornecedorDAO() {
+        //Conecta com o banco de dados
+        conn = new Conexao().conectaBD();
+    }
+
+    /**
+     * Método Cadastrar: Insere as informações no banco de dados nas colunas da
+     * tabela fornecedor de acordo com os atributos informados pelo usuário.
+     *
+     * @param objforndto FornecedorDTO conecta com banco para inserir as
+     * informações.
+     */
+    public void cadastrarFornecedor(FornecedorDTO objforndto) {
+        //Através dos comandos SQL salva as informações nas colunas da tabela fornecedor no banco de dados.
+        String sql = ""
+                + "INSERT INTO tbl_fornecedor( "
                 + "forn_nome, "
                 + "forn_cnpj, "
                 + "forn_celular, "
@@ -33,13 +61,11 @@ public class FornecedorDAO {
                 + "forn_cidade, "
                 + "forn_estado) "
                 + "VALUES (?,?,?,?,?,?,?,?,?)";
-        
-        ///conn = new Conexao().conectaBD();
 
         try {
-            
-            pst = conn.prepareStatement(sql);//conecta e prepara organizando o comando SQL
-            
+            //Conecta no banco e prepara organizando o comando SQL de acordo com a ordem dos nome das colunas informadas na String SQL.
+            pst = conn.prepareStatement(sql);
+
             pst.setString(1, objforndto.getNomeFornecedor());
             pst.setString(2, objforndto.getCnpjFornecedor());
             pst.setString(3, objforndto.getCelularFornecedor());
@@ -52,7 +78,7 @@ public class FornecedorDAO {
 
             pst.execute();
             pst.close();
-                    
+
             JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso ");
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o fornecedor " + erro);
@@ -60,8 +86,15 @@ public class FornecedorDAO {
 
     }
 
-    public void editarFornecedor(FornecedorDTO objforndto) 
-    {
+    /**
+     * Método Editar: Altera as informações no banco de dados na tabela
+     * fornecedor de acordo com as atributos informados pelo usuário.
+     *
+     * @param objforndto FornecedorDTO conecta com banco para fazer as
+     * alterações das informações.
+     */
+    public void editarFornecedor(FornecedorDTO objforndto) {
+        //Através dos comandos SQL edita as informações nas colunas da tabela fornecedor no banco de dados.
         String sql = "UPDATE tbl_fornecedor SET "
                 + "forn_nome=?, "
                 + "forn_cnpj=?, "
@@ -73,10 +106,9 @@ public class FornecedorDAO {
                 + "forn_cidade=?, "
                 + "forn_estado=? "
                 + "WHERE id_fornecedor=?";
-        
-        ///conn = new Conexao().conectaBD();
 
         try {
+            //Conecta no banco e prepara organizando o comando SQL de acordo e na ordem dos nome das colunas informadas na String SQL.
             pst = conn.prepareStatement(sql);
 
             pst.setString(1, objforndto.getNomeFornecedor());
@@ -89,57 +121,68 @@ public class FornecedorDAO {
             pst.setString(8, objforndto.getCidadeFornecedor());
             pst.setString(9, objforndto.getEstadoFornecedor());
             pst.setInt(10, objforndto.getIdFornecedor());
-            
+
             pst.execute();
             pst.close();
 
             JOptionPane.showMessageDialog(null, "Fornecedor alterado com sucesso");
-        
-        } catch (SQLException erro)
-        {
+
+        } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro ao alterar fornecedor " + erro);
         }
     }
 
-    public void excluirFornecedor(FornecedorDTO objforndto) 
-    {
-        String sql = "DELETE FROM tbl_fornecedor WHERE id_fornecedor = ? ";
-        
-        //conn = new Conexao().conectaBD();
+    /**
+     * Método Excluir: Exclui as informações no banco de dados nas colunas da
+     * tabela fornecedor informado pelo usuário.
+     *
+     * @param objforndto FornecedorDTO conecta com banco para excluir as
+     * informações.
+     */
+    public void excluirFornecedor(FornecedorDTO objforndto) {
+        //Através dos comandos SQL exclui as informações nas colunas da tabela funcionário no banco de dados.
+        String sql = ""
+                + "DELETE FROM tbl_fornecedor "
+                + "WHERE id_fornecedor = ? ";
 
-        try 
-        {
+        try {
+            //Conecta no banco e prepara organizando o comando SQL de acordo com o  nome da coluna informada na String SQL.
             pst = conn.prepareStatement(sql);
-            
+
             pst.setInt(1, objforndto.getIdFornecedor());
 
             pst.execute();
             pst.close();
-            
+
             JOptionPane.showMessageDialog(null, "Fornecedor excluido com sucesso");
 
-        } catch (SQLException erro) 
-        {
+        } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Funcionario nao alterado, erro", null, JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public ArrayList<FornecedorDTO> listarFornecedor() //lista fornecedor e  para jogar em uma tabela
-    {
-        String sql = "SELECT * FROM tbl_fornecedor ";
-        
-        ///conn = new Conexao().conectaBD();
+    /**
+     * Método Listar: Pega todas as informações do banco de dados das colunas da
+     * tabela fornecedor e retorna listando em uma tabela para o usuário.
+     *
+     * @return lista retorna a lista com as informações do banco.
+     */
+    public ArrayList<FornecedorDTO> listarFornecedor() {
+        //Através dos comandos SQL lista todas informações nas colunas da tabela fornecedor no banco de dados.
 
-        try 
-        {
-            
+        String sql = ""
+                + "SELECT * "
+                + "FROM tbl_fornecedor ";
+
+        try {
+            //Conecta no banco e prepara organizando o comando SQL.
+
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
 
-            while (rs.next()) 
-            {
+            while (rs.next()) {
                 FornecedorDTO objforndto = new FornecedorDTO();
-                
+
                 objforndto.setIdFornecedor(rs.getInt("id_fornecedor"));
                 objforndto.setNomeFornecedor(rs.getString("forn_nome"));
                 objforndto.setCnpjFornecedor(rs.getString("forn_cnpj"));
@@ -150,35 +193,41 @@ public class FornecedorDAO {
                 objforndto.setBairroFornecedor(rs.getString("forn_bairro"));
                 objforndto.setCidadeFornecedor(rs.getString("forn_cidade"));
                 objforndto.setEstadoFornecedor(rs.getString("forn_estado"));
-                            
+
                 lista.add(objforndto);
             }
             return lista;
-            
-        } catch (SQLException erro) 
-        {
+
+        } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro ao listar o FornecedorDAO " + erro);
             return null;
         }
-        
+
     }
 
-    public ArrayList<FornecedorDTO> buscarFornecedor(String forn_nome) 
-    {
-        String sql = "SELECT * FROM tbl_fornecedor WHERE forn_nome LIKE ? ";
-        
-        
-        try 
-        {
+    /**
+     * Método Buscar: Pega as informações do fornecedor escolhido no banco de
+     * dados das colunas da tabela fornecedor e retorna listando em uma tabela
+     * para o usuário.
+     * @param forn_nome informa o nome do fornecedor. 
+     * @return lista retorna a lista com as informações do banco.
+     */
+    public ArrayList<FornecedorDTO> buscarFornecedor(String forn_nome) {
+        //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela fornecedor no banco de dados.
+        String sql = "SELECT * "
+                + "FROM tbl_fornecedor "
+                + "WHERE forn_nome LIKE ? ";
+
+        try {
+            //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
-            
+
             pst.setString(1, forn_nome);
             rs = pst.executeQuery();
 
-            while (rs.next()) 
-            {
+            while (rs.next()) {
                 FornecedorDTO objforndto = new FornecedorDTO();
-                
+
                 objforndto.setIdFornecedor(rs.getInt("id_fornecedor"));
                 objforndto.setNomeFornecedor(rs.getString("forn_nome"));
                 objforndto.setCnpjFornecedor(rs.getString("forn_cnpj"));
@@ -193,17 +242,21 @@ public class FornecedorDAO {
                 lista.add(objforndto);
             }
             return lista;
-            
-        } catch (SQLException erro) 
-        {
+
+        } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Fornecedor não selecionado para busca " + erro);
             return null;
         }
-        
+
     }
     
-    public ResultSet CBXlistarNomeFornecedor() // lista o nome do fornecedor  para jogar na combobox
-    {
+    /**
+     * Método Listar Nome Fornecedor
+     * Lista o nome do fornecedor para jogar na combobox
+     * @return 
+     */
+        public ResultSet CBXlistarNomeFornecedor()
+        {
         String sql = "SELECT * FROM tbl_fornecedor ORDER BY forn_nome ";
         try 
         {
@@ -220,8 +273,5 @@ public class FornecedorDAO {
         }
         
     }
-        
-    
-    
-}
 
+}

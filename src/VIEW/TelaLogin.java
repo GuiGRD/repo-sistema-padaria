@@ -1,15 +1,10 @@
 package VIEW;
 
-import CONEXAO.Conexao;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
-
 import CONTROLE.Transparencia;
 import DAO.UsuarioDAO;
-import DTO.UsuarioDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -27,7 +22,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
         btnLogin.setBackground(new java.awt.Color(0, 0, 0, 0));
         btnSair.setBackground(new java.awt.Color(0, 0, 0, 0));
-        
+        txtNome.requestFocus();
 
     }
 
@@ -147,134 +142,27 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 
-    private void Logar() {
-
-        try {
-            //Declara as variaveis
-            String LoginUsuario, senhaUsuario;
-
-            //recebe as informacoes do usuario
-            LoginUsuario = txtNome.getText();
-            senhaUsuario = txtSenha.getText();
-
-            //passa para o dto conferir
-            UsuarioDTO objusuariodto = new UsuarioDTO();
-            objusuariodto.setLoginUsuario(LoginUsuario);
-            objusuariodto.setSenhaUsuario(senhaUsuario);
-
-            //passa para o dao conferir o que tem no banco com o que o usuario digitou 
-            UsuarioDAO objusuariodao = new UsuarioDAO();
-            ResultSet rsUsuariodao = objusuariodao.autenticarUsuario(objusuariodto);
-
-            //Se existir um usuário e senha correspondente  
-            if (rsUsuariodao.next()) {
-
-                MENUADM obj = new MENUADM();
-                obj.setVisible(true);
-
-                MENUADM.lblUsuario.setText(rsUsuariodao.getString(2));
-                MENUADM.lblUsuario.setForeground(Color.white);
-
-                dispose();
-
-            } else {
-                //Envia mensagem dizendo que está incorreto.(usuario e/ou senha incorreto)
-                JOptionPane.showMessageDialog(null, "Usuário e/ou Senha Inválida");
-            }
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "TelaLogin" + erro);
-        }
-    }
-
-    /*
-private void Logar2() {
+    
+    private void Logar() 
+    {
 
         try {
 
             //Declara as variaveis
-            String loginUsuario, senhaUsuario;
-
-            //recebe as informacoes do usuario
-            loginUsuario = txtNome.getText();
-            senhaUsuario = txtSenha.getText();
+            String login, senha;
+            
+             //recebe as informacoes do usuario
+            login = txtNome.getText();
+            senha = txtSenha.getText();
             
             
             //confere o que tem no banco com o que o usuario digitou 
-            UsuarioDAO objdao = new UsuarioDAO();
-            objdao.LogaUsuario(loginUsuario, senhaUsuario);
+            UsuarioDAO obj = new UsuarioDAO();
+            obj.LogarUsuario(login, senha);
             
 
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Entrar em contato com o Suporte");
         }
     }
-     */
-    private void Logar3() {
-        String sql = "SELECT usu_perfil "
-                + "FROM tbl_usuario "
-                + "WHERE usu_login = ? AND usu_senha = ?";
-        try {
-            //Declara as variaveis
-            String Login, Senha;
-
-            //recebe as informacoes do usuario
-            Login = txtNome.getText();
-            Senha = txtSenha.getText();
-
-            //passa para o dto conferir
-            UsuarioDTO objusuariodto = new UsuarioDTO();
-            objusuariodto.setLoginUsuario(Login);
-            objusuariodto.setSenhaUsuario(Senha);
-
-            conn = new Conexao().conectaBD();
-            pst = conn.prepareStatement(sql);
-
-            pst.setString(1, Login);// preenche os valores (1 = ao 1º ponto de ? informado na minha String sql)
-            pst.setString(2, Senha);
-
-            rs = pst.executeQuery();// executa  Query(consulta)
-
-            //Se existir um usuário e senha correspondente
-            if (rs.next()) {
-                //Fazendo o tratamento do perfil do usuario
-                String cargo;
-                cargo = rs.getString("usu_perfil");
-
-                if (cargo == "Adm") {
-                    JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-                    MENUADM menu = new MENUADM();
-                    menu.setVisible(true);
-
-                    //menu.LoginUsuario = rs.getString("usu_login");
-                    //MENU.lblUsuario.setForeground(Color.gray);
-                }
-                if (cargo == "Caixa") {
-                    JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-
-                    MENUCAIXA menu = new MENUCAIXA();
-                    menu.setVisible(true);
-
-                    //menu.LoginUsuario = rs.getString("usu_login");
-                    //MENU.lblUsuario.setForeground(Color.gray);
-                }
-                if (cargo == "Escritorio") {
-                    JOptionPane.showMessageDialog(null, " Bem vindo(a)");
-
-                    MENUESCRITORIO menu = new MENUESCRITORIO();
-                    menu.setVisible(true);
-
-                    //menu.LoginUsuario = rs.getString(" usu_login");
-                    //MENU.lblUsuario.setForeground(Color.BLUE);
-                }
-                dispose();
-            } else {
-                //Envia mensagem dizendo que está incorreto.(usuario e/ou senha incorreto)
-                JOptionPane.showMessageDialog(null, "Usuário e/ou Senha Inválida");
-            }
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "TELALOGIN3" + erro);
-        }
-
-    }
-
 }

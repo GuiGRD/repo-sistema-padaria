@@ -1,26 +1,32 @@
-
 package DTO;
-
 
 import java.util.Date;
 
+/**
+ *
+ * @author Pri
+ */
 
-
-public class VendasDTO 
-{
-
+    /**
+     * Método Venda, contem os atributos que serao as informacoes das
+     * saidas/vendas dos produtos.
+     */
+public class VendasDTO {
+    
+    // Atributos
     private int idVenda;
-    private Date dataVenda; // no banco esta como DATE
-
+    private Date dataVenda;
     private ProdutoDTO produto;
     private CompraDTO compra;
     private int qntVenda;
     private double valorProd;
     private double descontoVenda;
-    private double totalVenda; //txtValorTotal
-    
-    
+    private double totalVenda;
 
+    /**
+     * Métodos Getters e Setters utilizados para padronizacao do gerenciamento
+     * sobre os atributos informados.
+     */
     public int getIdVenda() {
         return idVenda;
     }
@@ -88,7 +94,5 @@ public class VendasDTO
     public void setDataVenda(String datamysql) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 
-   
 }

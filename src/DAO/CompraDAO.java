@@ -17,12 +17,18 @@ import javax.swing.JOptionPane;
 
 public class CompraDAO {
 
+    //Cria a Conexão
     Connection conn = new Conexao().conectaBD();
+    // Prepara a Conexão
     PreparedStatement pst;
+     //Retorna todo o resultado encontrado percorrendo cada linha do banco de dados
     ResultSet rs;
+    //Cria uma Lista das informações no banco de dados
     ArrayList<CompraDTO> lista = new ArrayList<>();
 
-    public void cadastrarCompra(CompraDTO obj) {
+    public void cadastrarCompra(CompraDTO obj)
+    
+    {
         String sql = ""
                 + "INSERT INTO tbl_compra( "
                 //+ "compra_data, "
@@ -132,7 +138,7 @@ public class CompraDAO {
                 ProdutoDTO p = new ProdutoDTO();
 
                 obj.setIdCompra(rs.getInt("c.id_compra"));
-                obj.setDataCompra(rs.getString("c.compra_data"));
+                //obj.setDataCompra(rs.getString("c.compra_data"));
                 obj.setCompraQnt(rs.getInt("c.compra_qnt"));
                 obj.setCompraPreco(rs.getInt("c.compra_preco"));
                 obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));
@@ -178,7 +184,7 @@ public class CompraDAO {
                 ProdutoDTO p = new ProdutoDTO();
 
                 obj.setIdCompra(rs.getInt("c.id_compra"));
-                obj.setDataCompra(rs.getString("c.compra_data"));
+                //obj.setDataCompra(rs.getString("c.compra_data"));
                 obj.setCompraQnt(rs.getInt("c.compra_qnt"));
                 obj.setCompraPreco(rs.getInt("c.compra_preco"));
                 obj.setCompraPrecoVenda(rs.getInt("c.compra_preco_venda"));

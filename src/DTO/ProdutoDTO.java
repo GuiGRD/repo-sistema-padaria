@@ -1,16 +1,31 @@
 
 package DTO;
 
-
-
+/**
+ *
+ * @author Pri
+ */
+    /**
+     * Método Produto, contem os atributos que serao as informacoes dos
+     * produtos que serao cadastrados para serem vendidos no sistema padaria
+     */
 public class ProdutoDTO 
+{    
 
-{
+    
+    //Atributos
     private int idProduto;
     private int codbarraProduto;
     private String nomeProduto;
     private int estoqueProduto;
-
+    private FornecedorDTO Fornecedor;
+    
+    
+     /**
+     * Métodos Getters e Setters utilizados para padronizacao do gerenciamento
+     * sobre os atributos informados.
+     */
+    
 
     public int getIdProduto() {
         return idProduto;
@@ -43,5 +58,15 @@ public class ProdutoDTO
     public void setEstoqueProduto(int estoqueProduto) {
         this.estoqueProduto = estoqueProduto;
     }
+
+    public FornecedorDTO getFornecedor() {
+        return Fornecedor;
+    }
+
+    public void setFornecedor(FornecedorDTO Fornecedor) {
+        this.Fornecedor = Fornecedor;
+    }
+
+
 
 }

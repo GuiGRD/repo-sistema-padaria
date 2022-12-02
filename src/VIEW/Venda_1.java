@@ -16,9 +16,9 @@ import java.sql.ResultSet;
 
 public class Venda extends javax.swing.JPanel {
 
-    int qnt;
+    //int qnt;
     int total;
-    int preco;
+    //int preco;
     int precosub;
     int ex;
     int i;
@@ -455,7 +455,7 @@ public class Venda extends javax.swing.JPanel {
 
     private void txtQtdStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtQtdStateChanged
 
-        Quantidade();
+//Quantidade();
 
 
     }//GEN-LAST:event_txtQtdStateChanged
@@ -548,7 +548,8 @@ public class Venda extends javax.swing.JPanel {
      * @param qnt quantidade do produto
      * @param preco preco do produto
      */
-    public void Quantidade() {
+    public int Quantidade(int qnt, int preco) 
+    {
         qnt=0;
         preco=0;
         precosub = 0;
@@ -556,7 +557,7 @@ public class Venda extends javax.swing.JPanel {
         preco = Integer.parseInt(txtPreco.getText());
         precosub = qnt * preco;
         txtPrecoSub.setText(String.valueOf(precosub));
-        
+        return qnt*preco;
     }
 
     private void AdicionarItens() {
@@ -644,7 +645,7 @@ public class Venda extends javax.swing.JPanel {
         txtPrint.setText(txtPrint.getText() + "****************************************************************\n");
         txtPrint.setText(txtPrint.getText() + "                          Impressão                             \n");
         txtPrint.setText(txtPrint.getText() + "****************************************************************\n");
-        txtPrint.setText(txtPrint.getText() + "Produto" + " Qnt" + " Preço" + "\t" + " Subtotal" + "\n");
+        txtPrint.setText(txtPrint.getText() + "Produto" + "Qnt" + "Preço" + "\t" + "Subtotal" + "\n");
 
         for (int i = 0; i < itensvenda.getRowCount(); i++) {
             String pnome = (String) itensvenda.getValueAt(i, 1);

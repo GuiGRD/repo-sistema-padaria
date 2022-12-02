@@ -37,7 +37,7 @@ public class Compra extends javax.swing.JPanel {
     int ex;
     int i;
     DefaultTableModel itenscompra;
-        DefaultTableModel limpartabela;
+    DefaultTableModel limpartabela;
 
     Connection conn; //Cria a Conexão
     PreparedStatement pst; // Prepara a Conexão
@@ -201,6 +201,11 @@ public class Compra extends javax.swing.JPanel {
         cbxFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         cbxFornecedor.setAutoscrolls(true);
         cbxFornecedor.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        cbxFornecedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxFornecedorActionPerformed(evt);
+            }
+        });
         cbxFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 cbxFornecedorKeyPressed(evt);
@@ -335,14 +340,14 @@ public class Compra extends javax.swing.JPanel {
                                         .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNomeProduto)
                                     .addGroup(painelCadCompraLayout.createSequentialGroup()
                                         .addGroup(painelCadCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(txtNomeFornecedor, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cbxFornecedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(txtCodigoProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnBuscarProdutoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtNomeProduto)
-                                    .addComponent(txtNomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(btnBuscarProdutoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelCadCompraLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -420,7 +425,7 @@ public class Compra extends javax.swing.JPanel {
                                     .addComponent(txtTotal)
                                     .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addComponent(txtPrecoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(114, 114, 114))
+                .addGap(50, 50, 50))
         );
 
         txtItemExcluido.setVisible(false);
@@ -514,7 +519,7 @@ public class Compra extends javax.swing.JPanel {
                     .addComponent(btnBuscaNome))
                 .addGap(16, 16, 16)
                 .addComponent(TblConCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
                 .addGroup(painelConFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnExcluir)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -539,8 +544,7 @@ public class Compra extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JTPainelCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addComponent(JTPainelCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 609, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -629,9 +633,13 @@ public class Compra extends javax.swing.JPanel {
     }//GEN-LAST:event_cbxFornecedorKeyPressed
 
     private void txtNomeFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeFornecedorActionPerformed
-                       String forn = (String)cbxFornecedor.getSelectedItem();
-                txtNomeFornecedor.setText(forn);
+        String forn = (String) cbxFornecedor.getSelectedItem();
+        txtNomeFornecedor.setText(forn);
     }//GEN-LAST:event_txtNomeFornecedorActionPerformed
+
+    private void cbxFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxFornecedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxFornecedorActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -707,20 +715,15 @@ public class Compra extends javax.swing.JPanel {
         new LimparCampos().Limpar(painelCadCompra);
         cbxFornecedor.setSelectedIndex(0);
         txtQtd.setValue(0);
-   
-
 
     }
 
     private void LimparTabela() {
         limpartabela = (DefaultTableModel) tabelaCompra.getModel();
-        while (limpartabela.getRowCount() > 0)
-        {
+        while (limpartabela.getRowCount() > 0) {
             limpartabela.removeRow(0);
         }
     }
-     
-    
 
     private void CancelarCompra() {
 
@@ -741,14 +744,15 @@ public class Compra extends javax.swing.JPanel {
 
     private void Cadastrar() {
 
-        if (cbxFornecedor.getSelectedItem().toString().isEmpty()
+       /*
+            if (cbxFornecedor.getSelectedItem().toString().isEmpty()
                 || txtCodigoProduto.getText().equals("")
                 || txtPreco.getText().isEmpty() //|| txtQtd.getValue().equals("")
                 ) {
             JOptionPane.showMessageDialog(null, "Preencha os campos Obrigatórios");
 
         } else {
-
+*/
             int op;
             Object[] options = {"Cancelar", "Confirmar"};
             op = JOptionPane.showOptionDialog(null, "Deseja realmente Cadastrar a Compra?", "ATENÇÃO", JOptionPane.DEFAULT_OPTION,
@@ -777,7 +781,7 @@ public class Compra extends javax.swing.JPanel {
                 dao.cadastrarCompra(cdto);
             }
         }
-    }
+    //}
 
     private void Editar() {
 
@@ -819,40 +823,7 @@ public class Compra extends javax.swing.JPanel {
         }
     }
 
-    /*
-private void tabelaItemCompra() {
-        // Pega os dados e envia para aba Cadastro
-
-        dtoproduto = daoproduto.pesquisarCodigoProduto(Integer.parseInt(txtCodigoProduto.getText()));
-        dtoproduto = daoproduto.pesquisarNomeProduto(txtNomeProduto.getText());
-        qtd = Integer.parseInt(txtQtd.getValue().toString());
-
-        if (qtd > 0) {
-            if (dtoproduto.getEstoqueProduto() > 0 && dtoproduto.getEstoqueProduto() >= qtd) {
-                preco = Double.parseDouble(txtPreco.getText());
-
-                subtotal = qtd * preco;
-
-                total += subtotal;
-                txtTotal.setText("R$ " + String.valueOf(total));
-
-                //Adicionar o produto no carrinho
-                itenscompra = (DefaultTableModel) tabelaCompra.getModel();
-
-                itenscompra.addRow(new Object[]{
-                    txtCodigoProduto.getText(),
-                    txtNomeProduto.getText(),
-                    txtQtd.getValue().toString(),
-                    txtPreco.getText(),
-                    txtPrecoVenda.getText(),
-                    subtotal
-
-                });
-
-            }
-        }
-    }
-     */
+ 
     private void AdicionarItens() {
         //Adicionar os  produtos na tabela de compra
         itenscompra = (DefaultTableModel) tabelaCompra.getModel();
@@ -873,7 +844,7 @@ private void tabelaItemCompra() {
         }
 
         //txtTotal.setText("R$ " + String.valueOf(total));
-        txtTotal.setText("R$ " + Integer.toString(total));
+        txtTotal.setText( Integer.toString(total));
 
     }
 
@@ -890,15 +861,13 @@ private void tabelaItemCompra() {
                 cbxFornecedor.addItem(rs.getString(2));// Armazenando o 2 elemento do sql que é o nome do fornecedor
 
                 //Listar();
-                String forn = (String)cbxFornecedor.getSelectedItem();
-                txtNomeFornecedor.setText(forn);
             }
-                            String forn = (String)cbxFornecedor.getSelectedItem();
-                txtNomeFornecedor.setText(forn);
 
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Carregar Compra");
         }
+        String forn = (String) cbxFornecedor.getSelectedItem();
+        txtNomeFornecedor.setText(forn);
     }
 
     private void Data() {
@@ -971,5 +940,4 @@ private void tabelaItemCompra() {
         }
     }
 
-    
 }
