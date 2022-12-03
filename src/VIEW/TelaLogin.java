@@ -5,9 +5,16 @@ import java.sql.ResultSet;
 import java.awt.event.KeyEvent;
 import UTILIDADES.Transparencia;
 import DAO.UsuarioDAO;
+import DTO.UsuarioDTO;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
+/**
+ * 
+ * @author Pri
+ */
 public class TelaLogin extends javax.swing.JFrame {
 
     Connection conn;
@@ -109,7 +116,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            Logar();
+            Logar1();
         }
     }//GEN-LAST:event_txtSenhaKeyPressed
 
@@ -124,7 +131,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeKeyPressed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        Logar();
+        Logar1();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
@@ -144,7 +151,7 @@ public class TelaLogin extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     
-    private void Logar() 
+    private void Logar2() 
     {
 
         try {
@@ -160,10 +167,53 @@ public class TelaLogin extends javax.swing.JFrame {
             //confere o que tem no banco com o que o usuario digitou 
             UsuarioDAO obj = new UsuarioDAO();
             obj.LogarUsuario(login, senha);
-            
+
 
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Entrar em contato com o Suporte");
         }
+
     }
+
+        private void Logar1() {
+
+        try {
+            //Declara as variaveis
+            String LoginUsuario, senhaUsuario;
+
+            //recebe as informacoes do usuario
+            LoginUsuario = txtNome.getText();
+            senhaUsuario = txtSenha.getText();
+
+            //passa para o dto conferir
+            UsuarioDTO objusuariodto = new UsuarioDTO();
+            objusuariodto.setLoginUsuario(LoginUsuario);
+            objusuariodto.setSenhaUsuario(senhaUsuario);
+
+            //passa para o dao conferir o que tem no banco com o que o usuario digitou 
+            UsuarioDAO objusuariodao = new UsuarioDAO();
+            ResultSet rsUsuariodao = objusuariodao.autenticarUsuario(objusuariodto);
+
+            //Se existir um usuário e senha correspondente  
+            if (rsUsuariodao.next()) {
+
+                MENUADM obj = new MENUADM();
+                obj.setVisible(true);
+
+                MENUADM.lblUsuario.setText(rsUsuariodao.getString(2));
+                MENUADM.lblUsuario.setForeground(Color.white);
+
+                dispose();
+
+            } else {
+                //Envia mensagem dizendo que está incorreto.(usuario e/ou senha incorreto)
+                JOptionPane.showMessageDialog(null, "Usuário e/ou Senha Inválida");
+            }
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "TelaLogin" + erro);
+        }
+    }
+    
+    
 }
+

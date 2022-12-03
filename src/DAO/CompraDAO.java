@@ -76,7 +76,7 @@ public class CompraDAO {
     public void editarCompra(CompraDTO obj) {
         //Através dos comandos SQL edita as informações nas colunas da tabela compra no banco de dados.
         String sql = ""
-                + "UPDATE INTO tbl_compra "
+                + "UPDATE tbl_compra "
                 + "SET "
                 + " date_format(compra_data,'%d/%m/%Y') "
                 + " AS data_format=?, "

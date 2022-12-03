@@ -16,8 +16,8 @@ public class FPrincipal {
     public static void main(String[] args) 
     {
         
-       MENUADM obj = new MENUADM();
-       // TelaLogin obj = new TelaLogin();
+       //MENUADM obj = new MENUADM();
+       TelaLogin obj = new TelaLogin();
         obj.setVisible(true);
     }
     

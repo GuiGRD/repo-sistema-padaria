@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
  *
  * @author Pri
  */
-
 public class ProdutoDAO {
 
     //Cria a Conexão
@@ -25,12 +24,11 @@ public class ProdutoDAO {
     //Cria uma Lista das informações no banco de dados
     ArrayList<ProdutoDTO> lista = new ArrayList<>();
 
- /**
- * Método Produto serão utilizados os atributos que foram encapsulados em
- * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
- * informações no banco de dados na tabela produto.
- */
-    
+    /**
+     * Método Produto serão utilizados os atributos que foram encapsulados em
+     * getters e setters no DTO para: Cadastrar, Editar, Excluir e Listar as
+     * informações no banco de dados na tabela produto.
+     */
     public ProdutoDAO() {
         //Conecta com o banco de dados
         conn = new Conexao().conectaBD();
@@ -106,7 +104,6 @@ public class ProdutoDAO {
      *
      * @param obj ProdutoDTO conecta com banco para excluir as informações.
      */
-
     public void excluirProduto(ProdutoDTO obj) {
         //Através dos comandos SQL exclui as informações nas colunas da tabela produto no banco de dados.
         String sql = ""
@@ -212,8 +209,8 @@ public class ProdutoDAO {
      *
      * @return lista retorna a lista com as informações do banco.
      */
-    public ProdutoDTO pesquisarCodigoProduto(int pro_cod_barra) {
-    //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela produto no banco de dados.
+    public ArrayList<ProdutoDTO> buscarCodigoProduto(int codigo) {
+        //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela produto no banco de dados.
         String sql = "SELECT * "
                 + "FROM tbl_produto "
                 + "WHERE pro_cod_barra = ? ";
@@ -222,7 +219,7 @@ public class ProdutoDAO {
             //Conecta no banco e prepara organizando o comando SQL.
             pst = conn.prepareStatement(sql);
 
-            pst.setInt(1, pro_cod_barra);
+            pst.setInt(1, codigo);
             rs = pst.executeQuery();
             ProdutoDTO obj = new ProdutoDTO();
 
@@ -231,12 +228,12 @@ public class ProdutoDAO {
                 obj.setIdProduto(rs.getInt("id_produto"));
                 obj.setCodbarraProduto(rs.getInt("pro_cod_barra"));
                 obj.setNomeProduto(rs.getString("pro_nome"));
-                
+                lista.add(obj);
             }
-            return obj;
+            return lista;
 
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Produto não selecionado para busca " + erro);
+            
             return null;
         }
 
@@ -271,8 +268,7 @@ public class ProdutoDAO {
     }
 
     /**
-     * Método Atual:
-     * Retorna o estoque atual de um produto específico.
+     * Método Atual: Retorna o estoque atual de um produto específico.
      */
     public int retornaEstoqueAtual(int id_produto) {
 //Através dos comandos SQL lista específicando a quantidade do produto atualizada, e todas as informacoes nas colunas da tabela produto no banco de dados.
@@ -298,12 +294,10 @@ public class ProdutoDAO {
         }
         return 0;
     }
-    
-        /**
-     * Método VendasDia:
-     * Retorna os produtos mais vendidos no dia 
-     */
 
+    /**
+     * Método VendasDia: Retorna os produtos mais vendidos no dia
+     */
     public int produtosVendasNoDia(int pro_cod_barra) {
         try {
             int produtovendas = 0;
@@ -329,6 +323,5 @@ public class ProdutoDAO {
             throw new RuntimeException(e);
         }
     }
-
 
 }

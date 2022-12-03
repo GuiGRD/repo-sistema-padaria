@@ -6,18 +6,11 @@ package DAO;
 
 import CONEXAO.Conexao;
 import DTO.FornecedorDTO;
-import VIEW.Fornecedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 
@@ -42,28 +35,11 @@ public class FornecedorDAOTest {
         conn = new Conexao().conectaBD();
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
 
-    @Before
-    public void setUp() {
-
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of cadastrarFornecedor method, of class FornecedorDAO.
-     */
+ 
     @Test
-    public boolean testCadastrarFornecedor(FornecedorDTO objforndto) {
+    public boolean CadastrarFornecedor(FornecedorDTO objforndto) {
         //Através dos comandos SQL salva as informações nas colunas da tabela fornecedor no banco de dados.
         String sql = ""
                 + "INSERT INTO tbl_fornecedor( "
@@ -108,7 +84,7 @@ public class FornecedorDAOTest {
      * Test of editarFornecedor method, of class FornecedorDAO.
      */
     @Test
-    public boolean testEditarFornecedor(FornecedorDTO objforndto) {
+    public boolean EditarFornecedor(FornecedorDTO objforndto) {
         //Através dos comandos SQL edita as informações nas colunas da tabela fornecedor no banco de dados.
         String sql = ""
                 + "UPDATE tbl_fornecedor "
@@ -153,7 +129,7 @@ public class FornecedorDAOTest {
      */
     
     @Test
-    public void testExcluirFornecedor(FornecedorDTO objforndto) {
+    public boolean ExcluirFornecedor(FornecedorDTO obj) {
         //Através dos comandos SQL exclui as informações nas colunas da tabela funcionário no banco de dados.
         String sql = ""
                 + "DELETE FROM tbl_fornecedor "
@@ -163,23 +139,24 @@ public class FornecedorDAOTest {
             //Conecta no banco e prepara organizando o comando SQL de acordo com o  nome da coluna informada na String SQL.
             pst = conn.prepareStatement(sql);
 
-            pst.setInt(1, objforndto.getIdFornecedor());
+            pst.setInt(1, obj.getIdFornecedor());
 
             pst.execute();
             pst.close();
 
-            JOptionPane.showMessageDialog(null, "Fornecedor excluido com sucesso");
+            
 
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Funcionario nao alterado, erro", null, JOptionPane.ERROR_MESSAGE);
+            return false;
         }
+        return true;
     }
 
     /**
      * Test of listarFornecedor method, of class FornecedorDAO.
      */
     @Test
-    public ArrayList<FornecedorDTO> testListarFornecedor() {
+    public ArrayList<FornecedorDTO> ListarFornecedor() {
 
         //Através dos comandos SQL lista todas informações nas colunas da tabela fornecedor no banco de dados.
         String sql = ""
@@ -221,7 +198,7 @@ public class FornecedorDAOTest {
      * Test of buscarFornecedor method, of class FornecedorDAO.
      */
     @Test
-    public ArrayList<FornecedorDTO> testBuscarFornecedor(String forn_nome) {
+    public ArrayList<FornecedorDTO> BuscarFornecedor(String forn_nome) {
 
         //Através dos comandos SQL lista específicando o nome, e todas as informacoes nas colunas da tabela fornecedor no banco de dados.
         String sql = "SELECT * "
@@ -260,25 +237,6 @@ public class FornecedorDAOTest {
 
     }
 
-    /**
-     * Test of CBXlistarNomeFornecedor method, of class FornecedorDAO.
-     */
-    @Test
-    public ResultSet testCBXlistarNomeFornecedor() {
-        //Através dos comandos SQL lista, ordenado pelo nome, todas as informacoes nas colunas da tabela fornecedor no banco de dados.
-        String sql = "SELECT * "
-                + "FROM tbl_fornecedor "
-                + "ORDER BY forn_nome ";
-        try {
-            //Conecta no banco e prepara organizando o comando SQL.
-            pst = conn.prepareStatement(sql);
 
-            return pst.executeQuery();
-
-        } catch (SQLException erro) {
-            return null;
-        }
-
-    }
 
 }

@@ -1,16 +1,20 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
+ */
 package DAO;
 
 import CONEXAO.Conexao;
-import DTO.UsuarioDTO;
 import DTO.FuncionarioDTO;
+import DTO.UsuarioDTO;
 import VIEW.MENUADM;
 import VIEW.MENUCAIXA;
 import VIEW.MENUESCRITORIO;
 import java.awt.Color;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +24,11 @@ import javax.swing.JOptionPane;
  *
  * @author Pri
  */
-public class UsuarioDAO {
+public class UsuarioDAOTest {
+
+    public UsuarioDAOTest() {
+
+    }
 
     public String LoginUsuario;
 
@@ -67,9 +75,9 @@ public class UsuarioDAO {
      * @param objusuariodto UsuarioDTO conecta com banco para inserir as
      * informações.
      */
-    public void cadastrarUsuario(UsuarioDTO objusuariodto) {
+    public boolean cadastrarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
-                + "INSERT INTO tbl_usuario"
+                + "INSERT INTO tbl_usuario "
                 + "fk_funcionario, "
                 + "usu_login, "
                 + "usu_senha, "
@@ -87,24 +95,16 @@ public class UsuarioDAO {
             pst.execute();
             pst.close();
 
-            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso");
-
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar o usuário " + erro);
+            return false;
         }
+        return true;
 
     }
 
-    /**
-     * Método Editar: Altera as informações no banco de dados na tabela usuário
-     * de acordo com os atributos informados pelo usuário.
-     *
-     * @param objusuariodto UsuarioDTO conecta com banco para fazer as
-     * alterações das informações.
-     */
-    public void editarUsuario(UsuarioDTO objusuariodto) {
+    public boolean editarUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
-                + "UPDATE tbl_usuario"
+                + "UPDATE tbl_usuario "
                 + "SET "
                 + "fk_funcionario = ?, "
                 + "usu_login=?, "
@@ -124,21 +124,13 @@ public class UsuarioDAO {
             pst.execute();
             pst.close();
 
-            JOptionPane.showMessageDialog(null, "Usuário alterado com sucesso");
-
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar usuário " + erro);
+            return false;
         }
+        return true;
     }
 
-    /**
-     * Método Excluir: Exclui as informações no banco de dados nas colunas da
-     * tabela usuário informado pelo usuário.
-     *
-     * @param objusuariodto UsuarioDTO conecta com banco para excluir as
-     * informações.
-     */
-    public void excluirUsuario(UsuarioDTO objusuariodto) {
+    public boolean excluirUsuario(UsuarioDTO objusuariodto) {
         String sql = ""
                 + "DELETE FROM tbl_usuario "
                 + "WHERE id_usuario = ? ";
@@ -151,19 +143,12 @@ public class UsuarioDAO {
             pst.execute();
             pst.close();
 
-            JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso");
-
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Usuário não selecionado para exclusão " + erro);
+            return false;
         }
+        return true;
     }
 
-    /**
-     * Método Listar: Pega as informações do banco de dados das colunas da
-     * tabela usuário e retorna listando em uma tabela para o usuário.
-     *
-     * @return lista retorna a lista com as informações do banco.
-     */
     public ArrayList<UsuarioDTO> listarUsuario() //traz as informações do banco de dados da tabela em questão retonando em uma lista
     {
         String sql = ""
@@ -196,20 +181,13 @@ public class UsuarioDAO {
             return lista;
 
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, " Listar USUARIODAO " + erro);
+
             return null;
         }
         // Esse metodo retorna toda a lista dos usuarios cadastrado
 
     }
 
-    /**
-     * Método Buscar: Pega as informações do usuário escolhido no banco de dados
-     * das colunas da tabela usuário e retorna listando em uma tabela para o
-     * usuário.
-     *
-     * @return lista retorna a lista com as informações do banco.
-     */
     public ArrayList<UsuarioDTO> buscarUsuario(String fun_nome) {
         String sql = "SELECT "
                 + "u.fk_funcionario, "
@@ -255,19 +233,13 @@ public class UsuarioDAO {
 
     }
 
-    /**
-     * Método Logar; Compara com o banco as informações passada pelo usuário
-     *
-     * @param Login Compara com o banco as informações passada pelo usuário
-     * @param Senha Compara com o banco as informações passada pelo usuário
-     */
-    public void LogarUsuario(String Login, String Senha) {
+    public boolean LogarUsuario(String Login, String Senha) {
 
         try {
             String sql = ""
                     + "SELECT * "
                     + "FROM tbl_usuario "
-                     + "WHERE usu_login = ? "
+                    + "WHERE usu_login = ? "
                     + "AND usu_senha = ?";
 
             conn = new Conexao().conectaBD();
@@ -285,45 +257,29 @@ public class UsuarioDAO {
                 cargo = rs.getString("usu_perfil");
 
                 if (cargo == "Adm") {
-                //if (rs.getString("usu_perfil").equals("Adm")) {
-                    //JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-                    MENUADM menuA = new MENUADM();
-                    menuA.setVisible(true);
+                    //if (rs.getString("usu_perfil").equals("Adm")) {
 
-                    
-                    menuA.LoginUsuario = rs.getString("usu_login");
-                    MENUADM.lblUsuario.setForeground(Color.BLUE);
+                    return true;
 
+                } else if (cargo == "Caixa") 
+                    //} else if (rs.getString("usu_perfil").equals("Caixa")) {
+
+                {
+                    return true;
+                } else if (rs.getString("usu_perfil") == "Escritorio") {
+                    //} else if (rs.getString("usu_perfil").equals("Escritorio")) {
+
+
+                    return true;
                 }
-              if (cargo == "Caixa") 
-            //} else if (rs.getString("usu_perfil").equals("Caixa")) {
-                JOptionPane.showMessageDialog(null, "Bem vindo(a)");
-
-                MENUCAIXA menuC = new MENUCAIXA();
-                menuC.setVisible(true);
-
-
-                menuC.LoginUsuario = rs.getString("usu_login");
-                MENUCAIXA.lblUsuario.setForeground(Color.gray);
-
-              } if (rs.getString("usu_perfil") == "Escritorio") {
-            //} else if (rs.getString("usu_perfil").equals("Escritorio")) {
-                JOptionPane.showMessageDialog(null, " Bem vindo(a)");
-
-                MENUESCRITORIO menuE = new MENUESCRITORIO();
-                menuE.setVisible(true);
-
-                menuE.LoginUsuario = rs.getString("usu_login");
-                MENUESCRITORIO.lblUsuario.setForeground(Color.gray);
+            } else {
+                return false;
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        {
-            //Envia mensagem dizendo que está incorreto.(usuario e/ou senha incorreto)
-            JOptionPane.showMessageDialog(null, "Usuário e/ou Senha Inválida");
-        }
+        return true;
+
     }
 }
-    

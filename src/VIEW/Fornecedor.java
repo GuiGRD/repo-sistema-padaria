@@ -548,12 +548,7 @@ int id, numero;
         if (nome.isEmpty()
                 || cnpj.equals("  .   .   /    -  ")
                 || celular.equals("(  )        -     ")
-                || cep.equals("      -    ")
-                || rua.isEmpty()
-                || txtNumero.getText().equals("")
-                || bairro.isEmpty()
-                || cidade.isEmpty()
-                || estado.isEmpty()) {
+                || txtNumero.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Preencher todos os campos obrigatórios");
 
         } else {

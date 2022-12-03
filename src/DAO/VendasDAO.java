@@ -73,7 +73,7 @@ public class VendasDAO {
     public ArrayList<VendasDTO> listarVenda() {//Através dos comandos SQL lista todas informações nas colunas da tabela venda no banco de dados.
         String sql = " "
                 + " SELECT "
-                + " date_format(data_venda,'%d/%m/%Y') as data_format ,"
+                + " date_format(data_venda,'%d/%m/%Y') AS data_format ,"
                 + " total_venda "
                 + " FROM tbl_venda ";
 
